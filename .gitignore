@@ -11,3 +11,6 @@ log/
 # OS rác
 .DS_Store
 Thumbs.db
+
+target/
+*.class
