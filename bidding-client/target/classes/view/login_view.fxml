@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="322.0" prefWidth="442.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField layoutX="164.0" layoutY="123.0" />
+      <TextField layoutX="164.0" layoutY="158.0" />
+      <Text layoutX="90.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tài Khoản :" wrappingWidth="74.19140625" />
+      <Text layoutX="90.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật Khẩu:" wrappingWidth="74.19140625" />
+   </children>
+</Pane>
