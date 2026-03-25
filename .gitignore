@@ -1,4 +1,13 @@
+# IntelliJ IDEA
 .idea/
-target/
 *.iml
-.mvn/
+out/
+gen/
+
+# Maven
+target/
+log/
+
+# OS rác
+.DS_Store
+Thumbs.db
