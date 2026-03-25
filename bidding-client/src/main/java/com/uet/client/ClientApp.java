@@ -2,19 +2,29 @@ package com.uet.client;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ClientApp extends Application {
-    @Override
-    public void start(Stage stage) throws Exception {
-        // Chú ý đường dẫn: /view/ vì file nằm trong resources/view/
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main_view.fxml"));
-        stage.setScene(new Scene(loader.load(), 300, 200));
-        stage.setTitle("UET Auction");
-        stage.show();
-    }
+import java.io.IOException;
 
+public class ClientApp extends Application {
+
+    @Override
+    public void start(Stage stage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setTitle("Hệ thống Đấu giá UET - Đăng nhập");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Lỗi: Không thể nạp file FXML. Hãy kiểm tra lại đường dẫn!");
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
         launch(args);
     }
