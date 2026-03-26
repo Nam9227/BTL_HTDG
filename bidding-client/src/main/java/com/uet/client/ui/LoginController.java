@@ -45,19 +45,10 @@ public class LoginController {
     public void handleShowRegister() {
         System.out.println("Nam vừa nhấn vào link Đăng ký ngay!");
         try {
-            // 1. Tải file FXML của trang đăng ký
-            // Đảm bảo file Register.fxml nằm cùng gói (package) với file Login.fxml
-            // Bạn phải đi từ gốc của thư mục resources (bắt đầu bằng dấu /)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/register_view.fxml"));
             Scene registerScene = loader.load();
-
-            // 2. Lấy Stage (cửa sổ) hiện tại
-            // Vì handleShowRegister thường được gọi từ một ActionEvent,
-            // nhưng ở đây bạn không truyền tham số, ta có thể lấy qua userField
             Stage stage = (Stage) userField.getScene().getWindow();
 
-            // 3. Chuyển sang Scene đăng ký
-            //Scene registerScene = new Scene(registerRoot);
             stage.setScene(registerScene);
             stage.setTitle("Đăng ký tài khoản");
             stage.show();
