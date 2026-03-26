@@ -23,7 +23,14 @@ public class LoginController {
             showError("Thất bại", "Tài khoản hoặc mật khẩu không đúng.");
         }
     }
-
+    @FXML
+    public void handleShowRegister() {
+        System.out.println("Nam vừa nhấn vào link Đăng ký ngay!");
+    }
+    @FXML
+    public void handleUserEnter() {
+        passField.requestFocus();
+    }
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
