@@ -7,15 +7,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.LoginController">
+
    <children>
-      <TextField fx:id="userField" layoutX="82.0" layoutY="77.0" prefHeight="25.0" prefWidth="200.0" />
-      <Text layoutX="11.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tài Khoản :" wrappingWidth="74.19140625" />
-      <Text layoutX="11.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật Khẩu :" wrappingWidth="74.19140625" />
-      <Button defaultButton="true" layoutX="82.0" layoutY="173.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Đăng nhập" />
+      <TextField fx:id="userField" layoutX="82.0" layoutY="77.0" onAction="#handleUserEnter" prefHeight="25.0" prefWidth="200.0" />
+      <Text layoutX="11.0" layoutY="94.0" text="Tài Khoản :" />
+
+      <Text layoutX="11.0" layoutY="140.0" text="Mật Khẩu :" />
       <PasswordField fx:id="passField" layoutX="82.0" layoutY="123.0" prefHeight="25.0" prefWidth="200.0" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="82.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chưa có tài khoản" wrappingWidth="101.86383056640625" />
-      <Hyperlink layoutX="184.0" layoutY="215.0" text="Đăng ký ngay" />
+
+      <Button defaultButton="true" layoutX="82.0" layoutY="173.0" onAction="#handleLogin" prefHeight="25.0" prefWidth="200.0" text="Đăng nhập" />
+
+      <Text layoutX="82.0" layoutY="231.0" text="Chưa có tài khoản" />
+
+      <Hyperlink layoutX="184.0" layoutY="215.0" onAction="#handleShowRegister" text="Đăng ký ngay" />
    </children>
 </Pane>
