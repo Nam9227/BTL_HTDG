@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.HomeController">
+
+    <right>
+        <VBox prefWidth="200.0" spacing="20.0" style="-fx-background-color: #1a3c5a;">
+            <children>
+                <VBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <ImageView fx:id="userAvatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label fx:id="userNameLabel" text="Nam UET" textFill="WHITE" style="-fx-font-weight: bold;" />
+                        <Label fx:id="balanceLabel" text="Số dư: 5,000,000đ" textFill="#f1c40f" />
+                    </children>
+                </VBox>
+                <Separator opacity="0.3" prefWidth="200.0" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" text="Sàn Đấu Giá" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
+                <Region VBox.vgrow="ALWAYS" />
+                <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Đăng Xuất" textFill="WHITE" />
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="30.0" />
+            </padding>
+        </VBox>
+    </right>
+
+    <center>
+        <VBox spacing="15.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                    <children>
+                        <Label text="Sản phẩm đang đấu giá" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchField" promptText="Tìm kiếm sản phẩm..." prefWidth="250.0" />
+                        <Button mnemonicParsing="false" text="Tìm" />
+                    </children>
+                </HBox>
+
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                    <content>
+                        <FlowPane fx:id="productContainer" hgap="20.0" vgap="20.0" prefWrapLength="650.0">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                            <VBox prefHeight="220.0" prefWidth="180.0" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 10; -fx-background-radius: 10;">
+                                <children>
+                                    <ImageView fitHeight="100.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Label text="iPhone 15 Pro Max" style="-fx-font-weight: bold;" />
+                                    <Label text="Giá hiện tại: 25,000,000đ" textFill="#27ae60" />
+                                    <Label text="Còn lại: 00:45:12" textFill="#e67e22" />
+                                    <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #f1c40f;" text="Đặt Giá" />
+                                </children>
+                                <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                </padding>
+                            </VBox>
+                        </FlowPane>
+                    </content>
+                </ScrollPane>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </center>
+</BorderPane>
