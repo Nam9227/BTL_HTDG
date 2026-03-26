@@ -1,0 +1,20 @@
+.button {
+    -fx-background-color: linear-gradient(#d0e6f5, #9ecae1);
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #6aaed6;
+
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.3, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#e0f3ff, #b3d9f2);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(#8fbcd4, #6baed6);
+    -fx-translate-y: 1;
+}
