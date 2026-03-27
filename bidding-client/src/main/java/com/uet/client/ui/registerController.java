@@ -14,12 +14,18 @@ import java.io.IOException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 public class registerController {
     @FXML private TextField fullNameField;
     @FXML private TextField emailField;
     @FXML private TextField phoneNumberField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
+    @FXML
+    private TextField inputField;
+
     @FXML
     public void handleRegister() {
         System.out.println("Nút Đăng ký đã được bấm!");
@@ -77,6 +83,20 @@ public class registerController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleEnter(ActionEvent event) {
+        TextField source = (TextField) event.getSource();
+
+        if (source == fullNameField) {
+            emailField.requestFocus();
+        } else if (source == emailField) {
+            phoneNumberField.requestFocus();
+        } else if (source == phoneNumberField) {
+            passwordField.requestFocus();
+        } else if (source == passwordField) {
+            confirmPasswordField.requestFocus();
+        }
     }
 
 }
