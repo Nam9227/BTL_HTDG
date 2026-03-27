@@ -4,22 +4,43 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.LoginController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="758.0" style="-fx-background-color: #2C687B;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.LoginController">
 
    <children>
-      <TextField fx:id="userField" layoutX="82.0" layoutY="77.0" onAction="#handleUserEnter" prefHeight="25.0" prefWidth="200.0" />
-      <Text layoutX="11.0" layoutY="94.0" text="Tài Khoản :" />
+      <TextField fx:id="userField" layoutX="82.0" layoutY="77.0" onAction="#handleUserEnter" prefHeight="36.0" prefWidth="259.0" />
+      <Text layoutX="11.0" layoutY="94.0" text="Tài Khoản :">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
 
-      <Text layoutX="11.0" layoutY="140.0" text="Mật Khẩu :" />
-      <PasswordField fx:id="passField" layoutX="82.0" layoutY="123.0" prefHeight="25.0" prefWidth="200.0" />
+      <Text layoutX="11.0" layoutY="140.0" text="Mật Khẩu :">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
+      <PasswordField fx:id="passField" layoutX="83.0" layoutY="121.0" prefHeight="36.0" prefWidth="259.0" />
 
-      <Button defaultButton="true" layoutX="82.0" layoutY="173.0" onAction="#handleLogin" prefHeight="25.0" prefWidth="200.0" text="Đăng nhập" />
+      <Button defaultButton="true" layoutX="82.0" layoutY="173.0" onAction="#handleLogin" prefHeight="36.0" prefWidth="259.0" style="-fx-background-color: #2C687B;" text="Đăng nhập" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Button>
 
-      <Text layoutX="82.0" layoutY="231.0" text="Chưa có tài khoản" />
+      <Text layoutX="121.0" layoutY="230.0" text="Chưa có tài khoản">
+         <font>
+            <Font size="14.0" />
+         </font></Text>
 
-      <Hyperlink layoutX="184.0" layoutY="215.0" onAction="#nextregiset" text="Đăng ký ngay" />
+      <Hyperlink layoutX="233.0" layoutY="214.0" onAction="#nextregiset" text="Đăng ký ngay" />
+      <Text layoutX="134.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Đăng Nhập" wrappingWidth="222.85711669921875">
+         <font>
+            <Font name="System Bold Italic" size="27.0" />
+         </font>
+      </Text>
+      
    </children>
 </Pane>

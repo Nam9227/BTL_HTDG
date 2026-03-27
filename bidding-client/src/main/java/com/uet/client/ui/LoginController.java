@@ -24,6 +24,7 @@ public class LoginController {
 
     @FXML
     public void handleLogin() {
+
         String username = userField.getText();
         String password = passField.getText();
         if (username.isEmpty() || password.isEmpty()) {
@@ -52,6 +53,7 @@ public class LoginController {
             Stage registerStage = new Stage();
             registerStage.setTitle("Trang Đăng Ký");
             registerStage.setScene(new Scene(root));
+            registerStage.setResizable(false);
 
             // 3. Hiển thị cửa sổ mới
             registerStage.show();
