@@ -20,6 +20,6 @@
 
       <Text layoutX="82.0" layoutY="231.0" text="Chưa có tài khoản" />
 
-      <Hyperlink layoutX="184.0" layoutY="215.0" onAction="#handleShowRegister" text="Đăng ký ngay" />
+      <Hyperlink layoutX="184.0" layoutY="215.0" onAction="#nextregiset" text="Đăng ký ngay" />
    </children>
 </Pane>
