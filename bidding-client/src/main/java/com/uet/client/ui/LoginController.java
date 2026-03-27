@@ -92,7 +92,7 @@ public class LoginController {
             else if(confirmPassword.isEmpty()) {
                 showError("Thông báo", "Bạn chưa xác nhận mật khẩu");
             }
-            if(password.equals(confirmPassword)) {
+            else if(password.equals(confirmPassword)) {
                 // Hiện thông báo thành công
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Thành công");
