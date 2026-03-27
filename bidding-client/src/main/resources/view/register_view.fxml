@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Scene xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.LoginController">
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.registerController">
     <AnchorPane prefHeight="483.0" prefWidth="664.0" stylesheets="@../style/register_view.css">
       <children>
          <Text layoutX="64.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Đăng Ký Tài Khoản" wrappingWidth="264.6497611999512">
@@ -28,4 +28,4 @@
          <PasswordField fx:id="passwordField" layoutX="149.0" layoutY="202.0" />
          <PasswordField fx:id="confirmPasswordField" layoutX="149.0" layoutY="243.0" />
       </children></AnchorPane>
-</Scene>
+</AnchorPane>
