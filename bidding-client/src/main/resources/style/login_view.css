@@ -1,0 +1,34 @@
+/* 1. Nền tổng thể của App */
+.root {
+    /* Màu chuyển từ xám đen sang xanh đen thẫm */
+    -fx-background-color: linear-gradient(to bottom right, #232526, #414345) !important;
+
+}
+
+/* Thêm một chút bóng đổ cho các ô nhập liệu để chúng nổi lên */
+.text-field, .password-field {
+    -fx-background-color: rgba(255, 255, 255, 0.05); /* Trắng mờ */
+    -fx-text-fill: white;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 5;
+}
+
+/* 3. Nút Đăng nhập (Class login-button bạn đã đặt) */
+.login-button {
+    -fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af); /* Màu gradient xanh thẫm chuyên nghiệp */
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.login-button:hover {
+    -fx-opacity: 0.85;
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* 4. Link Đăng ký */
+.hyperlink {
+    -fx-underline: false;
+    -fx-text-fill: #d4af37;
+}
