@@ -53,9 +53,9 @@
          </children>
       </AnchorPane>
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fitHeight="358.0" fitWidth="357.0" layoutX="416.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="380.0" fitWidth="378.0" layoutX="380.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../../Downloads/e3e4b37e-3714-4728-a767-a77d0efe60f0-removebg-preview.png" />
+            <Image url="@../photo/caibua.png" />
          </image>
       </ImageView>
    </children>
