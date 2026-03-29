@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="758.0" stylesheets="@../style/login_view.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.LoginController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="758.0" stylesheets="@../style/login_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.LoginController">
 
    <children>
       <TextField fx:id="userField" layoutX="82.0" layoutY="77.0" onAction="#handleUserEnter" prefHeight="36.0" prefWidth="259.0" styleClass="text-field" />
@@ -52,5 +52,11 @@
             </Text>
          </children>
       </AnchorPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="358.0" fitWidth="357.0" layoutX="416.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../../Downloads/e3e4b37e-3714-4728-a767-a77d0efe60f0-removebg-preview.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>
