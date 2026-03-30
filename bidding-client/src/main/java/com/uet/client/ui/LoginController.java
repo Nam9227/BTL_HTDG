@@ -20,8 +20,6 @@ public class LoginController {
     private TextField userField;
     @FXML
     private PasswordField passField;
-    // Các thành phần của trang Đăng ký (Đặt @FXML để kết nối với FXML)
-
     @FXML
     public void handleLogin() {
 
@@ -44,8 +42,6 @@ public class LoginController {
     @FXML
     private void nextregiset() {
         try {
-            // 1. Tải file FXML của màn hình Đăng ký
-            // Lưu ý: Kiểm tra kỹ đường dẫn file .fxml của bạn
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/register_view.fxml"));
             Parent root = loader.load();
 
@@ -55,10 +51,7 @@ public class LoginController {
             registerStage.setScene(new Scene(root));
             registerStage.setResizable(false);
 
-            // 3. Hiển thị cửa sổ mới
             registerStage.show();
-
-            // (Tùy chọn) Nếu muốn đóng/ẩn cửa sổ Đăng nhập hiện tại:
             // ((Node)event.getSource()).getScene().getWindow().hide();
 
         } catch (IOException e) {
