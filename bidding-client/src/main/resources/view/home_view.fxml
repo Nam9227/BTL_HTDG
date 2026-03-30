@@ -16,28 +16,40 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.HomeController">
 
     <right>
-        <VBox prefWidth="200.0" spacing="20.0" style="-fx-background-color: #1a3c5a;">
+        <HBox fx:id="sidebarContainer">
             <children>
-                <VBox alignment="CENTER" spacing="10.0">
+                <VBox alignment="CENTER">
                     <children>
-                        <ImageView fx:id="userAvatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label fx:id="userNameLabel" style="-fx-font-weight: bold;" text="Nam UET" textFill="WHITE" />
-                        <Label fx:id="balanceLabel" text="Số dư: 5,000,000đ" textFill="#f1c40f" />
+                        <Button fx:id="toggleBtn" mnemonicParsing="false" onAction="#handleToggleSidebar"
+                                prefHeight="50.0" prefWidth="25.0"
+                                style="-fx-background-color: #1a3c5a; -fx-text-fill: white; -fx-background-radius: 5 0 0 5;"
+                                text="&gt;" />
                     </children>
                 </VBox>
-                <Separator opacity="0.3" prefWidth="200.0" />
-                <Button maxWidth="Infinity" mnemonicParsing="false" text="Sàn Đấu Giá" />
-                <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
-                <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
-                <Region VBox.vgrow="ALWAYS" />
-                <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Đăng Xuất" textFill="WHITE" />
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="15.0" right="15.0" top="30.0" />
-            </padding>
-        </VBox>
-    </right>
 
+                <VBox fx:id="sideContent" prefWidth="200.0" spacing="20.0" style="-fx-background-color: #1a3c5a;">
+                    <children>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <children>
+                                <ImageView fx:id="userAvatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                                <Label fx:id="userNameLabel" style="-fx-font-weight: bold;" text="Nam UET" textFill="WHITE" />
+                                <Label fx:id="balanceLabel" text="Số dư: 5,000,000đ" textFill="#f1c40f" />
+                            </children>
+                        </VBox>
+                        <Separator opacity="0.3" prefWidth="200.0" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Sàn Đấu Giá" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
+                        <Region VBox.vgrow="ALWAYS" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Đăng Xuất" textFill="WHITE" />
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="15.0" right="15.0" top="30.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </HBox>
+    </right>
     <center>
         <VBox spacing="15.0" BorderPane.alignment="CENTER">
             <children>
