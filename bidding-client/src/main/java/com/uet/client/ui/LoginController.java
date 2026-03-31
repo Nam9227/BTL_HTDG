@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.io.IOException;
+import javafx.scene.Node;
 
 public class LoginController {
 
@@ -78,7 +79,7 @@ public class LoginController {
     }
 
     @FXML
-    private void nextregiset() {
+    private void nextregiset(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/register_view.fxml"));
             Parent root = loader.load();
@@ -87,6 +88,9 @@ public class LoginController {
             registerStage.setScene(new Scene(root));
             registerStage.setResizable(false);
             registerStage.show();
+            Node source = (Node) event.getSource();
+            Stage currentStage = (Stage) source.getScene().getWindow();
+            currentStage.hide();
         } catch (IOException e) {
             e.printStackTrace();
             showError("Lỗi hệ thống", "Không tìm thấy giao diện đăng ký!");
