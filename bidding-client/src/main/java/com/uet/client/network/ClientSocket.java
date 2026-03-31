@@ -9,7 +9,7 @@ public class ClientSocket {
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
-    private ClientSocket() {} // Đóng gói: Không cho tạo mới linh tinh
+    private ClientSocket() {}
 
     public static ClientSocket getInstance() {
         if (instance == null) instance = new ClientSocket();
@@ -19,7 +19,6 @@ public class ClientSocket {
     public void connect() throws IOException {
         if (socket == null || socket.isClosed()) {
             socket = new Socket("localhost", 915227);
-            // Quan trọng: Phải tạo Output trước Input để tránh bị treo
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
         }
