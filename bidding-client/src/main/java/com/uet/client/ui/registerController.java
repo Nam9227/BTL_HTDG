@@ -1,12 +1,12 @@
 package com.uet.client.ui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
@@ -23,6 +23,34 @@ public class registerController {
     @FXML private TextField phoneNumberField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
+    @FXML private TextField passwordText;
+    @FXML private Button togglePassword;
+    @FXML
+    private ImageView eyeIcon;
+    private Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
+    private Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
+    private boolean isPasswordShown = false;
+
+    @FXML
+    void handleTogglePassword(ActionEvent event) {
+        if (isPasswordShown) {
+            // Chuyển từ hiện sang ẩn
+            passwordField.setText(passwordText.getText());
+            passwordField.setVisible(true);
+            passwordText.setVisible(false);
+            // Thay đổi icon sang mắt đóng (nếu có)
+            eyeIcon.setImage(imageClose);
+            isPasswordShown = false;
+        } else {
+            // Chuyển từ ẩn sang hiện
+            passwordText.setText(passwordField.getText());
+            passwordText.setVisible(true);
+            passwordField.setVisible(false);
+            // Thay đổi icon sang mắt mở (nếu có)
+            eyeIcon.setImage(imageOpen);
+            isPasswordShown = true;
+        }
+    }
     @FXML
     private TextField inputField;
 

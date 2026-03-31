@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.registerController">
-    <AnchorPane prefHeight="483.0" prefWidth="664.0" stylesheets="@../style/register_view.css">
+    <AnchorPane layoutY="-8.0" prefHeight="483.0" prefWidth="664.0" stylesheets="@../style/register_view.css">
       <children>
          <Text layoutX="64.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Đăng Ký Tài Khoản" wrappingWidth="264.6497611999512">
             <font>
@@ -24,7 +28,23 @@
          <TextField fx:id="fullNameField" layoutX="149.0" layoutY="78.0" onAction="#handleEnter" />
          <TextField fx:id="emailField" layoutX="149.0" layoutY="121.0" onAction="#handleEnter" />
          <TextField fx:id="phoneNumberField" layoutX="149.0" layoutY="165.0" onAction="#handleEnter" />
-         <PasswordField fx:id="passwordField" layoutX="149.0" layoutY="202.0" onAction="#handleEnter" />
+         <StackPane layoutX="149.0" layoutY="202.0">
+            <children>
+               <PasswordField fx:id="passwordField" onAction="#handleEnter" />
+               <TextField fx:id="passwordText" visible="false" />
+               <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleTogglePassword" style="-fx-background-color: transparent; -fx-border-color: transparent;" StackPane.alignment="CENTER_RIGHT">
+                  <graphic>
+                     <ImageView fx:id="eyeIcon" fitHeight="22.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../photo/closeEye.png" />
+                        </image></ImageView>
+                  </graphic>
+                  <padding>
+                     <Insets right="-2.0" />
+                  </padding>
+               </Button>
+            </children>
+         </StackPane>
          <PasswordField fx:id="confirmPasswordField" layoutX="149.0" layoutY="243.0" onAction="#handleEnter" />
       </children></AnchorPane>
 </AnchorPane>
