@@ -1,5 +1,7 @@
 package com.uet.client.ui;
 
+import com.uet.client.model.LoginRequest;
+import com.uet.client.network.ClientSocket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -13,6 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Node;
+
+
 
 public class LoginController {
 
@@ -34,19 +38,41 @@ public class LoginController {
 
     @FXML
     public void handleLogin() {
-        // Lấy pass từ trường đang hiển thị
-        String username = userField.getText();
-        String password = isPasswordShown ? passTextField.getText() : passField.getText();
+        try {
+            String user = userField.getText();
+            String pass ;
+            if (passTextField.isVisible()) {
+                pass = passTextField.getText();
+            } else {
+                pass = passField.getText();
+            }
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showError("Lỗi", "Vui lòng không để trống tài khoản hoặc mật khẩu!");
-            return;
-        }
+            if (user.isEmpty() || pass.isEmpty()) {
+                showError("Lỗi", "Vui lòng không để trống tài khoản hoặc mật khẩu!");
+                return;
+            }
 
-        if (username.equals("admin") && password.equals("123")) {
-            System.out.println("Đăng nhập thành công!");
-        } else {
-            showError("Thất bại", "Tài khoản hoặc mật khẩu không đúng.");
+            // 2. Đóng gói vào đối tượng
+            LoginRequest request = new LoginRequest(user, pass);
+
+            // 3. Gửi qua Socket (Dùng Singleton của Nam)
+            ClientSocket network = ClientSocket.getInstance();
+            network.connect(); // Nhớ check port 27915 trong file này nhé
+            network.send(request);
+
+            // 4. Đợi phản hồi từ Server
+            Object response = network.receive();
+
+            if ("LOGIN_SUCCESS".equals(response)) {
+                System.out.println("Đăng nhập OK!");
+                // Code chuyển màn hình sang Home ở đây
+            } else {
+                showError("Lỗi","Sai tài khoản hoặc mật khẩu!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi kết nối Server: ");
         }
     }
 

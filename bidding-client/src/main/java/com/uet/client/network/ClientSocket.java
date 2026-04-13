@@ -18,7 +18,7 @@ public class ClientSocket {
 
     public void connect() throws IOException {
         if (socket == null || socket.isClosed()) {
-            socket = new Socket("localhost", 915227);
+            socket = new Socket("localhost", 27915);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
         }

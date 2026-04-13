@@ -6,8 +6,8 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private UserDAO userDAO = new UserDAO();
 
     public ClientHandler(Socket socket) {
@@ -17,32 +17,30 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            // QUAN TRỌNG: Phải tạo OutputStream trước InputStream để tránh bị treo (Deadlock)
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
 
-            String request;
-            while ((request = in.readLine()) != null) {
-                request = request.trim();
-                System.out.println("Nhận từ Client: " + request);
+            Object request;
+            while ((request = in.readObject()) != null) {
+                System.out.println("Nhận Object từ Client: " + request);
 
-                // Giả sử Client gửi: LOGIN:nam:123
-                if (request.startsWith("LOGIN:")) {
-                    String[] parts = request.split(":");
-                    String user = parts[1];
-                    String pass = parts[2];
-
-                    // Gọi DAO để check trong MySQL
-                    boolean isOk = userDAO.checkLogin(user, pass);
-                    if (isOk) {
-                        out.println("LOGIN_SUCCESS");
-                    } else {
-                        out.println("LOGIN_FAILED");
+                // Nếu Nam gửi chuỗi String "LOGIN:nam:123"
+                if (request instanceof String) {
+                    String cmd = (String) request;
+                    if (cmd.startsWith("LOGIN:")) {
+                        String[] parts = cmd.split(":");
+                        boolean isOk = userDAO.checkLogin(parts[1].trim(), parts[2].trim());
+                        out.writeObject(isOk ? "LOGIN_SUCCESS" : "LOGIN_FAILED");
+                        out.flush();
                     }
                 }
-                // Tí nữa Nam viết thêm logic BID (đấu giá) ở dưới này nhé
+
+                // NẾU NAM MUỐN GỬI OBJECT (Cực khuyến khích)
+                // if (request instanceof LoginRequest) { ... }
             }
-        } catch (IOException e) {
-            System.err.println("Một đại gia đã rời sàn!");
+        } catch (Exception e) {
+            System.err.println("Một đại gia đã ngắt kết nối!");
         }
     }
 }
