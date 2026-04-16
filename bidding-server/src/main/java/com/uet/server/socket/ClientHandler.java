@@ -40,7 +40,7 @@ public class ClientHandler implements Runnable {
                 // if (request instanceof LoginRequest) { ... }
             }
         } catch (Exception e) {
-            System.err.println("Một đại gia đã ngắt kết nối!");
+            System.err.println("Một user đã ngắt kết nối!");
         }
     }
 }
