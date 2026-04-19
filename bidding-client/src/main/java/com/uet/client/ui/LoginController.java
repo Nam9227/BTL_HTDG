@@ -1,6 +1,6 @@
 package com.uet.client.ui;
 
-import com.uet.client.model.LoginRequest;
+import com.uet.client.model.network.LoginRequest;
 import com.uet.client.network.ClientSocket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
