@@ -1,6 +1,6 @@
-package com.uet.server.socket;
+package com.uet.server.network;
 
-import com.uet.server.dao.UserDAO;
+import com.uet.server.database.dao.UserDAO;
 import java.io.*;
 import java.net.Socket;
 

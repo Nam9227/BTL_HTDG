@@ -1,6 +1,6 @@
 package com.uet.server;
 
-import com.uet.server.socket.AuctionServer;
+import com.uet.server.network.AuctionServer;
 
 public class Main {
     public static void main(String[] args) {

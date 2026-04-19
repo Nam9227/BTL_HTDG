@@ -3,7 +3,7 @@ package com.uet.server.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DBContext {
+public class DBConnection {
     public Connection getConnection() throws Exception {
         // bidding_db là tên Schema Nam tạo trong MySQL Workbench nhé
         String url = "jdbc:mysql://localhost:3306/bidding_db";
@@ -17,7 +17,7 @@ public class DBContext {
     // Nhấn chuột phải chọn "Run Main" để test thử luôn
     public static void main(String[] args) {
         try {
-            Connection conn = new DBContext().getConnection();
+            Connection conn = new DBConnection().getConnection();
             if (conn != null) {
                 System.out.println("--- [OK] SQL ĐÃ THÔNG RỒI NAM ƠI! ---");
             }

@@ -1,4 +1,4 @@
-package com.uet.server.socket;
+package com.uet.server.network;
 
 import java.net.ServerSocket;
 import java.net.Socket;
