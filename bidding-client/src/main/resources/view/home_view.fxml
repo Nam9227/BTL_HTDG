@@ -20,10 +20,7 @@
             <children>
                 <VBox alignment="CENTER">
                     <children>
-                        <Button fx:id="toggleBtn" mnemonicParsing="false" onAction="#handleToggleSidebar"
-                                prefHeight="50.0" prefWidth="25.0"
-                                style="-fx-background-color: #1a3c5a; -fx-text-fill: white; -fx-background-radius: 5 0 0 5;"
-                                text="&gt;" />
+                        <Button fx:id="toggleBtn" mnemonicParsing="false" onAction="#handleToggleSidebar" prefHeight="50.0" prefWidth="25.0" style="-fx-background-color: #1a3c5a; -fx-text-fill: white; -fx-background-radius: 5 0 0 5;" text="&gt;" />
                     </children>
                 </VBox>
 
@@ -57,7 +54,7 @@
                     <children>
                         <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Sản phẩm đang đấu giá" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="searchField" prefWidth="250.0" promptText="Tìm kiếm sản phẩm..." />
+                        <TextField fx:id="searchField" prefWidth="250.0" promptText="Tìm kiếm sản phẩm..." HBox.hgrow="ALWAYS" />
                         <Button mnemonicParsing="false" text="Tìm" />
                     </children>
                 </HBox>
