@@ -1,14 +1,15 @@
 package com.uet.server.network;
 
+import com.uet.server.model.network.LoginRequest;
 import com.uet.server.database.dao.UserDAO;
-import java.io.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
-    private Socket socket;
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
-    private UserDAO userDAO = new UserDAO();
+
+    private final Socket socket;
+    UserDAO userDAO = new UserDAO();
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -16,31 +17,34 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        try {
-            // QUAN TRỌNG: Phải tạo OutputStream trước InputStream để tránh bị treo (Deadlock)
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+        try (
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream())
+        ) {
+            while (true) {
+                Object obj = in.readObject();
 
-            Object request;
-            while ((request = in.readObject()) != null) {
-                System.out.println("Nhận Object từ Client: " + request);
+                if (obj instanceof LoginRequest request) {
 
-                // Nếu Nam gửi chuỗi String "LOGIN:nam:123"
-                if (request instanceof String) {
-                    String cmd = (String) request;
-                    if (cmd.startsWith("LOGIN:")) {
-                        String[] parts = cmd.split(":");
-                        boolean isOk = userDAO.checkLogin(parts[1].trim(), parts[2].trim());
-                        out.writeObject(isOk ? "LOGIN_SUCCESS" : "LOGIN_FAILED");
-                        out.flush();
+                    System.out.println("Login attempt: " + request.getUsername());
+
+                    boolean ok = userDAO.checkLogin(request.getUsername(), request.getPassword());
+
+                    if (ok) {
+                        out.writeObject("LOGIN_SUCCESS");
+                    } else {
+                        out.writeObject("LOGIN_FAIL");
                     }
-                }
 
-                // NẾU NAM MUỐN GỬI OBJECT (Cực khuyến khích)
-                // if (request instanceof LoginRequest) { ... }
+                    out.flush();
+                } else {
+                    out.writeObject("UNKNOWN_REQUEST");
+                    out.flush();
+                }
             }
+
         } catch (Exception e) {
-            System.err.println("Một user đã ngắt kết nối!");
+            System.out.println("Client disconnected.");
         }
     }
 }
