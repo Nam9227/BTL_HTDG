@@ -3,7 +3,10 @@ package com.uet.server.network;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class AuctionServer {
+public class ServerMain {
+    public static void main(String[] args){
+        new ServerMain().start();
+    }
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(27915)) {
             System.out.println("--- SERVER ĐANG CHỜ Ở CỔNG 27915 ---");
