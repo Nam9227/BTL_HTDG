@@ -47,18 +47,18 @@
    <children>
       <VBox layoutX="30.0" layoutY="-57.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+            <AnchorPane prefHeight="55.0" prefWidth="559.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="125.0" text="Admin:" />
-                  <Label text="số dư:" />
-                  <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="thoát" />
+                  <Label prefHeight="17.0" prefWidth="125.0" text="Admin:" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Label text="số dư:" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
+                  <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="thoát" AnchorPane.rightAnchor="0.0" />
                </children>
-            </HBox>
+            </AnchorPane>
             <HBox prefHeight="28.0" prefWidth="585.0">
                <children>
                   <TextField promptText="nhập tên sp" />
                   <ComboBox prefWidth="150.0" promptText="nhập loại sp" />
-                  <ComboBox prefHeight="25.0" prefWidth="111.0" promptText="nút thêm sửa xoá" />
+                  <ComboBox prefHeight="25.0" prefWidth="145.0" promptText="nút thêm sửa xoá" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
