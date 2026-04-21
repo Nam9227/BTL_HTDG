@@ -95,5 +95,10 @@
                <Font size="14.0" />
             </font>
          </Text>
+         <ImageView fitHeight="86.0" fitWidth="82.0" layoutX="27.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../photo/icon_app.png" />
+            </image>
+         </ImageView>
       </children></AnchorPane>
 </AnchorPane>
