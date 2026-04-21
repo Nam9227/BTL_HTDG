@@ -126,5 +126,24 @@ public class registerController {
             confirmPasswordField.requestFocus();
         }
     }
+    @FXML
+    private void nextregiset(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
+            Parent root = loader.load();
+            Stage registerStage = new Stage();
+            registerStage.setTitle("Trang Đăng Nhập");
+            registerStage.setScene(new Scene(root));
+            registerStage.setResizable(false);
+            registerStage.show();
+            Node source = (Node) event.getSource();
+            Stage currentStage = (Stage) source.getScene().getWindow();
+            currentStage.hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Lỗi hệ thống", "Không tìm thấy giao diện đăng nhập!");
+        }
+    }
+
 
 }

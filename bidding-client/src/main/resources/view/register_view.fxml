@@ -86,7 +86,7 @@
                <Image url="@../photo/caibua.png" />
             </image>
          </ImageView>
-         <Hyperlink layoutX="283.0" layoutY="360.0" prefHeight="25.0" prefWidth="114.0" text="Đăng nhập ngay">
+         <Hyperlink layoutX="283.0" layoutY="360.0" onAction="#nextregiset" prefHeight="25.0" prefWidth="114.0" text="Đăng nhập ngay">
             <font>
                <Font size="14.0" />
             </font></Hyperlink>
