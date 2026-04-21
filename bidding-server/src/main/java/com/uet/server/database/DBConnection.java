@@ -1,29 +1,34 @@
 package com.uet.server.database;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBConnection {
-    public Connection getConnection() throws Exception {
-        // bidding_db là tên Schema Nam tạo trong MySQL Workbench nhé
-        String url = "jdbc:mysql://localhost:3306/bidding_db";
-        String user = "root";
-        String password = "123456";
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(url, user, password);
-    }
+    private static Connection connection;
 
-    // Nhấn chuột phải chọn "Run Main" để test thử luôn
-    public static void main(String[] args) {
+    public static Connection getConnection() throws SQLException {
         try {
-            Connection conn = new DBConnection().getConnection();
-            if (conn != null) {
-                System.out.println("--- [OK] SQL ĐÃ THÔNG RỒI NAM ƠI! ---");
+            if (connection == null || connection.isClosed()) {
+
+                Properties properties = new Properties();
+                FileInputStream fis = new FileInputStream("bidding-server/config/db.properties");
+                properties.load(fis);
+
+                String url = properties.getProperty("db.url");
+                String username = properties.getProperty("db.username");
+                String password = properties.getProperty("db.password");
+
+                connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Connected to database!");
             }
-        } catch (Exception e) {
-            System.err.println("--- [LỖI] KIỂM TRA LẠI PASS HOẶC TÊN DB NHÉ! ---");
-            e.printStackTrace();
+            return connection;
+        } catch (IOException e) {
+            throw new SQLException("Cannot read db.properties", e);
         }
     }
 }
