@@ -93,10 +93,10 @@ public class registerController {
                 alert.setTitle("Thành công");
                 alert.setHeaderText(null);
                 alert.setContentText("Tạo tài khoản thành công! Nhấn OK để quay lại đăng nhập.");
-
                 // Đợi người dùng bấm OK
                 alert.showAndWait();
 
+                switchScene("/view/login_view.fxml", "Trang Đăng Nhập");
             }else{
                 showError("Thông báo", "Mật khẩu không khớp");
             }
@@ -128,22 +128,20 @@ public class registerController {
     }
     @FXML
     private void nextregiset(ActionEvent event) {
+        switchScene("/view/login_view.fxml", "Trang Đăng Nhập");
+    }
+    private void switchScene(String fxmlPath, String title) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
-            Parent root = loader.load();
-            Stage registerStage = new Stage();
-            registerStage.setTitle("Trang Đăng Nhập");
-            registerStage.setScene(new Scene(root));
-            registerStage.setResizable(false);
-            registerStage.show();
-            Node source = (Node) event.getSource();
-            Stage currentStage = (Stage) source.getScene().getWindow();
-            currentStage.hide();
-        } catch (IOException e) {
+            Stage stage = (Stage) fullNameField.getScene().getWindow();
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource(fxmlPath)));
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
             e.printStackTrace();
-            showError("Lỗi hệ thống", "Không tìm thấy giao diện đăng nhập!");
+            showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
         }
     }
-
 
 }

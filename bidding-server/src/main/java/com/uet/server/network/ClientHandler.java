@@ -1,6 +1,6 @@
 package com.uet.server.network;
 
-import com.uet.server.model.network.LoginRequest;
+import com.uet.common.network.LoginRequest;
 import com.uet.server.database.dao.UserDAO;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

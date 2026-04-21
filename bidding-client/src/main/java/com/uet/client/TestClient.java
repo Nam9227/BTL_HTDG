@@ -1,6 +1,6 @@
 package com.uet.client;
 
-import com.uet.client.model.network.LoginRequest;
+import com.uet.common.network.LoginRequest;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,7 +13,7 @@ public class TestClient {
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream())
         ) {
-            LoginRequest request = new LoginRequest("admin", "123456");
+            LoginRequest request = new LoginRequest("admin1", "123456");
 
             out.writeObject(request);
             out.flush();

@@ -49,7 +49,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.uet.server.Main</mainClass>
+                            <mainClass>com.uet.server.network.ServerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

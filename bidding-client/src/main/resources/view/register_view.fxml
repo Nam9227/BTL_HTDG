@@ -56,7 +56,7 @@
                   <font>
                      <Font size="14.0" />
                   </font></Text>
-               <TextField onAction="#handleEnter" prefHeight="36.0" prefWidth="232.0" GridPane.columnIndex="1" />
+               <TextField fx:id="fullNameField" onAction="#handleEnter" prefHeight="36.0" prefWidth="232.0" GridPane.columnIndex="1" />
                <TextField fx:id="emailField" onAction="#handleEnter" prefHeight="37.0" prefWidth="273.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                <TextField fx:id="phoneNumberField" onAction="#handleEnter" prefHeight="38.0" prefWidth="303.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="3">
