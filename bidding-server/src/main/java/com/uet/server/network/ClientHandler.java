@@ -1,10 +1,12 @@
 package com.uet.server.network;
 
 import com.uet.common.network.LoginRequest;
+import com.uet.common.network.RegisterRequest;
 import com.uet.server.database.dao.UserDAO;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import com.uet.server.database.dao.RegisterDAO;
 
 public class ClientHandler implements Runnable {
 
@@ -37,7 +39,11 @@ public class ClientHandler implements Runnable {
                     }
 
                     out.flush();
-                } else {
+                } else if (obj instanceof RegisterRequest request) {
+                    RegisterDAO registerDAO = new RegisterDAO();
+                    String result = registerDAO.register(request);
+                    out.writeObject(result);
+                }else {
                     out.writeObject("UNKNOWN_REQUEST");
                     out.flush();
                 }
