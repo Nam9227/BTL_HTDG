@@ -32,8 +32,8 @@ public class LoginController {
     @FXML
     private ImageView eyeIcon; // Cần @FXML để JavaFX kết nối với ImageView trong Button
 
-    private final Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openeye.png"));
-    private final Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeeye.png"));
+    private final Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
+    private final Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
     private boolean isPasswordShown = false;
 
     @FXML
