@@ -28,7 +28,10 @@
                               <Image url="@../photo/menu.png" />
                            </image>
                         </ImageView>
-                     </graphic></Button>
+                     </graphic>
+                     <padding>
+                        <Insets top="15.0" />
+                     </padding></Button>
                     </children>
                 </VBox>
 
