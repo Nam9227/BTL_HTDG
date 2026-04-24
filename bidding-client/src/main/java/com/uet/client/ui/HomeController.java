@@ -48,99 +48,50 @@ import javafx.stage.Stage;
 }*/
 
 //code thêm vào ể chạy thử testhomcontroller
-public class HomeController extends Application {
+public class HomeController{
 
-    @FXML private VBox sideContent;
-    @FXML private Button toggleBtn;
+        @FXML private VBox sideContent; // Sidebar màu xanh
+        @FXML private Button openBtn;   // Nút 3 gạch (nằm ngoài sidebar)
+        @FXML private Button closeBtn;  // Nút X (nằm trong sidebar)
 
-    private boolean isExpanded = true;
-
-    /*@FXML
-    public void handleToggleSidebar() {
-        // Lấy chính xác chiều rộng hiện tại của thanh menu
-        double width = sideContent.getWidth();
-        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sideContent);
-
-        if (isExpanded) {
-            // 1. Thực hiện trượt sang phải
-            transition.setToX(width);
-            toggleBtn.setText("<");
-
-            // 2. Sau khi trượt xong mới biến mất hẳn để phần bên trái dãn ra
-            transition.setOnFinished(e -> {
-                sideContent.setVisible(false);
-                sideContent.setManaged(false);
-            });
-
-            isExpanded = false;
-        } else {
-            // 1. Phải setManaged và Visible trước để nó có không gian trượt về
-            sideContent.setManaged(true);
-            sideContent.setVisible(true);
-
-            // Đảm bảo nó bắt đầu từ vị trí đang ẩn để trượt vào mượt hơn
-            sideContent.setTranslateX(width);
-
-            transition.setToX(0);
-            toggleBtn.setText(">");
-            isExpanded = true;
-        }
-        transition.play();
-    }*/
-    @FXML
-    public void handleToggleSidebar() {
-        // 1. Lấy chiều rộng thực tế của thanh menu màu xanh
-        double width = sideContent.getWidth();
-
-        // 2. Tạo hiệu ứng di chuyển cho cả thanh menu và nút bấm
-        TranslateTransition menuTransition = new TranslateTransition(Duration.millis(300), sideContent);
-        TranslateTransition btnTransition = new TranslateTransition(Duration.millis(300), toggleBtn);
-
-        // Thêm cái này để chuyển động mượt hơn (nhanh dần rồi chậm dần)
-        menuTransition.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
-        btnTransition.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
-
-        if (isExpanded) {
-            // TRẠNG THÁI: ĐANG MỞ -> THU VÀO
-            menuTransition.setToX(width); // Đẩy menu sang phải
-            btnTransition.setToX(width);  // Đẩy nút bấm đi theo menu
-
-            toggleBtn.setText("<");
-
-            // Sau khi chạy xong hiệu ứng mới cho ẩn hẳn
-            menuTransition.setOnFinished(e -> {
-                sideContent.setVisible(false);
-                // sideContent.setManaged(false); // Nếu muốn phần bên trái dãn ra thì mở dòng này
-            });
-
-            isExpanded = false;
-        } else {
-            // TRẠNG THÁI: ĐANG ĐÓNG -> MỞ RA
-            sideContent.setVisible(true);
-            sideContent.setManaged(true);
-
-            menuTransition.setToX(0); // Kéo menu về vị trí ban đầu
-            btnTransition.setToX(0);  // Kéo nút bấm về vị trí ban đầu
-
-            toggleBtn.setText(">");
-            isExpanded = true;
+        public void initialize() {
+            // Ban đầu ẩn Sidebar và nút X đi
+            // Giả sử chiều rộng sidebar là 300
+            sideContent.setTranslateX(300);
+            sideContent.setVisible(false);
+            closeBtn.setVisible(false);
         }
 
-        // Chạy cả hai cùng lúc
-        menuTransition.play();
-        btnTransition.play();
-    }
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        // Đảm bảo file .fxml nằm đúng đường dẫn (thường là trong folder resources)
-        // Ví dụ: /com/uet/client/ui/home.fxml
-        Parent root = FXMLLoader.load(getClass().getResource("/view/home_view.fxml"));
-        primaryStage.setTitle("Test Sidebar");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-    }
+        @FXML
+        public void handleOpenSidebar() {
+            sideContent.setVisible(true);
+            closeBtn.setVisible(true);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+            // Hiệu ứng đẩy Sidebar vào từ phải sang trái (hoặc trái sang phải tùy layout của bạn)
+            TranslateTransition menuSlide = new TranslateTransition(Duration.millis(300), sideContent);
+            menuSlide.setToX(0);
+
+            // Khi mở ra thì ẩn nút Menu đi ngay lập tức hoặc sau animation
+            openBtn.setVisible(false);
+
+            menuSlide.play();
+        }
+
+        @FXML
+        public void handleCloseSidebar() {
+            double width = sideContent.getWidth();
+            TranslateTransition menuSlide = new TranslateTransition(Duration.millis(300), sideContent);
+
+            // Đẩy sidebar ra ngoài (ví dụ sang phải)
+            menuSlide.setToX(width);
+
+            menuSlide.setOnFinished(e -> {
+                sideContent.setVisible(false);
+                closeBtn.setVisible(false);
+                // Hiện lại nút Menu ban đầu
+                openBtn.setVisible(true);
+            });
+
+            menuSlide.play();
+        }
 }
