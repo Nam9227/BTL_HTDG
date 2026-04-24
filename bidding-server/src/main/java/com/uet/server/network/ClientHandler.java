@@ -1,7 +1,10 @@
 package com.uet.server.network;
 
-import com.uet.server.model.network.LoginRequest;
+import com.uet.common.network.LoginRequest;
+import com.uet.common.network.RegisterRequest;
+import com.uet.server.database.dao.RegisterDAO;
 import com.uet.server.database.dao.UserDAO;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -9,42 +12,72 @@ import java.net.Socket;
 public class ClientHandler implements Runnable {
 
     private final Socket socket;
-    UserDAO userDAO = new UserDAO();
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+
+    private final UserDAO userDAO = new UserDAO();
+    private final RegisterDAO registerDAO = new RegisterDAO();
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
     }
 
+    public void send(Object message) {
+        try {
+            out.writeObject(message);
+            out.flush();
+        } catch (Exception e) {
+            ClientManager.removeClient(this);
+        }
+    }
+
     @Override
     public void run() {
-        try (
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream())
-        ) {
+        try {
+            out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
+            in = new ObjectInputStream(socket.getInputStream());
+
+            ClientManager.addClient(this);
+
             while (true) {
                 Object obj = in.readObject();
 
                 if (obj instanceof LoginRequest request) {
-
                     System.out.println("Login attempt: " + request.getUsername());
 
-                    boolean ok = userDAO.checkLogin(request.getUsername(), request.getPassword());
+                    boolean ok = userDAO.checkLogin(
+                            request.getUsername(),
+                            request.getPassword()
+                    );
 
-                    if (ok) {
-                        out.writeObject("LOGIN_SUCCESS");
-                    } else {
-                        out.writeObject("LOGIN_FAIL");
-                    }
+                    send(ok ? "LOGIN_SUCCESS" : "LOGIN_FAIL");
 
-                    out.flush();
+                } else if (obj instanceof RegisterRequest request) {
+                    String result = registerDAO.register(request);
+                    send(result);
+
+                } else if ("LOGOUT".equals(obj)) {
+                    send("LOGOUT_SUCCESS");
+                    break;
+
                 } else {
-                    out.writeObject("UNKNOWN_REQUEST");
-                    out.flush();
+                    send("UNKNOWN_REQUEST");
                 }
             }
 
         } catch (Exception e) {
-            System.out.println("Client disconnected.");
+            System.out.println("Client disconnected because:");
+            e.printStackTrace();
+        } finally {
+            ClientManager.removeClient(this);
+
+            try {
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+            } catch (Exception ignored) {
+            }
         }
     }
 }

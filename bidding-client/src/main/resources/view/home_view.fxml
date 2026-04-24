@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
@@ -18,23 +19,48 @@
     <right>
         <HBox fx:id="sidebarContainer">
             <children>
-                <VBox alignment="CENTER">
+                <VBox>
                     <children>
-                        <Button fx:id="toggleBtn" mnemonicParsing="false" onAction="#handleToggleSidebar" prefHeight="50.0" prefWidth="25.0" style="-fx-background-color: #1a3c5a; -fx-text-fill: white; -fx-background-radius: 5 0 0 5;" text="&gt;" />
+                        <Button fx:id="openBtn" mnemonicParsing="false" onAction="#handleOpenSidebar" prefHeight="43.0" prefWidth="46.0" style="-fx-text-fill: white; -fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="41.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../photo/menu.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <padding>
+                        <Insets top="15.0" />
+                     </padding></Button>
                     </children>
                 </VBox>
 
                 <VBox fx:id="sideContent" prefWidth="200.0" spacing="20.0" style="-fx-background-color: #1a3c5a;">
                     <children>
+                  <HBox prefHeight="12.0" prefWidth="169.0">
+                     <children>
+                        <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#handleCloseSidebar" prefHeight="35.0" prefWidth="37.0" style="-fx-background-color: #1a3c5a;" text="X" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets top="-10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="-15.0" top="-17.0" />
+                     </padding>
+                  </HBox>
                         <VBox alignment="CENTER" spacing="10.0">
                             <children>
-                                <ImageView fx:id="userAvatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                                <ImageView fx:id="userAvatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../photo/avatar.png" />
+                           </image></ImageView>
                                 <Label fx:id="userNameLabel" style="-fx-font-weight: bold;" text="Nam UET" textFill="WHITE" />
                                 <Label fx:id="balanceLabel" text="Số dư: 5,000,000đ" textFill="#f1c40f" />
                             </children>
                         </VBox>
                         <Separator opacity="0.3" prefWidth="200.0" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Sàn Đấu Giá" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Thông tin tài khoản" />
                         <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
                         <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
                         <Region VBox.vgrow="ALWAYS" />

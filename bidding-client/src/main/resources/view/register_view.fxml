@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.registerController">
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.RegisterController">
     <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="483.0" prefWidth="758.0" styleClass="root" stylesheets="@../style/register_view.css">
       <children>
          <Text fill="WHITE" layoutX="136.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Đăng Ký Tài Khoản" wrappingWidth="263.5069389343262">
@@ -44,7 +44,7 @@
                   <font>
                      <Font size="14.0" />
                   </font></Text>
-               <Text fill="#f9f7f7" strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <Text fill="#f9f7f7" strokeType="OUTSIDE" strokeWidth="0.0" text="Tài Khoản" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                   <font>
                      <Font size="14.0" />
                   </font></Text>
@@ -58,7 +58,7 @@
                   </font></Text>
                <TextField fx:id="fullNameField" onAction="#handleEnter" prefHeight="36.0" prefWidth="232.0" GridPane.columnIndex="1" />
                <TextField fx:id="emailField" onAction="#handleEnter" prefHeight="37.0" prefWidth="273.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               <TextField fx:id="phoneNumberField" onAction="#handleEnter" prefHeight="38.0" prefWidth="303.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               <TextField fx:id="usernameField" onAction="#handleEnter" prefHeight="38.0" prefWidth="303.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="3">
                   <children>
                      <PasswordField fx:id="passwordField" onAction="#handleEnter" prefHeight="38.0" prefWidth="313.0" />
@@ -95,5 +95,10 @@
                <Font size="14.0" />
             </font>
          </Text>
+         <ImageView fitHeight="86.0" fitWidth="82.0" layoutX="27.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../photo/icon_app.png" />
+            </image>
+         </ImageView>
       </children></AnchorPane>
 </AnchorPane>

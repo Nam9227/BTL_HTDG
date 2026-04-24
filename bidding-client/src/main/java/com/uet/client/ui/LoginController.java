@@ -1,6 +1,6 @@
 package com.uet.client.ui;
 
-import com.uet.client.model.network.LoginRequest;
+import com.uet.common.network.LoginRequest;
 import com.uet.client.network.ClientSocket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,7 +65,7 @@ public class LoginController {
 
             if ("LOGIN_SUCCESS".equals(response)) {
                 System.out.println("Đăng nhập OK!");
-                // Code chuyển màn hình sang Home ở đây
+                switchScene("/view/home_view.fxml", "Trang chủ");
             } else {
                 showError("Lỗi","Sai tài khoản hoặc mật khẩu!");
             }
@@ -106,23 +106,22 @@ public class LoginController {
 
     @FXML
     private void nextregiset(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/register_view.fxml"));
-            Parent root = loader.load();
-            Stage registerStage = new Stage();
-            registerStage.setTitle("Trang Đăng Ký");
-            registerStage.setScene(new Scene(root));
-            registerStage.setResizable(false);
-            registerStage.show();
-            Node source = (Node) event.getSource();
-            Stage currentStage = (Stage) source.getScene().getWindow();
-            currentStage.hide();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Lỗi hệ thống", "Không tìm thấy giao diện đăng ký!");
-        }
+        switchScene("/view/register_view.fxml", "Trang Đăng Ký");
     }
 
+    private void switchScene(String fxmlPath, String title) {
+        try {
+            Stage stage = (Stage) userField.getScene().getWindow();
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource(fxmlPath)));
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
+        }
+    }
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

@@ -1,4 +1,4 @@
-package com.uet.client.model.network;
+package com.uet.common.network;
 
 import java.io.Serializable;
 
