@@ -22,6 +22,7 @@ public class ClientSocket {
         if (socket == null || socket.isClosed()) {
             socket = new Socket(AppConfig.get("server.host"), AppConfig.getInt("server.port"));
             out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
             in = new ObjectInputStream(socket.getInputStream());
         }
     }

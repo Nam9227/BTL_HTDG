@@ -35,6 +35,7 @@ public class ClientHandler implements Runnable {
     public void run() {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
             in = new ObjectInputStream(socket.getInputStream());
 
             ClientManager.addClient(this);
@@ -66,7 +67,8 @@ public class ClientHandler implements Runnable {
             }
 
         } catch (Exception e) {
-            System.out.println("Client disconnected.");
+            System.out.println("Client disconnected because:");
+            e.printStackTrace();
         } finally {
             ClientManager.removeClient(this);
 
