@@ -59,12 +59,14 @@ public class HomeController{
             // Giả sử chiều rộng sidebar là 300
             sideContent.setTranslateX(300);
             sideContent.setVisible(false);
+            sideContent.setManaged(false);
             closeBtn.setVisible(false);
         }
 
         @FXML
         public void handleOpenSidebar() {
             sideContent.setVisible(true);
+            sideContent.setManaged(true);
             closeBtn.setVisible(true);
 
             // Hiệu ứng đẩy Sidebar vào từ phải sang trái (hoặc trái sang phải tùy layout của bạn)
@@ -87,6 +89,7 @@ public class HomeController{
 
             menuSlide.setOnFinished(e -> {
                 sideContent.setVisible(false);
+                sideContent.setManaged(false);
                 closeBtn.setVisible(false);
                 // Hiện lại nút Menu ban đầu
                 openBtn.setVisible(true);
