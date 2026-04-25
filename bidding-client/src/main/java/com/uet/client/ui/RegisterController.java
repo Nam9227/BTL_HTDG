@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
+import java.util.regex.Pattern;
 import javafx.scene.control.Alert;
 
 import javafx.event.ActionEvent;
@@ -28,7 +28,15 @@ public class RegisterController {
     private Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
     private Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
     private boolean isPasswordShown = false;
-
+    @FXML
+    private static final String GMAIL_REGEX = "^[A-Za-z0-9+_.-]+@gmail\\.com$";
+    @FXML
+    public static boolean isValidGmail(String email) {
+        if (email == null) {
+            return false;
+        }
+        return Pattern.matches(GMAIL_REGEX, email);
+    }
     @FXML
     void handleTogglePassword(ActionEvent event) {
         if (isPasswordShown) {
@@ -75,6 +83,9 @@ public class RegisterController {
             }
             else if(email.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập email");
+            }
+            else if(!isValidGmail(email)) {
+                showError("Thông báo", "Email chưa đúng định dạng");
             }
             else if(username.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập tên tài khoản");
