@@ -43,22 +43,25 @@
             <TextField fx:id="AddressField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <StackPane layoutX="57.0" layoutY="293.0" prefHeight="25.0" prefWidth="211.0">
+      <StackPane layoutX="59.0" layoutY="265.0" prefHeight="25.0" prefWidth="211.0">
          <children>
-            <HBox fx:id="editMode" prefHeight="100.0" prefWidth="200.0" spacing="80.0" visible="false">
+            <HBox fx:id="informationEditMode" prefHeight="100.0" prefWidth="200.0" spacing="80.0" visible="false">
                <children>
-                  <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#handleSave" prefHeight="25.0" prefWidth="80.0" text="Lưu" />
-                  <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" prefHeight="25.0" prefWidth="84.0" text="Hủy" />
+                  <Button fx:id="informationSaveBtn" mnemonicParsing="false" onAction="#handleSave" prefHeight="25.0" prefWidth="80.0" text="Lưu" />
+                  <Button fx:id="informationCancelBtn" mnemonicParsing="false" onAction="#handleCancel" prefHeight="25.0" prefWidth="84.0" text="Hủy" />
                </children>
             </HBox>
-            <Button fx:id="editBtn" mnemonicParsing="false" onAction="#handleEdit" text="Chỉnh sửa" />
+            <Button fx:id="informationEditBtn" mnemonicParsing="false" onAction="#handleEdit" text="Chỉnh sửa" />
          </children>
       </StackPane>
-      <Button fx:id="avatarPic" layoutX="431.0" layoutY="247.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Chỉnh sửa" />
-      <ImageView fitHeight="142.0" fitWidth="182.0" layoutX="405.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../photo/avatar.png" />
-         </image>
-      </ImageView>
+      <Button fx:id="avatarEditBtn" layoutX="376.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleAvatarChange" prefHeight="128.0" prefWidth="147.0">
+         <graphic>
+            <ImageView fx:id="avatarImage" fitHeight="151.0" fitWidth="137.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../photo/avatar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>
