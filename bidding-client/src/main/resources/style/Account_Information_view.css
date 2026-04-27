@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #232526, #414345);
+
+}
+#informationEditBtn{
+    -fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af);
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+#informationSaveBtn{
+    -fx-background-color: linear-gradient(to right, #2c3e50, #4ca1af);
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+#informationCancelBtn{
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255, 255, 255, 0.5); /* Viền trắng mờ */
+    -fx-border-radius: 20;
+    -fx-text-fill: white;
+}
+#avatarEditBtn{
+    -fx-background-color: transparent;
+}
+.text-field{
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: white;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 5;
+}
