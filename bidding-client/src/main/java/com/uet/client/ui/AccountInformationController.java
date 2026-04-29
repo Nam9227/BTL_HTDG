@@ -6,12 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
@@ -25,11 +27,17 @@ public class AccountInformationController {
     @FXML private TextField EmailField;
     @FXML private TextField NumberField;
     @FXML private TextField AddressField;
+    @FXML private TextField UsernameField;
     @FXML private Button avatarEditBtn;
     @FXML private ImageView avatarImage;
+    @FXML private Label pathLabel;
     @FXML public void initialize() {
         editMode.managedProperty().bind(editMode.visibleProperty());
         switchToViewMode();
+        Circle clip = new Circle(50, 50, 50); // Tâm x, tâm y, bán kính
+        avatarImage.setClip(clip);
+        String path = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        pathLabel.setText(path);
     }
     private void switchToViewMode() {
         editBtn.setVisible(true);
@@ -42,6 +50,7 @@ public class AccountInformationController {
         EmailField.setEditable(false);
         NumberField.setEditable(false);
         AddressField.setEditable(false);
+        UsernameField.setEditable(false);
     }
     private void switchToEditMode(){
         editBtn.setVisible(false);
@@ -54,6 +63,7 @@ public class AccountInformationController {
         EmailField.setEditable(true);
         NumberField.setEditable(true);
         AddressField.setEditable(true);
+        UsernameField.setEditable(true);
     }
     @FXML
     void handleEdit(){
@@ -85,4 +95,5 @@ public class AccountInformationController {
             avatarImage.setImage(image);
         }
     }
+    void handlePasswordChange(){}
 }
