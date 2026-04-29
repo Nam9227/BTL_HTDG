@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.uet.client.ui.AuctionDetailController"
+            prefWidth="1180" prefHeight="720"
+            style="-fx-background-color: #F5F7FA;">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="18"
+              style="-fx-background-color: white; -fx-padding: 18 28; -fx-border-color: #E5E7EB; -fx-border-width: 0 0 1 0;">
+            <Button text="← Quay lại" onAction="#handleBack"
+                    style="-fx-background-color: #F3F4F6; -fx-text-fill: #111827; -fx-background-radius: 12; -fx-padding: 8 18;"/>
+
+            <Label text="Chi tiết đấu giá"
+                   style="-fx-text-fill: #111827; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="userNameLabel" text="Nam UET"
+                   style="-fx-text-fill: #111827; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+
+            <Label fx:id="balanceLabel" text="Số dư: 5,000,000đ"
+                   style="-fx-text-fill: #16A34A; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="24" style="-fx-padding: 24 40 30 40;">
+
+            <VBox spacing="16" prefWidth="300"
+                  style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-padding: 16;">
+
+                <StackPane prefHeight="210"
+                           style="-fx-background-color: #F3F4F6; -fx-background-radius: 16;">
+                    <ImageView fx:id="productImage"
+                               fitWidth="260"
+                               fitHeight="190"
+                               preserveRatio="true"/>
+                </StackPane>
+
+                <Label fx:id="productNameLabel"
+                       text="iPhone 15 Pro Max"
+                       wrapText="true"
+                       style="-fx-text-fill: #111827; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+                <Label fx:id="sellerLabel"
+                       text="Người bán: admin1"
+                       style="-fx-text-fill: #6B7280;"/>
+
+                <Label text="Mô tả sản phẩm"
+                       style="-fx-text-fill: #111827; -fx-font-size: 15px; -fx-font-weight: bold;"/>
+
+                <TextArea fx:id="descriptionArea"
+                          editable="false"
+                          wrapText="true"
+                          VBox.vgrow="ALWAYS"
+                          style="-fx-control-inner-background: #F9FAFB;"/>
+            </VBox>
+
+            <VBox spacing="16" prefWidth="280">
+
+                <VBox spacing="13"
+                      style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-padding: 18;">
+
+                    <Label text="Thông tin phiên đấu giá"
+                           style="-fx-text-fill: #111827; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <Label text="Giá khởi điểm" style="-fx-text-fill: #6B7280;"/>
+                    <Label fx:id="startPriceLabel" text="15,000,000đ"
+                           style="-fx-text-fill: #111827; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+                    <Label text="Giá hiện tại" style="-fx-text-fill: #6B7280;"/>
+                    <Label fx:id="currentPriceLabel" text="25,000,000đ"
+                           style="-fx-text-fill: #16A34A; -fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+                    <Label text="Người dẫn đầu" style="-fx-text-fill: #6B7280;"/>
+                    <Label fx:id="leaderLabel" text="Nam UET"
+                           style="-fx-text-fill: #111827; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                    <Label text="Kết thúc sau" style="-fx-text-fill: #6B7280;"/>
+                    <Label fx:id="countdownLabel" text="00:45:12"
+                           style="-fx-text-fill: #F59E0B; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox spacing="12"
+                      style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-padding: 18;">
+
+                    <Label text="Đặt giá mới"
+                           style="-fx-text-fill: #111827; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <TextField fx:id="bidAmountField"
+                               promptText="Nhập giá muốn đặt"
+                               style="-fx-background-color: #F9FAFB; -fx-background-radius: 12; -fx-border-color: #E5E7EB; -fx-border-radius: 12; -fx-padding: 10 14;"/>
+
+                    <Button text="Đặt giá"
+                            onAction="#handlePlaceBid"
+                            maxWidth="Infinity"
+                            style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10 0;"/>
+
+                    <Label fx:id="messageLabel"
+                           text=""
+                           style="-fx-text-fill: #F59E0B;"/>
+                </VBox>
+            </VBox>
+
+            <VBox spacing="16" HBox.hgrow="ALWAYS">
+
+                <VBox spacing="12"
+                      style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-padding: 18;">
+
+                    <Label text="Biểu đồ giá theo thời gian"
+                           style="-fx-text-fill: #111827; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <LineChart fx:id="priceChart"
+                               prefHeight="250"
+                               animated="false"
+                               legendVisible="false"
+                               createSymbols="true">
+                        <xAxis>
+                            <CategoryAxis label="Thời gian"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Giá"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <VBox spacing="12"
+                      VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #E5E7EB; -fx-border-radius: 20; -fx-padding: 18;">
+
+                    <Label text="Lịch sử đặt giá gần đây"
+                           style="-fx-text-fill: #111827; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <TableView fx:id="bidHistoryTable" prefHeight="210">
+                        <columns>
+                            <TableColumn fx:id="bidderColumn" text="Người đặt" prefWidth="180"/>
+                            <TableColumn fx:id="amountColumn" text="Giá đặt" prefWidth="170"/>
+                            <TableColumn fx:id="timeColumn" text="Thời gian" prefWidth="260"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+        </HBox>
+    </center>
+</BorderPane>
