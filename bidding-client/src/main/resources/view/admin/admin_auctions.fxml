@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.uet.client.ui.admin.AdminAuctionsController"
+            prefWidth="1100" prefHeight="650"
+            style="-fx-background-color: #2f3336;">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox prefWidth="230" spacing="12"
+              style="-fx-background-color: #24282b; -fx-padding: 25;">
+            <Label text="ADMIN PANEL"
+                   style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+            <Separator/>
+
+            <Button text="Dashboard" onAction="#goDashboard" maxWidth="Infinity"/>
+            <Button text="Quản lý người dùng" onAction="#goUsers" maxWidth="Infinity"/>
+            <Button text="Quản lý sản phẩm" onAction="#goProducts" maxWidth="Infinity"/>
+
+            <Button text="Quản lý phiên đấu giá" maxWidth="Infinity"
+                    style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button text="Đăng xuất" onAction="#handleLogout" maxWidth="Infinity"
+                    style="-fx-background-color: #b23b3b; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </VBox>
+    </left>
+
+    <!-- Main -->
+    <center>
+        <VBox spacing="20" style="-fx-padding: 30;">
+
+            <Label text="Quản lý phiên đấu giá"
+                   style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;"/>
+
+            <!-- Filter -->
+            <HBox spacing="12">
+                <TextField fx:id="searchField"
+                           promptText="Tìm theo sản phẩm..."
+                           prefWidth="300"/>
+
+                <ComboBox fx:id="statusFilter"
+                          promptText="Trạng thái"
+                          prefWidth="150"/>
+
+                <Button text="Tìm"
+                        onAction="#handleSearch"
+                        style="-fx-background-color: #4f9db2; -fx-text-fill: white;"/>
+
+                <Button text="Làm mới"
+                        onAction="#handleRefresh"/>
+            </HBox>
+
+            <!-- Table -->
+            <TableView fx:id="auctionTable" prefHeight="420">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="productColumn" text="Sản phẩm" prefWidth="200"/>
+                    <TableColumn fx:id="currentPriceColumn" text="Giá hiện tại" prefWidth="140"/>
+                    <TableColumn fx:id="leaderColumn" text="Người dẫn đầu" prefWidth="150"/>
+                    <TableColumn fx:id="endTimeColumn" text="Kết thúc" prefWidth="180"/>
+                    <TableColumn fx:id="statusColumn" text="Trạng thái" prefWidth="120"/>
+                </columns>
+            </TableView>
+
+            <!-- Actions -->
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+                <Button text="Xem chi tiết"
+                        onAction="#handleViewDetail"/>
+
+                <Button text="Kết thúc phiên"
+                        onAction="#handleEndAuction"
+                        style="-fx-background-color: #d9822b; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+                <Button text="Hủy phiên"
+                        onAction="#handleCancelAuction"
+                        style="-fx-background-color: #b23b3b; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            </HBox>
+
+        </VBox>
+    </center>
+</BorderPane>

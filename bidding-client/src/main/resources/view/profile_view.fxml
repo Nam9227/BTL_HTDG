@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.uet.client.ui.ProfileController"
+            prefWidth="900" prefHeight="600"
+            style="-fx-background-color: #2f3336;">
+
+    <VBox spacing="25"
+          AnchorPane.topAnchor="40"
+          AnchorPane.leftAnchor="60"
+          AnchorPane.rightAnchor="60">
+
+        <Label text="Thông tin tài khoản"
+               style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="25"
+              style="-fx-background-color: #3a3f42; -fx-background-radius: 18; -fx-padding: 25;">
+            <StackPane prefWidth="120" prefHeight="120">
+                <Circle radius="55" fill="#4f9db2"/>
+                <ImageView fx:id="avatarImage"
+                           fitWidth="100"
+                           fitHeight="100"
+                           preserveRatio="true"/>
+            </StackPane>
+
+            <VBox spacing="8" alignment="CENTER_LEFT">
+                <Label fx:id="fullNameLabel"
+                       text="Nguyễn Văn A"
+                       style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+                <Label fx:id="usernameLabel"
+                       text="@admin1"
+                       style="-fx-text-fill: #d0d0d0; -fx-font-size: 15px;"/>
+
+                <Label fx:id="statusLabel"
+                       text="Đang hoạt động"
+                       style="-fx-text-fill: #7ee787; -fx-font-size: 14px;"/>
+            </VBox>
+        </HBox>
+
+        <GridPane hgap="25" vgap="18"
+                  style="-fx-background-color: #3a3f42; -fx-background-radius: 18; -fx-padding: 30;">
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="18"/>
+                <ColumnConstraints percentWidth="32"/>
+                <ColumnConstraints percentWidth="18"/>
+                <ColumnConstraints percentWidth="32"/>
+            </columnConstraints>
+
+            <Label text="Họ tên:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                   style="-fx-text-fill: white; -fx-font-size: 15px;"/>
+            <TextField fx:id="fullNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                       promptText="Nhập họ tên"/>
+
+            <Label text="Username:" GridPane.rowIndex="0" GridPane.columnIndex="2"
+                   style="-fx-text-fill: white; -fx-font-size: 15px;"/>
+            <TextField fx:id="usernameField" GridPane.rowIndex="0" GridPane.columnIndex="3"
+                       editable="false"/>
+
+            <Label text="Email:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                   style="-fx-text-fill: white; -fx-font-size: 15px;"/>
+            <TextField fx:id="emailField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                       promptText="example@gmail.com"/>
+
+            <Label text="SĐT:" GridPane.rowIndex="1" GridPane.columnIndex="2"
+                   style="-fx-text-fill: white; -fx-font-size: 15px;"/>
+            <TextField fx:id="phoneField" GridPane.rowIndex="1" GridPane.columnIndex="3"
+                       promptText="0123456789"/>
+
+            <Label text="Địa chỉ:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                   style="-fx-text-fill: white; -fx-font-size: 15px;"/>
+            <TextField fx:id="addressField" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                       GridPane.columnSpan="3"
+                       promptText="Nhập địa chỉ"/>
+        </GridPane>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button fx:id="editButton"
+                    text="Chỉnh sửa"
+                    onAction="#handleEdit"
+                    style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 10 28;"/>
+
+            <Button fx:id="saveButton"
+                    text="Lưu thay đổi"
+                    onAction="#handleSave"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 10 28;"/>
+
+            <Button fx:id="changePasswordButton"
+                    text="Đổi mật khẩu"
+                    onAction="#handleChangePassword"
+                    style="-fx-background-color: #555b60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 10 28;"/>
+        </HBox>
+
+    </VBox>
+</AnchorPane>
