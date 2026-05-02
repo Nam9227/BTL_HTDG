@@ -1,5 +1,7 @@
 package com.uet.client.network;
 
+import com.uet.client.config.AppConfig;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -18,8 +20,9 @@ public class ClientSocket {
 
     public void connect() throws IOException {
         if (socket == null || socket.isClosed()) {
-            socket = new Socket("localhost", 915227);
+            socket = new Socket(AppConfig.get("server.host"), AppConfig.getInt("server.port"));
             out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
             in = new ObjectInputStream(socket.getInputStream());
         }
     }

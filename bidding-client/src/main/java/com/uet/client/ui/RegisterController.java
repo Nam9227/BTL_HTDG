@@ -1,26 +1,24 @@
 package com.uet.client.ui;
 
+import com.uet.client.network.ClientSocket;
+import com.uet.common.network.RegisterRequest;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-import java.io.IOException;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-public class registerController {
+
+public class RegisterController {
     @FXML private TextField fullNameField;
     @FXML private TextField emailField;
-    @FXML private TextField phoneNumberField;
+    @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private TextField passwordText;
@@ -67,7 +65,7 @@ public class registerController {
 
             String fullName = fullNameField.getText().trim();
             String email = emailField.getText().trim();
-            String phoneNumber = phoneNumberField.getText().trim();
+            String username = usernameField.getText().trim();
             String password = passwordField.getText().trim();
             String confirmPassword = confirmPasswordField.getText().trim();
             // ... các logic kiểm tra khác ...
@@ -78,8 +76,8 @@ public class registerController {
             else if(email.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập email");
             }
-            else if(phoneNumber.isEmpty()) {
-                showError("Thông báo", "Bạn chưa nhập số điện thoại");
+            else if(username.isEmpty()) {
+                showError("Thông báo", "Bạn chưa nhập tên tài khoản");
             }
             else if(password.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập mật khẩu");
@@ -87,19 +85,37 @@ public class registerController {
             else if(confirmPassword.isEmpty()) {
                 showError("Thông báo", "Bạn chưa xác nhận mật khẩu");
             }
-            else if(password.equals(confirmPassword)) {
-                // Hiện thông báo thành công
+            else if(!password.equals(confirmPassword)) {
+                showError("Thông báo", "Mật khẩu không khớp");
+            }
+            RegisterRequest request = new RegisterRequest(username, password, fullName, email);
+
+            ClientSocket network = ClientSocket.getInstance();
+            network.connect();
+            network.send(request);
+
+            Object response = network.receive();
+
+            if ("REGISTER_SUCCESS".equals(response)) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Thành công");
                 alert.setHeaderText(null);
                 alert.setContentText("Tạo tài khoản thành công! Nhấn OK để quay lại đăng nhập.");
-
-                // Đợi người dùng bấm OK
                 alert.showAndWait();
 
-            }else{
-                showError("Thông báo", "Mật khẩu không khớp");
+                switchScene("/view/login_view.fxml", "Trang Đăng Nhập");
+
+            } else if ("USERNAME_EXISTS".equals(response)) {
+                showError("Thông báo", "Tên tài khoản đã tồn tại!");
+
+            } else if ("EMAIL_EXISTS".equals(response)) {
+                showError("Thông báo", "Email đã tồn tại!");
+
+            } else {
+                showError("Thông báo", "Đăng ký thất bại!");
             }
+
+
         } catch (Exception a) {
             a.printStackTrace(); // In lỗi chi tiết ra màn hình đen (Console)
         }
@@ -119,11 +135,28 @@ public class registerController {
         if (source == fullNameField) {
             emailField.requestFocus();
         } else if (source == emailField) {
-            phoneNumberField.requestFocus();
-        } else if (source == phoneNumberField) {
+            usernameField.requestFocus();
+        } else if (source == usernameField) {
             passwordField.requestFocus();
         } else if (source == passwordField) {
             confirmPasswordField.requestFocus();
+        }
+    }
+    @FXML
+    private void nextregiset(ActionEvent event) {
+        switchScene("/view/login_view.fxml", "Trang Đăng Nhập");
+    }
+    private void switchScene(String fxmlPath, String title) {
+        try {
+            Stage stage = (Stage) fullNameField.getScene().getWindow();
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource(fxmlPath)));
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
         }
     }
 
