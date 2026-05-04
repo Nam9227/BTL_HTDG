@@ -22,9 +22,12 @@ public class RegisterController {
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private TextField passwordText;
+    @FXML private TextField confirmPasswordText;
+    @FXML private ImageView eyeIcon;
+    @FXML private ImageView confirmEyeIcon;
+    @FXML private Button btnTogglePassword;
+    @FXML private Button btnToggleConfirm;
     @FXML private Button togglePassword;
-    @FXML
-    private ImageView eyeIcon;
     private Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
     private Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
     private boolean isPasswordShown = false;
@@ -37,7 +40,7 @@ public class RegisterController {
         }
         return Pattern.matches(GMAIL_REGEX, email);
     }
-    @FXML
+    /*@FXML
     void handleTogglePassword(ActionEvent event) {
         if (isPasswordShown) {
             // Chuyển từ hiện sang ẩn
@@ -55,6 +58,51 @@ public class RegisterController {
             // Thay đổi icon sang mắt mở (nếu có)
             eyeIcon.setImage(imageOpen);
             isPasswordShown = true;
+        }
+    }*/
+    // Hàm dùng chung cho bất kỳ cặp trường mật khẩu nào
+    /*@FXML
+    private void togglePasswordVisibility(PasswordField pField, TextField tField, ImageView icon) {
+        if (pField.isVisible()) {
+            // Đang ẩn -> Hiện mật khẩu
+            tField.setText(pField.getText());
+            tField.setVisible(true);
+            pField.setVisible(false);
+            icon.setImage(imageOpen); // Dùng biến imageOpen sẵn có của bạn
+        } else {
+            // Đang hiện -> Ẩn mật khẩu
+            pField.setText(tField.getText());
+            pField.setVisible(true);
+            tField.setVisible(false);
+            icon.setImage(imageClose); // Dùng biến imageClose sẵn có của bạn
+        }
+    }*/
+    @FXML
+    private void handleTogglePassword(ActionEvent event) {
+        // Xác định nút nào vừa được bấm
+        Object source = event.getSource();
+
+        if (source == btnTogglePassword) {
+            // Xử lý cho mật khẩu chính
+            toggleLogic(passwordField, passwordText, eyeIcon);
+        } else if (source == btnToggleConfirm) {
+            // Xử lý cho xác nhận mật khẩu
+            toggleLogic(confirmPasswordField, confirmPasswordText, confirmEyeIcon);
+        }
+    }
+
+    // Hàm logic bổ trợ (giữ nguyên như cũ)
+    private void toggleLogic(PasswordField pField, TextField tField, ImageView icon) {
+        if (pField.isVisible()) {
+            tField.setText(pField.getText());
+            tField.setVisible(true);
+            pField.setVisible(false);
+            icon.setImage(imageOpen);
+        } else {
+            pField.setText(tField.getText());
+            pField.setVisible(true);
+            tField.setVisible(false);
+            icon.setImage(imageClose);
         }
     }
     @FXML

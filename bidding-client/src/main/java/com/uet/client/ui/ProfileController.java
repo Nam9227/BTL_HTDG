@@ -1,59 +1,43 @@
 package com.uet.client.ui;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 
-import javax.swing.*;
-
-public class AccountInformationController {
-    @FXML private Button editBtn;
-    @FXML private HBox editMode;
-    @FXML private TextField FullNameField;
-    @FXML private TextField EmailField;
-    @FXML private TextField NumberField;
-    @FXML private TextField AddressField;
+public class ProfileController {
+    @FXML private Button editButton;
+    @FXML private TextField fullNameField;
+    @FXML private TextField emailField;
+    @FXML private TextField phoneField;
+    @FXML private TextField addressField;
+    @FXML private TextField usernameField;
     @FXML private Button avatarEditBtn;
     @FXML private ImageView avatarImage;
     @FXML public void initialize() {
-        editMode.managedProperty().bind(editMode.visibleProperty());
         switchToViewMode();
     }
     private void switchToViewMode() {
-        editBtn.setVisible(true);
-        editBtn.setManaged(true);
-
-        editMode.setVisible(false);
-        editMode.setManaged(false);
-
-        FullNameField.setEditable(false);
-        EmailField.setEditable(false);
-        NumberField.setEditable(false);
-        AddressField.setEditable(false);
+        fullNameField.setEditable(false);
+        emailField.setEditable(false);
+        phoneField.setEditable(false);
+        addressField.setEditable(false);
+        usernameField.setEditable(false);
     }
     private void switchToEditMode(){
-        editBtn.setVisible(false);
-        editBtn.setManaged(false);
-
-        editMode.setVisible(true);
-        editMode.setManaged(true);
-
-        FullNameField.setEditable(true);
-        EmailField.setEditable(true);
-        NumberField.setEditable(true);
-        AddressField.setEditable(true);
+        fullNameField.setEditable(true);
+        emailField.setEditable(true);
+        phoneField.setEditable(true);
+        addressField.setEditable(true);
+        usernameField.setEditable(true);
     }
     @FXML
     void handleEdit(){
@@ -85,4 +69,5 @@ public class AccountInformationController {
             avatarImage.setImage(image);
         }
     }
+    void handlePasswordChange(){}
 }
