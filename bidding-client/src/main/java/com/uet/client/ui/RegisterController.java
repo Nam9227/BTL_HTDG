@@ -122,8 +122,12 @@ public class RegisterController {
             String fullName = fullNameField.getText().trim();
             String email = emailField.getText().trim();
             String username = usernameField.getText().trim();
-            String password = passwordField.getText().trim();
-            String confirmPassword = confirmPasswordField.getText().trim();
+            String password = passwordText.isVisible()
+                    ? passwordText.getText().trim()
+                    : passwordField.getText().trim();
+            String confirmPassword = confirmPasswordText.isVisible()
+                    ? confirmPasswordText.getText().trim()
+                    : confirmPasswordField.getText().trim();
             // ... các logic kiểm tra khác ...
 
             if (fullName.isEmpty()) {
@@ -131,21 +135,27 @@ public class RegisterController {
             }
             else if(email.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập email");
+                return;
             }
             else if(!isValidGmail(email)) {
                 showError("Thông báo", "Email chưa đúng định dạng");
+                return;
             }
             else if(username.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập tên tài khoản");
+                return;
             }
             else if(password.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập mật khẩu");
+                return;
             }
             else if(confirmPassword.isEmpty()) {
                 showError("Thông báo", "Bạn chưa xác nhận mật khẩu");
+                return;
             }
             else if(!password.equals(confirmPassword)) {
                 showError("Thông báo", "Mật khẩu không khớp");
+                return;
             }
             RegisterRequest request = new RegisterRequest(username, password, fullName, email);
 

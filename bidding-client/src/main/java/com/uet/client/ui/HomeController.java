@@ -6,12 +6,9 @@ import com.uet.common.model.user.User;
 import com.uet.common.network.UpdateRoleRequest;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
 import javafx.util.Duration;
 
 public class HomeController{
@@ -41,29 +38,42 @@ public class HomeController{
         private String formatMoney(double amount) {
             return String.format("%,.0f đ", amount);
         }
-        private void showChooseRoleDialog() {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Chọn vai trò");
-            alert.setHeaderText("Bạn muốn sử dụng hệ thống với vai trò nào?");
-            alert.setContentText("Chỉ cần chọn một lần.");
+    private void showChooseRoleDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Chọn vai trò");
+        alert.setHeaderText("Bạn muốn sử dụng hệ thống với vai trò nào?");
+        alert.setContentText("Chỉ cần chọn một lần để bắt đầu sử dụng hệ thống.");
 
-            ButtonType bidderBtn = new ButtonType("Người đấu giá");
-            ButtonType sellerBtn = new ButtonType("Người bán hàng");
+        ButtonType bidderBtn = new ButtonType("Người đấu giá");
+        ButtonType sellerBtn = new ButtonType("Người bán hàng");
 
-            alert.getButtonTypes().setAll(bidderBtn, sellerBtn);
+        alert.getButtonTypes().setAll(bidderBtn, sellerBtn);
 
-            alert.showAndWait().ifPresent(result -> {
-                if (result == bidderBtn) {
-                    currentUser.setRole(Role.BIDDER);
-                    saveRoleToServer(Role.BIDDER);
-                } else if (result == sellerBtn) {
-                    currentUser.setRole(Role.SELLER);
-                    saveRoleToServer(Role.SELLER);
-                }
+        DialogPane pane = alert.getDialogPane();
+        pane.setPrefWidth(420);
 
-                applyRoleUI();
-            });
-        }
+        pane.getStylesheets().add(
+                getClass().getResource("/style/choose_role_dialog.css").toExternalForm()
+        );
+
+        Button bidderButton = (Button) pane.lookupButton(bidderBtn);
+        bidderButton.getStyleClass().add("bidder-button");
+
+        Button sellerButton = (Button) pane.lookupButton(sellerBtn);
+        sellerButton.getStyleClass().add("seller-button");
+
+        alert.showAndWait().ifPresent(result -> {
+            if (result == bidderBtn) {
+                currentUser.setRole(Role.BIDDER);
+                saveRoleToServer(Role.BIDDER);
+            } else if (result == sellerBtn) {
+                currentUser.setRole(Role.SELLER);
+                saveRoleToServer(Role.SELLER);
+            }
+
+            applyRoleUI();
+        });
+    }
         private void saveRoleToServer(Role role) {
             try {
                 UpdateRoleRequest request = new UpdateRoleRequest(

@@ -62,7 +62,16 @@ public class ClientHandler implements Runnable {
 
                 }else if (obj instanceof UpdateRoleRequest request) {
                     userDAO.updateRole(request.getUserId(), request.getRole());
-                } else {
+                } else if (obj instanceof RegisterRequest request) {
+
+                    String result = registerDAO.register(request);
+                    send(result);
+
+                } else if ("LOGOUT".equals(obj)) {
+                    send("LOGOUT_SUCCESS");
+                    break;
+
+                }{
                     send("UNKNOWN_REQUEST");
                 }
             }
