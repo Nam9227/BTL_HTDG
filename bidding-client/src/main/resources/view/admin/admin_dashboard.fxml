@@ -5,7 +5,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.uet.client.ui.AdminDashboardController"
+            fx:controller="com.uet.client.ui.admin.AdminDashboardController"
             prefWidth="1100" prefHeight="650"
             style="-fx-background-color: #2f3336;">
 
