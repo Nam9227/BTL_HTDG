@@ -1,7 +1,9 @@
 package com.uet.server.network;
 
+import com.uet.common.model.user.User;
 import com.uet.common.network.LoginRequest;
 import com.uet.common.network.RegisterRequest;
+import com.uet.common.network.UpdateRoleRequest;
 import com.uet.server.database.dao.RegisterDAO;
 import com.uet.server.database.dao.UserDAO;
 
@@ -46,21 +48,20 @@ public class ClientHandler implements Runnable {
                 if (obj instanceof LoginRequest request) {
                     System.out.println("Login attempt: " + request.getUsername());
 
-                    boolean ok = userDAO.checkLogin(
+                    User ok = userDAO.login(
                             request.getUsername(),
                             request.getPassword()
                     );
 
-                    send(ok ? "LOGIN_SUCCESS" : "LOGIN_FAIL");
+                    if (ok != null) {
+                        send(ok);
+                    }
+                    else{
+                        send("LOGIN_FAIL");
+                    }
 
-                } else if (obj instanceof RegisterRequest request) {
-                    String result = registerDAO.register(request);
-                    send(result);
-
-                } else if ("LOGOUT".equals(obj)) {
-                    send("LOGOUT_SUCCESS");
-                    break;
-
+                }else if (obj instanceof UpdateRoleRequest request) {
+                    userDAO.updateRole(request.getUserId(), request.getRole());
                 } else {
                     send("UNKNOWN_REQUEST");
                 }

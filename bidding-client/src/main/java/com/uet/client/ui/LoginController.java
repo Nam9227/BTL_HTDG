@@ -1,5 +1,6 @@
 package com.uet.client.ui;
 
+import com.uet.common.model.user.User;
 import com.uet.common.network.LoginRequest;
 import com.uet.client.network.ClientSocket;
 import javafx.event.ActionEvent;
@@ -57,17 +58,17 @@ public class LoginController {
 
             // 3. Gửi qua Socket (Dùng Singleton của Nam)
             ClientSocket network = ClientSocket.getInstance();
-            network.connect(); // Nhớ check port 27915 trong file này nhé
+            network.connect();
             network.send(request);
 
             // 4. Đợi phản hồi từ Server
             Object response = network.receive();
 
-            if ("LOGIN_SUCCESS".equals(response)) {
+            if (response instanceof User loginUser) {
                 System.out.println("Đăng nhập OK!");
-                switchScene("/view/home_view.fxml", "Trang chủ");
+                switchScene("/view/home_view.fxml", "Trang chủ", loginUser);
             } else {
-                showError("Lỗi","Sai tài khoản hoặc mật khẩu!");
+                showError("Lỗi", "Sai tài khoản hoặc mật khẩu!");
             }
 
         } catch (Exception e) {
@@ -108,7 +109,30 @@ public class LoginController {
     private void nextregiset(ActionEvent event) {
         switchScene("/view/register_view.fxml", "Trang Đăng Ký");
     }
+    private void switchScene(String fxmlPath, String title, User user) {
+        try {
+            Stage stage = (Stage) userField.getScene().getWindow();
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            Object controller = loader.getController();
+
+            if (controller instanceof HomeController homeController) {
+                homeController.setUser(user);
+            }
+
+            Scene scene = new Scene(root);
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
+        }
+    }
     private void switchScene(String fxmlPath, String title) {
         try {
             Stage stage = (Stage) userField.getScene().getWindow();

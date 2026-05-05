@@ -35,6 +35,7 @@ public class RegisterDAO {
         String checkEmailSql = "SELECT user_id FROM user_profiles WHERE email = ?";
         String insertUserSql = "INSERT INTO users (id, username, password, role) VALUES (?, ?, ?, ?)";
         String insertProfileSql = "INSERT INTO user_profiles (user_id, full_name, email, phone_number, avatar_url) VALUES (?, ?, ?, ?, ?)";
+        String sqlWallet = "INSERT INTO wallet(user_id, balance) VALUES (?, 0)";
 
         Connection conn = null;
 
@@ -81,6 +82,11 @@ public class RegisterDAO {
                 insertProfileStmt.setNull(4, Types.VARCHAR); // phone = null
                 insertProfileStmt.setNull(5, Types.VARCHAR); // avatar = null
                 insertProfileStmt.executeUpdate();
+            }
+
+            try (PreparedStatement psWallet = conn.prepareStatement(sqlWallet)) {
+                psWallet.setString(1, userId);
+                psWallet.executeUpdate();
             }
 
             conn.commit();
