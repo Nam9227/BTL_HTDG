@@ -174,14 +174,16 @@ public class RegisterController {
 
                 switchScene("/view/login_view.fxml", "Trang Đăng Nhập");
 
-            } else if ("USERNAME_EXISTS".equals(response)) {
-                showError("Thông báo", "Tên tài khoản đã tồn tại!");
-
             } else if ("EMAIL_EXISTS".equals(response)) {
                 showError("Thông báo", "Email đã tồn tại!");
-
+                return;
+            } else if ("USERNAME_EXISTS".equals(response)) {
+                showError("Thông báo", "Tên tài khoản đã tồn tại!");
+                return;
             } else {
                 showError("Thông báo", "Đăng ký thất bại!");
+                return;
+
             }
 
 

@@ -43,15 +43,6 @@ public class RegisterDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
 
-            // check username
-            try (PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSql)) {
-                checkUserStmt.setString(1, request.getUsername());
-                ResultSet rs = checkUserStmt.executeQuery();
-                if (rs.next()) {
-                    return "USERNAME_EXISTS";
-                }
-            }
-
             // check email
             if (request.getEmail() != null && !request.getEmail().isBlank()) {
                 try (PreparedStatement checkEmailStmt = conn.prepareStatement(checkEmailSql)) {
@@ -62,6 +53,17 @@ public class RegisterDAO {
                     }
                 }
             }
+            
+            // check username
+            try (PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSql)) {
+                checkUserStmt.setString(1, request.getUsername());
+                ResultSet rs = checkUserStmt.executeQuery();
+                if (rs.next()) {
+                    return "USERNAME_EXISTS";
+                }
+            }
+
+
 
             String userId = generateUniqueId(conn);
 
