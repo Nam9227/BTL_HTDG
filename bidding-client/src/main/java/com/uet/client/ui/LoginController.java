@@ -66,7 +66,11 @@ public class LoginController {
 
             if (response instanceof User loginUser) {
                 System.out.println("Đăng nhập OK!");
-                switchScene("/view/home_view.fxml", "Trang chủ", loginUser);
+                if (loginUser.getRole() != null && "ADMIN".equalsIgnoreCase(loginUser.getRole().name())) {
+                    switchScene("/view/admin_auctions.fxml", "Trang Admin", loginUser);
+                } else {
+                    switchScene("/view/home_view.fxml", "Trang chủ", loginUser);
+                }
             } else {
                 showError("Lỗi", "Sai tài khoản hoặc mật khẩu!");
             }
