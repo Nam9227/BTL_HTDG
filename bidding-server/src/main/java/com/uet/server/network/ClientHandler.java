@@ -71,7 +71,7 @@ public class ClientHandler implements Runnable {
                     send("LOGOUT_SUCCESS");
                     break;
 
-                }{
+                }else {
                     send("UNKNOWN_REQUEST");
                 }
             }
