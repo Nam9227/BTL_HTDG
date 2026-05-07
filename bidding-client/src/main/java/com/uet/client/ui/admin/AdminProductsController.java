@@ -36,4 +36,10 @@ public class AdminProductsController {
     private void goAuctions(ActionEvent event) {
         switchScene(event, "/view/admin/admin_auctions.fxml", "Quản lý phiên đấu giá");
     }
+    @FXML
+    private void handleLogout() {
+        System.out.println("Đang đăng xuất...");
+        System.exit(0);
+    }
+    private void handleSearch
 }
