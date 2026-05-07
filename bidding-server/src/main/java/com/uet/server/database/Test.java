@@ -2,7 +2,7 @@ package com.uet.server.database;
 
 import java.sql.Connection;
 
-public class test {
+public class Test {
     public static void main(String[] args) {
         try {
             Connection conn = DBConnection.getConnection();

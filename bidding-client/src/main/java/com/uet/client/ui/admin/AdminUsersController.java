@@ -1,6 +1,6 @@
 package com.uet.client.ui.admin;
 
-import com.uet.client.model.user.User; // Import đúng package bạn vừa tạo
+import com.uet.common.model.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
