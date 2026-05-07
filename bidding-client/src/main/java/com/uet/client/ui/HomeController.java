@@ -117,7 +117,7 @@ public class HomeController{
             sideContent.setManaged(true);
             closeBtn.setVisible(true);
 
-            // Hiệu ứng đẩy Sidebar vào từ phải sang trái (hoặc trái sang phải tùy layout của bạn)
+            // Hiệu ứng đẩy Sidebar vào từ phải sang trái
             TranslateTransition menuSlide = new TranslateTransition(Duration.millis(300), sideContent);
             menuSlide.setToX(0);
 
@@ -132,7 +132,7 @@ public class HomeController{
             double width = sideContent.getWidth();
             TranslateTransition menuSlide = new TranslateTransition(Duration.millis(300), sideContent);
 
-            // Đẩy sidebar ra ngoài (ví dụ sang phải)
+            // Đẩy sidebar ra ngoài
             menuSlide.setToX(width);
 
             menuSlide.setOnFinished(e -> {

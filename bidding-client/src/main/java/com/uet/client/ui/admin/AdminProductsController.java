@@ -6,11 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class AdminProductsController {
+    @FXML private TextField searchField;
     private void switchScene(ActionEvent event, String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -41,5 +43,7 @@ public class AdminProductsController {
         System.out.println("Đang đăng xuất...");
         System.exit(0);
     }
-    private void handleSearch(){}
+    private void handleSearch(){
+        String informationSearch = searchField.getText();
+    }
 }
