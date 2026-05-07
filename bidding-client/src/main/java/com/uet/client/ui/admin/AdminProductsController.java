@@ -41,5 +41,5 @@ public class AdminProductsController {
         System.out.println("Đang đăng xuất...");
         System.exit(0);
     }
-    private void handleSearch
+    private void handleSearch(){}
 }

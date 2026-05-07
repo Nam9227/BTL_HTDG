@@ -67,7 +67,7 @@ public class LoginController {
             if (response instanceof User loginUser) {
                 System.out.println("Đăng nhập OK!");
                 if (loginUser.getRole() != null && "ADMIN".equalsIgnoreCase(loginUser.getRole().name())) {
-                    switchScene("/view/admin/admin_auctions.fxml", "Trang Admin", loginUser);
+                    switchScene("/view/admin/admin_dashboard.fxml", "Trang Admin", loginUser);
                 } else {
                     switchScene("/view/home_view.fxml", "Trang chủ", loginUser);
                 }
