@@ -27,10 +27,8 @@ public class RegisterController {
     @FXML private ImageView confirmEyeIcon;
     @FXML private Button btnTogglePassword;
     @FXML private Button btnToggleConfirm;
-    @FXML private Button togglePassword;
     private Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
     private Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
-    private boolean isPasswordShown = false;
     @FXML
     private static final String GMAIL_REGEX = "^[A-Za-z0-9+_.-]+@gmail\\.com$";
     @FXML
@@ -40,43 +38,6 @@ public class RegisterController {
         }
         return Pattern.matches(GMAIL_REGEX, email);
     }
-    /*@FXML
-    void handleTogglePassword(ActionEvent event) {
-        if (isPasswordShown) {
-            // Chuyển từ hiện sang ẩn
-            passwordField.setText(passwordText.getText());
-            passwordField.setVisible(true);
-            passwordText.setVisible(false);
-            // Thay đổi icon sang mắt đóng (nếu có)
-            eyeIcon.setImage(imageClose);
-            isPasswordShown = false;
-        } else {
-            // Chuyển từ ẩn sang hiện
-            passwordText.setText(passwordField.getText());
-            passwordText.setVisible(true);
-            passwordField.setVisible(false);
-            // Thay đổi icon sang mắt mở (nếu có)
-            eyeIcon.setImage(imageOpen);
-            isPasswordShown = true;
-        }
-    }*/
-    // Hàm dùng chung cho bất kỳ cặp trường mật khẩu nào
-    /*@FXML
-    private void togglePasswordVisibility(PasswordField pField, TextField tField, ImageView icon) {
-        if (pField.isVisible()) {
-            // Đang ẩn -> Hiện mật khẩu
-            tField.setText(pField.getText());
-            tField.setVisible(true);
-            pField.setVisible(false);
-            icon.setImage(imageOpen); // Dùng biến imageOpen sẵn có của bạn
-        } else {
-            // Đang hiện -> Ẩn mật khẩu
-            pField.setText(tField.getText());
-            pField.setVisible(true);
-            tField.setVisible(false);
-            icon.setImage(imageClose); // Dùng biến imageClose sẵn có của bạn
-        }
-    }*/
     @FXML
     private void handleTogglePassword(ActionEvent event) {
         // Xác định nút nào vừa được bấm
@@ -91,7 +52,7 @@ public class RegisterController {
         }
     }
 
-    // Hàm logic bổ trợ (giữ nguyên như cũ)
+    // Hàm logic bổ trợ
     private void toggleLogic(PasswordField pField, TextField tField, ImageView icon) {
         if (pField.isVisible()) {
             tField.setText(pField.getText());

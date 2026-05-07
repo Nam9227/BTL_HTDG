@@ -53,7 +53,7 @@ public class RegisterDAO {
                     }
                 }
             }
-            
+
             // check username
             try (PreparedStatement checkUserStmt = conn.prepareStatement(checkUserSql)) {
                 checkUserStmt.setString(1, request.getUsername());
