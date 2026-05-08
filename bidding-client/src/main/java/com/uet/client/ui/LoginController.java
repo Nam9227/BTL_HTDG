@@ -3,6 +3,7 @@ package com.uet.client.ui;
 import com.uet.common.model.user.User;
 import com.uet.common.network.LoginRequest;
 import com.uet.client.network.ClientSocket;
+import com.uet.common.network.Response;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -62,22 +63,26 @@ public class LoginController {
             network.send(request);
 
             // 4. Đợi phản hồi từ Server
-            Object response = network.receive();
+            Object responseObj = network.receive();
 
-            if (response instanceof User loginUser) {
+            if (responseObj instanceof Response response && response.isSuccess()) {
+                User loginUser = (User) response.getData();
+
                 System.out.println("Đăng nhập OK!");
                 if (loginUser.getRole() != null && "ADMIN".equalsIgnoreCase(loginUser.getRole().name())) {
                     switchScene("/view/admin/admin_dashboard.fxml", "Trang Admin", loginUser);
                 } else {
                     switchScene("/view/home_view.fxml", "Trang chủ", loginUser);
                 }
+            } else if (responseObj instanceof Response response) {
+                showError("Lỗi", response.getMessage());
             } else {
-                showError("Lỗi", "Sai tài khoản hoặc mật khẩu!");
+                showError("Lỗi", "Phản hồi từ server không hợp lệ!");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Lỗi kết nối Server: ");
+            showError("Lỗi kết nối", "Không thể kết nối Server!");
         }
     }
 

@@ -11,6 +11,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.math.BigDecimal;
+
 public class HomeController{
 
         @FXML private VBox sideContent; // Sidebar màu xanh
@@ -35,7 +37,9 @@ public class HomeController{
                 applyRoleUI();
                 }
             }
-        private String formatMoney(double amount) {
+        private String formatMoney(BigDecimal amount) {
+            if (amount==null)
+                return "0 đ";
             return String.format("%,.0f đ", amount);
         }
     private void showChooseRoleDialog() {

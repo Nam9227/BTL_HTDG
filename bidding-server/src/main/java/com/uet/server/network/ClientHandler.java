@@ -1,5 +1,6 @@
 package com.uet.server.network;
 
+import com.uet.common.network.Response;
 import com.uet.common.model.user.User;
 import com.uet.common.network.LoginRequest;
 import com.uet.common.network.RegisterRequest;
@@ -44,35 +45,23 @@ public class ClientHandler implements Runnable {
 
             while (true) {
                 Object obj = in.readObject();
-
                 if (obj instanceof LoginRequest request) {
                     System.out.println("Login attempt: " + request.getUsername());
+                    send(userDAO.handleLogin(request));
 
-                    User ok = userDAO.login(
-                            request.getUsername(),
-                            request.getPassword()
-                    );
-
-                    if (ok != null) {
-                        send(ok);
-                    }
-                    else{
-                        send("LOGIN_FAIL");
-                    }
-
-                }else if (obj instanceof UpdateRoleRequest request) {
+                } else if (obj instanceof UpdateRoleRequest request) {
                     userDAO.updateRole(request.getUserId(), request.getRole());
-                } else if (obj instanceof RegisterRequest request) {
+                    send(Response.success("Cập nhật quyền thành công", null));
 
-                    String result = registerDAO.register(request);
-                    send(result);
+                }  else if (obj instanceof RegisterRequest request) {
+                    send(registerDAO.handleRegister(request));
 
                 } else if ("LOGOUT".equals(obj)) {
-                    send("LOGOUT_SUCCESS");
+                    send(Response.success("Đăng xuất thành công", null));
                     break;
 
-                }else {
-                    send("UNKNOWN_REQUEST");
+                } else {
+                    send(Response.fail("Yêu cầu không hợp lệ"));
                 }
             }
 

@@ -2,6 +2,7 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.network.RegisterRequest;
+import com.uet.common.network.Response;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.fxml.FXMLLoader;
@@ -124,32 +125,29 @@ public class RegisterController {
             network.connect();
             network.send(request);
 
-            Object response = network.receive();
+            Object responseObj = network.receive();
 
-            if ("REGISTER_SUCCESS".equals(response)) {
+            if (responseObj instanceof Response response && response.isSuccess()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Thành công");
                 alert.setHeaderText(null);
-                alert.setContentText("Tạo tài khoản thành công! Nhấn OK để quay lại đăng nhập.");
+                alert.setContentText(response.getMessage() + "! Nhấn OK để quay lại đăng nhập.");
                 alert.showAndWait();
 
                 switchScene("/view/login_view.fxml", "Trang Đăng Nhập");
 
-            } else if ("EMAIL_EXISTS".equals(response)) {
-                showError("Thông báo", "Email đã tồn tại!");
-                return;
-            } else if ("USERNAME_EXISTS".equals(response)) {
-                showError("Thông báo", "Tên tài khoản đã tồn tại!");
+            } else if (responseObj instanceof Response response) {
+                showError("Thông báo", response.getMessage());
                 return;
             } else {
-                showError("Thông báo", "Đăng ký thất bại!");
+                showError("Thông báo", "Phản hồi từ server không hợp lệ!");
                 return;
-
             }
 
 
         } catch (Exception a) {
-            a.printStackTrace(); // In lỗi chi tiết ra màn hình đen (Console)
+            a.printStackTrace();
+            showError("Lỗi kết nối", "Không thể kết nối Server!");
         }
 
     }
