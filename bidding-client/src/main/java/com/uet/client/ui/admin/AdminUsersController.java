@@ -1,6 +1,7 @@
 package com.uet.client.ui.admin;
 
 import com.uet.common.model.user.User;
+import com.uet.common.model.user.Role;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -49,9 +50,9 @@ public class AdminUsersController {
 
     private void loadMockData() {
         // Dữ liệu giả lập khớp với constructor mới của bạn
-        //masterData.add(new User("U001", "nguyenvana", "Nguyễn Văn A", "a@gmail.com", "0987654321", "USER", "Hoạt động"));
-        //masterData.add(new User("U002", "admin_tuan", "Trần Anh Tuấn", "tuan@uet.vn", "0123456789", "ADMIN", "Hoạt động"));
-        //masterData.add(new User("U003", "bad_boy", "Lê Văn B", "b@yahoo.com", "0999999999", "USER", "Bị khóa"));
+        masterData.add(new User("U001", "nguyenvana", "Nguyễn Văn A", "a@gmail.com", "0987654321", "USER", "Hoạt động"));
+        masterData.add(new User("U002", "admin_tuan", "Trần Anh Tuấn", "tuan@uet.vn", "0123456789", "ADMIN", "Hoạt động"));
+        masterData.add(new User("U003", "bad_boy", "Lê Văn B", "b@yahoo.com", "0999999999", "USER", "Bị khóa"));
 
         userTable.setItems(masterData);
     }
@@ -74,22 +75,22 @@ public class AdminUsersController {
 
     @FXML
     private void handleLockUser() {
-        //User selected = userTable.getSelectionModel().getSelectedItem();
-        //if (selected != null) {
-        //    selected.setStatus("Bị khóa");
-        //    userTable.refresh(); // Cập nhật lại dòng hiển thị trên bảng
-        //} else {
-        //    showWarning("Vui lòng chọn một người dùng để khóa!");
-        //}
+        User selected = userTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            selected.setStatus("Bị khóa");
+            userTable.refresh(); // Cập nhật lại dòng hiển thị trên bảng
+        } else {
+           showWarning("Vui lòng chọn một người dùng để khóa!");
+        }
     }
 
     @FXML
     private void handleUnlockUser() {
         User selected = userTable.getSelectionModel().getSelectedItem();
-        //if (selected != null) {
-        //    selected.setStatus("Hoạt động");
-        //    userTable.refresh();
-        //}
+        if (selected != null) {
+            selected.setStatus("Hoạt động");
+            userTable.refresh();
+        }
     }
 
     @FXML
