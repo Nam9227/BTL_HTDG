@@ -1,11 +1,14 @@
 package com.uet.client.ui;
 
+import com.uet.common.model.auction.AuctionItem;
+import com.uet.common.model.user.User;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -41,6 +44,9 @@ public class AuctionDetailController {
     private final DecimalFormat moneyFormat = new DecimalFormat("#,###");
     private final XYChart.Series<String, Number> priceSeries = new XYChart.Series<>();
 
+    private User currentUser;
+    private AuctionItem auctionItem;
+
     private double currentPrice = 25000000;
     private LocalDateTime endTime = LocalDateTime.now().plusMinutes(45);
 
@@ -49,26 +55,42 @@ public class AuctionDetailController {
         //bidderColumn.setCellValueFactory(data -> data.getValue().bidderProperty());
         //amountColumn.setCellValueFactory(data -> data.getValue().amountProperty());
         //timeColumn.setCellValueFactory(data -> data.getValue().timeProperty());
-
         priceChart.getData().add(priceSeries);
-
-        loadDemoData();
         startCountdown();
     }
 
-    private void loadDemoData() {
-        userNameLabel.setText("Nam UET");
-        balanceLabel.setText("Số dư: 5,000,000đ");
+    public void setData(User user, AuctionItem item) {
+        this.currentUser = user;
+        this.auctionItem = item;
 
-        productNameLabel.setText("iPhone 15 Pro Max");
-        sellerLabel.setText("Người bán: admin1");
-        descriptionArea.setText("Máy đẹp, pin tốt, còn bảo hành. Phù hợp để demo đấu giá.");
+        userNameLabel.setText(user.getUsername());
+        balanceLabel.setText("Số dư: " + formatMoney(user.getBalance().doubleValue()));
 
-        startPriceLabel.setText(formatMoney(15000000));
-        currentPriceLabel.setText(formatMoney(currentPrice));
-        leaderLabel.setText("Nam UET");
+        productNameLabel.setText(item.getProductName());
+        sellerLabel.setText("Người bán: " + item.getSellerName());
+        descriptionArea.setText(item.getDescription());
 
-        addBidHistory("Nam UET", currentPrice);
+        currentPrice = item.getCurrentPrice();
+        endTime = item.getEndTime();
+
+        startPriceLabel.setText(formatMoney(item.getStartPrice()));
+        currentPriceLabel.setText(formatMoney(item.getCurrentPrice()));
+
+        if (item.getWinnerName() == null || item.getWinnerName().isBlank()) {
+            leaderLabel.setText("Chưa có");
+        } else {
+            leaderLabel.setText(item.getWinnerName());
+        }
+
+        if (item.getImageUrl() != null && !item.getImageUrl().isBlank()) {
+            try {
+                productImage.setImage(new Image(item.getImageUrl()));
+            } catch (Exception e) {
+                System.out.println("Không load được ảnh: " + item.getImageUrl());
+            }
+        }
+
+        addBidHistory("Giá hiện tại", currentPrice);
     }
 
     @FXML
@@ -88,9 +110,18 @@ public class AuctionDetailController {
             showMessage("Giá đặt không hợp lệ.", false);
             return;
         }
-
         if (amount <= currentPrice) {
             showMessage("Giá đặt phải cao hơn giá hiện tại.", false);
+            return;
+        }
+
+        if (currentUser == null || currentUser.getBalance() == null) {
+            showMessage("Không lấy được thông tin số dư tài khoản.", false);
+            return;
+        }
+
+        if (amount > currentUser.getBalance().doubleValue()) {
+            showMessage("Số dư không đủ để đặt giá này.", false);
             return;
         }
 
@@ -146,8 +177,30 @@ public class AuctionDetailController {
 
     @FXML
     private void handleBack() {
-        // TODO: chuyển về trang danh sách đấu giá
-        System.out.println("Back to auction list");
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource("/view/home_view.fxml")
+            );
+
+            javafx.scene.Parent root = loader.load();
+
+            HomeController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            javafx.stage.Stage stage = (javafx.stage.Stage) productNameLabel.getScene().getWindow();
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setResizable(true);
+            stage.show();
+
+            javafx.application.Platform.runLater(() -> {
+                stage.setMaximized(false);
+                stage.setMaximized(true);
+            });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showMessage("Không quay lại được trang chủ.", false);
+            }
     }
 
     private void showMessage(String message, boolean success) {

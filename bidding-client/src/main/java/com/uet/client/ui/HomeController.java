@@ -10,10 +10,15 @@ import com.uet.common.network.UpdateRoleRequest;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+// ... existing code ...
 
 import java.math.BigDecimal;
 import java.util.List;;
@@ -195,9 +200,7 @@ public class HomeController{
 
                 bidButton.setMaxWidth(Double.MAX_VALUE);
 
-                bidButton.setOnAction(e -> {
-                    System.out.println("Đấu giá: " + item.getProductName());
-                });
+                bidButton.setOnAction(e -> openAuctionDetail(item));
 
                 card.getChildren().addAll(
                         nameLabel,
@@ -210,7 +213,33 @@ public class HomeController{
                 productContainer.getChildren().add(card);
             }
         }
+        private void openAuctionDetail(AuctionItem item) {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/view/auction_detail.fxml")
+                );
 
+                Parent root = loader.load();
+
+                AuctionDetailController controller = loader.getController();
+                controller.setData(currentUser, item);
+
+                Stage stage = (Stage) productContainer.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setResizable(true);
+                stage.show();
+
+                Platform.runLater(() -> {
+                    stage.setMaximized(false);
+                    stage.setMaximized(true);
+                });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showError("Lỗi", "Không mở được trang chi tiết đấu giá!");
+                }
+
+        }
 
         @FXML
         public void handleOpenSidebar() {
