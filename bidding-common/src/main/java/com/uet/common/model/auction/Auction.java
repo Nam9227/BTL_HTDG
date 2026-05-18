@@ -1,6 +1,7 @@
-package com.uet.client.model.auction;
+package com.uet.common.model.auction;
 
-import com.uet.client.model.item.Item;
+import com.uet.common.model.item.Item;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

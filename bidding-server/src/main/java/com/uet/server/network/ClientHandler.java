@@ -1,16 +1,16 @@
 package com.uet.server.network;
 
-import com.uet.common.network.Response;
+import com.uet.common.model.auction.AuctionItem;
+import com.uet.common.network.*;
 import com.uet.common.model.user.User;
-import com.uet.common.network.LoginRequest;
-import com.uet.common.network.RegisterRequest;
-import com.uet.common.network.UpdateRoleRequest;
+import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.RegisterDAO;
 import com.uet.server.database.dao.UserDAO;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class ClientHandler implements Runnable {
 
@@ -59,6 +59,10 @@ public class ClientHandler implements Runnable {
                 } else if ("LOGOUT".equals(obj)) {
                     send(Response.success("Đăng xuất thành công", null));
                     break;
+                } else if (obj instanceof GetActiveAuctionsRequest) {
+                    AuctionDAO dao = new AuctionDAO();
+                    List<AuctionItem> auctions = dao.getActiveAuctions();
+                    send(new GetActiveAuctionsResponse(auctions));
 
                 } else {
                     send(Response.fail("Yêu cầu không hợp lệ"));
