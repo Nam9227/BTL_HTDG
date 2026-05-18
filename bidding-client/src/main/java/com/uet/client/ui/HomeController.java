@@ -1,10 +1,14 @@
 package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
+import com.uet.common.model.auction.AuctionItem;
 import com.uet.common.model.user.Role;
 import com.uet.common.model.user.User;
+import com.uet.common.network.GetActiveAuctionsRequest;
+import com.uet.common.network.GetActiveAuctionsResponse;
 import com.uet.common.network.UpdateRoleRequest;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -12,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.math.BigDecimal;
+import java.util.List;;
 
 public class HomeController{
 
@@ -42,42 +47,42 @@ public class HomeController{
                 return "0 đ";
             return String.format("%,.0f đ", amount);
         }
-    private void showChooseRoleDialog() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Chọn vai trò");
-        alert.setHeaderText("Bạn muốn sử dụng hệ thống với vai trò nào?");
-        alert.setContentText("Chỉ cần chọn một lần để bắt đầu sử dụng hệ thống.");
+        private void showChooseRoleDialog() {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Chọn vai trò");
+            alert.setHeaderText("Bạn muốn sử dụng hệ thống với vai trò nào?");
+            alert.setContentText("Chỉ cần chọn một lần để bắt đầu sử dụng hệ thống.");
 
-        ButtonType bidderBtn = new ButtonType("Người đấu giá");
-        ButtonType sellerBtn = new ButtonType("Người bán hàng");
+            ButtonType bidderBtn = new ButtonType("Người đấu giá");
+            ButtonType sellerBtn = new ButtonType("Người bán hàng");
 
-        alert.getButtonTypes().setAll(bidderBtn, sellerBtn);
+            alert.getButtonTypes().setAll(bidderBtn, sellerBtn);
 
-        DialogPane pane = alert.getDialogPane();
-        pane.setPrefWidth(420);
+            DialogPane pane = alert.getDialogPane();
+            pane.setPrefWidth(420);
 
-        pane.getStylesheets().add(
-                getClass().getResource("/style/choose_role_dialog.css").toExternalForm()
-        );
+            pane.getStylesheets().add(
+                    getClass().getResource("/style/choose_role_dialog.css").toExternalForm()
+            );
 
-        Button bidderButton = (Button) pane.lookupButton(bidderBtn);
-        bidderButton.getStyleClass().add("bidder-button");
+            Button bidderButton = (Button) pane.lookupButton(bidderBtn);
+            bidderButton.getStyleClass().add("bidder-button");
 
-        Button sellerButton = (Button) pane.lookupButton(sellerBtn);
-        sellerButton.getStyleClass().add("seller-button");
+            Button sellerButton = (Button) pane.lookupButton(sellerBtn);
+            sellerButton.getStyleClass().add("seller-button");
 
-        alert.showAndWait().ifPresent(result -> {
-            if (result == bidderBtn) {
-                currentUser.setRole(Role.BIDDER);
-                saveRoleToServer(Role.BIDDER);
-            } else if (result == sellerBtn) {
-                currentUser.setRole(Role.SELLER);
-                saveRoleToServer(Role.SELLER);
-            }
+            alert.showAndWait().ifPresent(result -> {
+                if (result == bidderBtn) {
+                    currentUser.setRole(Role.BIDDER);
+                    saveRoleToServer(Role.BIDDER);
+                } else if (result == sellerBtn) {
+                    currentUser.setRole(Role.SELLER);
+                    saveRoleToServer(Role.SELLER);
+                }
 
-            applyRoleUI();
-        });
-    }
+                applyRoleUI();
+            });
+        }
         private void saveRoleToServer(Role role) {
             try {
                 UpdateRoleRequest request = new UpdateRoleRequest(
@@ -106,7 +111,16 @@ public class HomeController{
                 // productContainer.setManaged(false);
             }
         }
+
+        @FXML
         public void initialize() {
+            productContainer.getStylesheets().add(
+                    getClass().getResource("/style/auction-card.css").toExternalForm()
+            );
+            productContainer.getStyleClass().add("root-container");
+            productContainer.setHgap(20);
+            productContainer.setVgap(20);
+            loadActiveAuctions();
             // Ban đầu ẩn Sidebar và nút X đi
             // Giả sử chiều rộng sidebar là 300
             sideContent.setTranslateX(300);
@@ -114,6 +128,89 @@ public class HomeController{
             sideContent.setManaged(false);
             closeBtn.setVisible(false);
         }
+        private void loadActiveAuctions() {
+            new Thread(() -> {
+                try {
+                    ClientSocket socket = ClientSocket.getInstance();
+
+                    socket.send(new GetActiveAuctionsRequest());
+
+                    Object response = socket.receive();
+
+                    if (response instanceof GetActiveAuctionsResponse auctionResponse) {
+                        List<AuctionItem> auctions = auctionResponse.getAuctions();
+
+                        Platform.runLater(() -> renderAuctions(auctions));
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    Platform.runLater(() ->
+                            showError("Lỗi", "Không lấy được danh sách sản phẩm đấu giá!")
+                    );
+                }
+            }).start();
+        }
+
+        private void renderAuctions(List<AuctionItem> auctions) {
+
+            productContainer.getChildren().clear();
+
+            if (auctions == null || auctions.isEmpty()) {
+                Label emptyLabel = new Label("Chưa có sản phẩm đấu giá nào.");
+                productContainer.getChildren().add(emptyLabel);
+                return;
+            }
+
+            for (AuctionItem item : auctions) {
+
+                VBox card = new VBox(12);
+                card.getStyleClass().add("auction-card");
+
+                Label nameLabel = new Label(item.getProductName());
+                nameLabel.getStyleClass().add("product-name");
+
+                Label descriptionLabel = new Label(item.getDescription());
+                descriptionLabel.setWrapText(true);
+                descriptionLabel.getStyleClass().add("product-description");
+
+                Label priceTitle = new Label("Giá hiện tại");
+                priceTitle.getStyleClass().add("price-title");
+
+                Label currentPriceLabel = new Label(
+                        String.format("%,.0f đ", item.getCurrentPrice())
+                );
+                currentPriceLabel.getStyleClass().add("current-price");
+
+                VBox priceBox = new VBox(2, priceTitle, currentPriceLabel);
+
+                Label endTimeLabel = new Label(
+                        "Kết thúc: " + item.getEndTime()
+                );
+                endTimeLabel.getStyleClass().add("end-time");
+
+                Button bidButton = new Button("Đấu giá ngay");
+                bidButton.getStyleClass().add("bid-button");
+
+                bidButton.setMaxWidth(Double.MAX_VALUE);
+
+                bidButton.setOnAction(e -> {
+                    System.out.println("Đấu giá: " + item.getProductName());
+                });
+
+                card.getChildren().addAll(
+                        nameLabel,
+                        descriptionLabel,
+                        priceBox,
+                        endTimeLabel,
+                        bidButton
+                );
+
+                productContainer.getChildren().add(card);
+            }
+        }
+
 
         @FXML
         public void handleOpenSidebar() {

@@ -134,7 +134,8 @@ public class LoginController {
             Scene scene = new Scene(root);
             stage.setTitle(title);
             stage.setScene(scene);
-            stage.setResizable(false);
+            stage.setMaximized(true);
+            stage.setResizable(true);
             stage.show();
 
         } catch (Exception e) {
