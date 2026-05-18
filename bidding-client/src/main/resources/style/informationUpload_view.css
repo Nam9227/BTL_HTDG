@@ -1,0 +1,9 @@
+.check-box .box {
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-border-radius: 2;
+}
+.check-box:selected .box {
+    -fx-border-color: lightgray; /* Giữ viền cùng màu */
+    -fx-background-color: white; /* Nền ô vuông màu trắng */
+}
