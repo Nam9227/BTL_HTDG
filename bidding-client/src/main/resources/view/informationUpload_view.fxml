@@ -19,9 +19,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="786.0" prefWidth="967.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.informationUploadController">
+<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="868.0" prefWidth="967.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" stylesheets="@../style/informationUpload_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.informationUploadController">
   <content>
-      <VBox alignment="TOP_CENTER" prefHeight="779.0" prefWidth="965.0" spacing="30.0">
+      <VBox alignment="TOP_CENTER" prefHeight="860.0" prefWidth="965.0" spacing="30.0">
          <padding>
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
          </padding>
@@ -40,9 +40,9 @@
                   </Label>
                </children>
             </VBox>
-            <HBox alignment="TOP_CENTER" prefHeight="625.0" prefWidth="885.0" spacing="25.0">
+            <HBox alignment="TOP_CENTER" prefHeight="541.0" prefWidth="885.0" spacing="25.0">
                <children>
-                  <VBox prefHeight="524.0" prefWidth="461.0" spacing="20.0" style="-fx-background-color: #282b2d; -fx-background-radius: 12; -fx-border-color: #3e4347; -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 25;">
+                  <VBox prefHeight="529.0" prefWidth="415.0" spacing="20.0" style="-fx-background-color: #282b2d; -fx-background-radius: 12; -fx-border-color: #3e4347; -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 25;">
                      <children>
                         <Label text="Thông tin sản phẩm" textFill="WHITE">
                            <font>
@@ -52,25 +52,25 @@
                         <VBox prefHeight="68.0" prefWidth="221.0" spacing="8.0">
                            <children>
                               <Label prefHeight="17.0" prefWidth="81.0" text="Tên sản phẩm" textFill="WHITE" />
-                              <TextField style="-fx-background-color: #3a3f42; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8; -fx-padding: 8; -fx-text-fill: white;" />
+                              <TextField style="-fx-padding: 8;" />
                            </children>
                         </VBox>
                         <VBox prefHeight="79.0" prefWidth="221.0" spacing="8.0">
                            <children>
                               <Label text="Mô tả chi tiết" textFill="WHITE" />
-                              <TextArea prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #3a3f42; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8; -fx-padding: 8; -fx-text-fill: white; -fx-control-inner-background: #3a3f42;" />
+                              <TextArea prefHeight="150.0" prefWidth="200.0" />
                            </children>
                         </VBox>
                         <VBox prefHeight="40.0" prefWidth="377.0" spacing="8.0">
                            <children>
                               <Label text="Danh mục" textFill="WHITE" />
-                              <ComboBox fx:id="ProductType" prefWidth="150.0" style="-fx-background-color: #3a3f42; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8; -fx-text-fill: white;" />
+                              <ComboBox fx:id="ProductType" prefWidth="150.0" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="8.0">
+                        <VBox prefHeight="88.0" prefWidth="363.0" spacing="8.0">
                            <children>
                               <Label text="Thương hiệu" textFill="WHITE" />
-                              <TextField style="-fx-background-color: #3a3f42; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8; -fx-padding: 8; -fx-text-fill: white;" />
+                              <TextField style="-fx-padding: 8;" />
                            </children>
                         </VBox>
                         <VBox spacing="8.0" />
@@ -104,7 +104,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <GridPane hgap="10.0" prefHeight="120.0" prefWidth="408.0">
+                        <GridPane hgap="10.0" prefHeight="117.0" prefWidth="351.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.66661834716797" minWidth="10.0" prefWidth="108.33335367838542" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.00000000000001" minWidth="10.0" prefWidth="60.99997965494792" />
@@ -149,7 +149,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="89.0" prefWidth="885.0" spacing="50.0" style="-fx-background-color: transparent; -fx-padding: 20 0 0 0;">
+            <HBox alignment="CENTER_RIGHT" prefHeight="111.0" prefWidth="885.0" spacing="50.0" style="-fx-background-color: transparent; -fx-padding: 20 0 0 0;">
                <children>
                   <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="143.0" style="-fx-background-color: #5a5f63; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 20; -fx-padding: 10 25 10 25; -fx-cursor: hand;" text="Hủy" textFill="WHITE" />
                   <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="137.0" style="-fx-background-color: #2b667a; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20; -fx-padding: 10 25 10 25; -fx-cursor: hand;" text="Xác nhận" textFill="WHITE" />
