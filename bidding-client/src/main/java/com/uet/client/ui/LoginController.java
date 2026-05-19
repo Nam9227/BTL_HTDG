@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Node;
+import java.util.concurrent.CompletableFuture;
 
 
 
@@ -60,10 +61,19 @@ public class LoginController {
             // 3. Gửi qua Socket (Dùng Singleton của Nam)
             ClientSocket network = ClientSocket.getInstance();
             network.connect();
-            network.send(request);
 
-            // 4. Đợi phản hồi từ Server
-            Object responseObj = network.receive();
+            CompletableFuture<Object> loginFuture = new CompletableFuture<>();
+
+            java.util.function.Consumer<Object> loginListener = message -> {
+                if (message instanceof Response) {
+                    loginFuture.complete(message);
+                }
+            };
+
+            network.addMessageListener(loginListener);
+            network.send(request);
+            Object responseObj = loginFuture.get();
+            network.removeMessageListener(loginListener);
 
             if (responseObj instanceof Response response && response.isSuccess()) {
                 User loginUser = (User) response.getData();

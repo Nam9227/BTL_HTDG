@@ -45,6 +45,7 @@ public class HomeController{
                 showChooseRoleDialog();
             } else {
                 applyRoleUI();
+                loadActiveAuctions();
                 }
             }
         private String formatMoney(BigDecimal amount) {
@@ -86,6 +87,7 @@ public class HomeController{
                 }
 
                 applyRoleUI();
+                loadActiveAuctions();
             });
         }
         private void saveRoleToServer(Role role) {
@@ -102,6 +104,7 @@ public class HomeController{
                 showError("Lỗi", "Không lưu được vai trò!");
             }
         }
+
         private void applyRoleUI() {
             if (currentUser.getRole() == Role.BIDDER) {
                 System.out.println("Người đấu giá");
@@ -125,7 +128,6 @@ public class HomeController{
             productContainer.getStyleClass().add("root-container");
             productContainer.setHgap(20);
             productContainer.setVgap(20);
-            loadActiveAuctions();
             // Ban đầu ẩn Sidebar và nút X đi
             // Giả sử chiều rộng sidebar là 300
             sideContent.setTranslateX(300);
@@ -134,28 +136,34 @@ public class HomeController{
             closeBtn.setVisible(false);
         }
         private void loadActiveAuctions() {
-            new Thread(() -> {
-                try {
-                    ClientSocket socket = ClientSocket.getInstance();
+            try {
+                ClientSocket socket = ClientSocket.getInstance();
 
-                    socket.send(new GetActiveAuctionsRequest());
+                java.util.function.Consumer<Object> homeListener = new java.util.function.Consumer<>() {
+                    @Override
+                    public void accept(Object response) {
+                        if (response instanceof GetActiveAuctionsResponse auctionResponse) {
+                            List<AuctionItem> auctions = auctionResponse.getAuctions();
 
-                    Object response = socket.receive();
+                            System.out.println("Home nhận danh sách đấu giá: " + auctions.size());
 
-                    if (response instanceof GetActiveAuctionsResponse auctionResponse) {
-                        List<AuctionItem> auctions = auctionResponse.getAuctions();
+                            Platform.runLater(() -> renderAuctions(auctions));
 
-                        Platform.runLater(() -> renderAuctions(auctions));
+                            ClientSocket.getInstance().removeMessageListener(this);
+                        }
                     }
+                };
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                socket.addMessageListener(homeListener);
+                socket.send(new GetActiveAuctionsRequest());
 
-                    Platform.runLater(() ->
-                            showError("Lỗi", "Không lấy được danh sách sản phẩm đấu giá!")
-                    );
-                }
-            }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                Platform.runLater(() ->
+                        showError("Lỗi", "Không lấy được danh sách sản phẩm đấu giá!")
+                );
+            }
         }
 
         private void renderAuctions(List<AuctionItem> auctions) {

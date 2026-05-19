@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 
 public class AuctionItem implements Serializable {
 
-    private int auctionId;
+    private String auctionId;
 
-    private int productId;
+    private String productId;
     private String productName;
     private String description;
     private String imageUrl;
@@ -15,10 +15,10 @@ public class AuctionItem implements Serializable {
     private double startPrice;
     private double currentPrice;
 
-    private int sellerId;
+    private String sellerId;
     private String sellerName;
 
-    private int winnerId;
+    private String winnerId;
     private String winnerName;
 
     private LocalDateTime endTime;
@@ -28,19 +28,19 @@ public class AuctionItem implements Serializable {
     public AuctionItem() {
     }
 
-    public int getAuctionId() {
+    public String getAuctionId() {
         return auctionId;
     }
 
-    public void setAuctionId(int auctionId) {
+    public void setAuctionId(String auctionId) {
         this.auctionId = auctionId;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -84,11 +84,11 @@ public class AuctionItem implements Serializable {
         this.currentPrice = currentPrice;
     }
 
-    public int getSellerId() {
+    public String getSellerId() {
         return sellerId;
     }
 
-    public void setSellerId(int sellerId) {
+    public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
     }
 
@@ -100,11 +100,11 @@ public class AuctionItem implements Serializable {
         this.sellerName = sellerName;
     }
 
-    public int getWinnerId() {
+    public String getWinnerId() {
         return winnerId;
     }
 
-    public void setWinnerId(int winnerId) {
+    public void setWinnerId(String winnerId) {
         this.winnerId = winnerId;
     }
 

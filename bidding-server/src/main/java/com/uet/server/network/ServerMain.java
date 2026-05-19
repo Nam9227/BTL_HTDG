@@ -1,10 +1,13 @@
 package com.uet.server.network;
 
+import com.uet.server.service.AuctionBroadcastService;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerMain {
     public static void main(String[] args){
+        AuctionBroadcastService.start();
         new ServerMain().start();
     }
     public void start() {

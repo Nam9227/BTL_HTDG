@@ -12,7 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.util.regex.Pattern;
 import javafx.scene.control.Alert;
-
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 
@@ -121,11 +122,23 @@ public class RegisterController {
             }
             RegisterRequest request = new RegisterRequest(username, password, fullName, email);
 
+
             ClientSocket network = ClientSocket.getInstance();
             network.connect();
+
+            CompletableFuture<Object> registerFuture = new CompletableFuture<>();
+
+            Consumer<Object> registerListener = message -> {
+                if (message instanceof Response) {
+                    registerFuture.complete(message);
+                }
+            };
+
+            network.addMessageListener(registerListener);
             network.send(request);
 
-            Object responseObj = network.receive();
+            Object responseObj = registerFuture.get();
+            network.removeMessageListener(registerListener);
 
             if (responseObj instanceof Response response && response.isSuccess()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
