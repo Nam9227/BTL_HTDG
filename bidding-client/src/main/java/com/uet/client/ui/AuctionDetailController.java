@@ -1,9 +1,16 @@
 package com.uet.client.ui;
 
+import com.uet.client.network.ClientSocket;
 import com.uet.common.model.auction.AuctionItem;
 import com.uet.common.model.user.User;
+import com.uet.common.network.AuctionUpdateResponse;
+import com.uet.common.network.BidRequest;
+import com.uet.common.network.JoinAuctionRequest;
+import com.uet.common.network.LeaveAuctionRequest;
+import com.uet.common.network.Response;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -47,14 +54,24 @@ public class AuctionDetailController {
     private User currentUser;
     private AuctionItem auctionItem;
 
+    private java.util.function.Consumer<Object> auctionMessageListener;
+
     private double currentPrice = 25000000;
     private LocalDateTime endTime = LocalDateTime.now().plusMinutes(45);
 
     @FXML
     public void initialize() {
-        //bidderColumn.setCellValueFactory(data -> data.getValue().bidderProperty());
-        //amountColumn.setCellValueFactory(data -> data.getValue().amountProperty());
-        //timeColumn.setCellValueFactory(data -> data.getValue().timeProperty());
+
+        priceChart.getStylesheets().add(
+                "data:text/css," +
+                        /* 1. Đổi màu đường vẽ đồ thị sang màu tím Indigo (màu nút Đặt giá của Nam) và làm mỏng lại */
+                        ".chart-series-line { -fx-stroke: #4F46E5; -fx-stroke-width: 2px; }" +
+                        /* 2. Thu nhỏ chấm tròn to tướng thành điểm nếp nhỏ tinh tế */
+                        ".chart-line-symbol { -fx-background-color: #4F46E5, white; -fx-background-radius: 2.5px; -fx-padding: 2.5px; }" +
+                        /* 3. Đẩy nhẹ chữ thời gian xuống dưới một chút cho thoáng mắt */
+                        ".axis-tick-label { -fx-translate-y: 5px; }"
+        );
+
         priceChart.getData().add(priceSeries);
         startCountdown();
     }
@@ -64,23 +81,33 @@ public class AuctionDetailController {
         this.auctionItem = item;
 
         userNameLabel.setText(user.getUsername());
-        balanceLabel.setText("Số dư: " + formatMoney(user.getBalance().doubleValue()));
+
+        if (user.getBalance() == null) {
+            balanceLabel.setText("Số dư: 0đ");
+        } else {
+            balanceLabel.setText("Số dư: " + formatMoney(user.getBalance().doubleValue()));
+        }
 
         productNameLabel.setText(item.getProductName());
-        sellerLabel.setText("Người bán: " + item.getSellerName());
+
+        if (item.getSellerName() == null || item.getSellerName().isBlank()) {
+            sellerLabel.setText("Người bán: " + item.getSellerId());
+        } else {
+            sellerLabel.setText("Người bán: " + item.getSellerName());
+        }
+
         descriptionArea.setText(item.getDescription());
 
         currentPrice = item.getCurrentPrice();
-        endTime = item.getEndTime();
+
+        if (item.getEndTime() != null) {
+            endTime = item.getEndTime();
+        }
 
         startPriceLabel.setText(formatMoney(item.getStartPrice()));
         currentPriceLabel.setText(formatMoney(item.getCurrentPrice()));
 
-        if (item.getWinnerName() == null || item.getWinnerName().isBlank()) {
-            leaderLabel.setText("Chưa có");
-        } else {
-            leaderLabel.setText(item.getWinnerName());
-        }
+        updateLeaderLabel(item);
 
         if (item.getImageUrl() != null && !item.getImageUrl().isBlank()) {
             try {
@@ -91,6 +118,84 @@ public class AuctionDetailController {
         }
 
         addBidHistory("Giá hiện tại", currentPrice);
+
+        joinAuctionRoom();
+    }
+
+    private void joinAuctionRoom() {
+        try {
+            ClientSocket socket = ClientSocket.getInstance();
+
+            auctionMessageListener = message -> {
+                if (message instanceof AuctionUpdateResponse updateResponse) {
+                    AuctionItem updatedItem = updateResponse.getAuctionItem();
+
+                    if (updatedItem != null
+                            && auctionItem != null
+                            && auctionItem.getAuctionId().equals(updatedItem.getAuctionId())) {
+
+                        Platform.runLater(() -> {
+                            updateAuctionUI(updatedItem);
+
+                            if (updateResponse.getMessage() != null
+                                    && !updateResponse.getMessage().isBlank()) {
+                                showMessage(updateResponse.getMessage(), true);
+                            }
+                        });
+                    }
+
+                } else if (message instanceof Response responseMessage) {
+                    Platform.runLater(() ->
+                            showMessage(responseMessage.getMessage(), responseMessage.isSuccess())
+                    );
+                }
+            };
+
+            socket.addMessageListener(auctionMessageListener);
+            socket.send(new JoinAuctionRequest(auctionItem.getAuctionId()));
+
+            showMessage("Đã tham gia phiên đấu giá.", true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showMessage("Không thể tham gia phiên đấu giá.", false);
+        }
+    }
+
+
+    private void updateAuctionUI(AuctionItem updatedItem) {
+        this.auctionItem = updatedItem;
+        this.currentPrice = updatedItem.getCurrentPrice();
+
+        if (updatedItem.getEndTime() != null) {
+            this.endTime = updatedItem.getEndTime();
+        }
+
+        productNameLabel.setText(updatedItem.getProductName());
+        descriptionArea.setText(updatedItem.getDescription());
+
+        if (updatedItem.getSellerName() == null || updatedItem.getSellerName().isBlank()) {
+            sellerLabel.setText("Người bán: " + updatedItem.getSellerId());
+        } else {
+            sellerLabel.setText("Người bán: " + updatedItem.getSellerName());
+        }
+
+        startPriceLabel.setText(formatMoney(updatedItem.getStartPrice()));
+        currentPriceLabel.setText(formatMoney(updatedItem.getCurrentPrice()));
+
+        updateLeaderLabel(updatedItem);
+
+        addBidHistory("Cập nhật", updatedItem.getCurrentPrice());
+    }
+
+    private void updateLeaderLabel(AuctionItem item) {
+        if (item.getWinnerName() != null && !item.getWinnerName().isBlank()) {
+            leaderLabel.setText(item.getWinnerName());
+        } else if (item.getWinnerId() != null && !item.getWinnerId().isBlank()) {
+            leaderLabel.setText(item.getWinnerId());
+        } else {
+            leaderLabel.setText("Chưa có");
+        }
     }
 
     @FXML
@@ -110,6 +215,7 @@ public class AuctionDetailController {
             showMessage("Giá đặt không hợp lệ.", false);
             return;
         }
+
         if (amount <= currentPrice) {
             showMessage("Giá đặt phải cao hơn giá hiện tại.", false);
             return;
@@ -125,28 +231,41 @@ public class AuctionDetailController {
             return;
         }
 
-        currentPrice = amount;
-        currentPriceLabel.setText(formatMoney(currentPrice));
-        leaderLabel.setText(userNameLabel.getText());
+        if (auctionItem == null || auctionItem.getAuctionId() == null) {
+            showMessage("Không lấy được thông tin phiên đấu giá.", false);
+            return;
+        }
 
-        addBidHistory(userNameLabel.getText(), currentPrice);
+        try {
+            BidRequest request = new BidRequest(
+                    auctionItem.getAuctionId(),
+                    currentUser.getId(),
+                    amount
+            );
 
-        bidAmountField.clear();
-        showMessage("Đặt giá thành công.", true);
+            ClientSocket.getInstance().send(request);
 
-        // Sau này thay đoạn trên bằng gửi socket:
-        // ClientSocket.getInstance().send(new PlaceBidRequest(auctionId, userId, amount));
+            bidAmountField.clear();
+            showMessage("Đã gửi yêu cầu đặt giá.", true);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showMessage("Không gửi được giá đặt lên server.", false);
+        }
     }
 
     private void addBidHistory(String bidder, double amount) {
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-       // bidHistoryTable.getItems().add(
-       //         0,
-       //         new BidRow(bidder, formatMoney(amount), time)
-       // );
+        // bidHistoryTable.getItems().add(
+        //         0,
+        //         new BidRow(bidder, formatMoney(amount), time)
+        // );
 
         priceSeries.getData().add(new XYChart.Data<>(time, amount));
+        if (priceSeries.getData().size() > 10) {
+            priceSeries.getData().remove(0);
+        }
     }
 
     private void startCountdown() {
@@ -178,6 +297,15 @@ public class AuctionDetailController {
     @FXML
     private void handleBack() {
         try {
+            if (auctionMessageListener != null) {
+                ClientSocket.getInstance().removeMessageListener(auctionMessageListener);
+                auctionMessageListener = null;
+            }
+
+            if (auctionItem != null && auctionItem.getAuctionId() != null) {
+                ClientSocket.getInstance().send(new LeaveAuctionRequest(auctionItem.getAuctionId()));
+            }
+
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
                     getClass().getResource("/view/home_view.fxml")
             );
@@ -197,10 +325,10 @@ public class AuctionDetailController {
                 stage.setMaximized(true);
             });
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                showMessage("Không quay lại được trang chủ.", false);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showMessage("Không quay lại được trang chủ.", false);
+        }
     }
 
     private void showMessage(String message, boolean success) {

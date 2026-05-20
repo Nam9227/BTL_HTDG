@@ -121,12 +121,13 @@
                                prefHeight="250"
                                animated="false"
                                legendVisible="false"
-                               createSymbols="true">
+                               createSymbols="true"
+                               style="-fx-stroke-width: 2px;">
                         <xAxis>
-                            <CategoryAxis label="Thời gian"/>
+                            <CategoryAxis label="Thời gian" tickLabelRotation="0"/>
                         </xAxis>
                         <yAxis>
-                            <NumberAxis label="Giá"/>
+                            <NumberAxis label="Giá" autoRanging="true" forceZeroInRange="false"/>
                         </yAxis>
                     </LineChart>
                 </VBox>
