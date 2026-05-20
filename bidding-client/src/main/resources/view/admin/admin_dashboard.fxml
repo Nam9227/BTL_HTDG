@@ -23,8 +23,7 @@
             <Button text="Quản lý người dùng" onAction="#showUsers" maxWidth="Infinity"/>
             <Button text="Quản lý sản phẩm" onAction="#showProducts" maxWidth="Infinity"/>
             <Button text="Quản lý phiên đấu giá" onAction="#showAuctions" maxWidth="Infinity"/>
-            <Button text="Duyệt sản phẩm" onAction="#showPendingProducts" maxWidth="Infinity"/>
-            <Button text="Thống kê" onAction="#showReports" maxWidth="Infinity"/>
+            
 
             <Region VBox.vgrow="ALWAYS"/>
 
