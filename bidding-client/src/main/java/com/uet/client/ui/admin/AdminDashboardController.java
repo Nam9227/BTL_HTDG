@@ -18,13 +18,13 @@ import java.io.IOException;
 
 public class AdminDashboardController {
 
-    // --- Các Label thống kê ---
+
     @FXML private Label totalUsersLabel;
     @FXML private Label totalProductsLabel;
     @FXML private Label activeAuctionsLabel;
     @FXML private Label pendingProductsLabel;
 
-    // --- TableView Hoạt động ---
+
     @FXML private TableView<DashboardActivity> recentActivityTable;
     @FXML private TableColumn<DashboardActivity, String> timeColumn;
     @FXML private TableColumn<DashboardActivity, String> actionColumn;
@@ -33,7 +33,7 @@ public class AdminDashboardController {
 
     @FXML
     public void initialize() {
-        // 1. Cấu hình các cột cho TableView
+
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         actionColumn.setCellValueFactory(cellData -> cellData.getValue().actionProperty());
         targetColumn.setCellValueFactory(cellData -> cellData.getValue().targetProperty());
@@ -44,13 +44,13 @@ public class AdminDashboardController {
     }
 
     private void refreshData() {
-        // Giả lập dữ liệu thống kê
+
         totalUsersLabel.setText("1,250");
         totalProductsLabel.setText("450");
         activeAuctionsLabel.setText("12");
         pendingProductsLabel.setText("5");
 
-        // Giả lập dữ liệu bảng
+
         ObservableList<DashboardActivity> activities = FXCollections.observableArrayList(
                 new DashboardActivity("10:30", "Đăng nhập hệ thống", "Admin_01", "Thành công"),
                 new DashboardActivity("10:25", "Duyệt sản phẩm", "Laptop Dell XPS", "Thành công"),
@@ -59,7 +59,7 @@ public class AdminDashboardController {
         recentActivityTable.setItems(activities);
     }
 
-    // --- PHẦN XỬ LÝ CHUYỂN TRANG (SIDEBAR) ---
+
 
     private void switchScene(ActionEvent event, String fxmlPath, String title) {
         try {
@@ -77,7 +77,6 @@ public class AdminDashboardController {
 
     @FXML
     private void showDashboard(ActionEvent event) {
-        // Đang ở Dashboard nên chỉ cần refresh dữ liệu
         refreshData();
     }
 
@@ -107,8 +106,7 @@ public class AdminDashboardController {
     }
 
     @FXML
-    private void handleLogout() {
-        System.out.println("Đang đăng xuất...");
-        System.exit(0);
+    private void handleLogout(ActionEvent event) {
+        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
     }
 }

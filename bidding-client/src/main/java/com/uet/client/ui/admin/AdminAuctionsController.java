@@ -2,9 +2,15 @@ package com.uet.client.ui.admin;
 
 import com.uet.common.model.user.User;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 public class AdminAuctionsController {
 
@@ -23,7 +29,9 @@ public class AdminAuctionsController {
 
     public void setUser(User user) {
         this.currentUser = user;
-        System.out.println("Admin login: " + user.getUsername());
+        if (user != null) {
+            System.out.println("Admin login: " + user.getUsername());
+        }
     }
 
     @FXML
@@ -47,26 +55,39 @@ public class AdminAuctionsController {
         ));
     }
 
-    @FXML
-    private void goDashboard() {
-        showInfo("Dashboard", "Chức năng đang làm sau.");
+    private void switchScene(ActionEvent event, String fxmlPath, String title) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle(title);
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("Lỗi chuyển trang: " + fxmlPath);
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void goUsers() {
-        showInfo("Users", "Chức năng quản lý người dùng đang làm sau.");
+    private void goDashboard(ActionEvent event) {
+        switchScene(event, "/view/admin/admin_dashboard.fxml", "Dashboard");
     }
 
     @FXML
-    private void goProducts() {
-        showInfo("Products", "Chức năng quản lý sản phẩm đang làm sau.");
+    private void goUsers(ActionEvent event) {
+        switchScene(event, "/view/admin/admin_users.fxml", "Quản lý người dùng");
+    }
+
+    @FXML
+    private void goProducts(ActionEvent event) {
+        switchScene(event, "/view/admin/admin_products.fxml", "Quản lý sản phẩm");
     }
 
     @FXML
     private void handleSearch() {
         String keyword = searchField.getText();
         String status = statusFilter.getValue();
-
         showInfo("Tìm kiếm", "Từ khóa: " + keyword + "\nTrạng thái: " + status);
     }
 
@@ -80,26 +101,23 @@ public class AdminAuctionsController {
     @FXML
     private void handleViewDetail() {
         AuctionRow selected = auctionTable.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
             showError("Lỗi", "Vui lòng chọn một phiên đấu giá.");
             return;
         }
-
         showInfo("Chi tiết", "Sản phẩm: " + selected.getProduct()
                 + "\nGiá hiện tại: " + selected.getCurrentPrice()
-                + "\nNgười dẫn đầu: " + selected.getLeader());
+                + "\nNgười dẫn đầu: " + selected.getLeader()
+                + "\nTrạng thái: " + selected.getStatus());
     }
 
     @FXML
     private void handleEndAuction() {
         AuctionRow selected = auctionTable.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
             showError("Lỗi", "Vui lòng chọn phiên cần kết thúc.");
             return;
         }
-
         selected.setStatus("Đã kết thúc");
         auctionTable.refresh();
     }
@@ -107,20 +125,17 @@ public class AdminAuctionsController {
     @FXML
     private void handleCancelAuction() {
         AuctionRow selected = auctionTable.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
             showError("Lỗi", "Vui lòng chọn phiên cần hủy.");
             return;
         }
-
         selected.setStatus("Đã hủy");
         auctionTable.refresh();
     }
 
     @FXML
-    private void handleLogout() {
-        Stage stage = (Stage) auctionTable.getScene().getWindow();
-        stage.close();
+    private void handleLogout(ActionEvent event) {
+        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
     }
 
     private void showInfo(String title, String message) {

@@ -100,8 +100,7 @@ public class AdminProductsController {
     }
 
     @FXML
-    private void handleLogout() {
-        System.out.println("Đang đăng xuất...");
-        System.exit(0);
+    private void handleLogout(ActionEvent event) {
+        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
     }
 }

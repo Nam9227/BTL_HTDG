@@ -28,11 +28,21 @@ public class AuctionRow {
     public StringProperty endTimeProperty() { return endTime; }
     public StringProperty statusProperty() { return status; }
 
+
+    public int getId() { return id.get(); }
     public String getProduct() { return product.get(); }
     public String getCurrentPrice() { return currentPrice.get(); }
     public String getLeader() { return leader.get(); }
+    public String getEndTime() { return endTime.get(); }
 
-    public void setStatus(String value) {
-        status.set(value);
-    }
+
+    public String getStatus() { return status.get(); }
+
+
+    public void setId(int value) { id.set(value); }
+    public void setProduct(String value) { product.set(value); }
+    public void setCurrentPrice(String value) { currentPrice.set(value); }
+    public void setLeader(String value) { leader.set(value); }
+    public void setEndTime(String value) { endTime.set(value); }
+    public void setStatus(String value) { status.set(value); }
 }

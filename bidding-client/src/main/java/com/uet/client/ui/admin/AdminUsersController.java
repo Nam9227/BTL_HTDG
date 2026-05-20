@@ -220,7 +220,7 @@ public class AdminUsersController {
     @FXML private void goReports(ActionEvent event) { switchScene(event, "/view/admin/admin_reports.fxml", "Thống kê báo cáo"); }
 
     @FXML
-    private void handleLogout() {
-        System.exit(0);
+    private void handleLogout(ActionEvent event) {
+        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
     }
 }
