@@ -10,19 +10,38 @@ public class UpdateProfileRequest implements Serializable {
     private String email;
     private String phoneNumber;
     private String address;
+    private FileUploadData avatar;
 
-    public UpdateProfileRequest(String userId, String fullName, String email, String phoneNumber, String address) {
+    public UpdateProfileRequest(String userId, String fullName, String email, String phoneNumber, String address, FileUploadData avatar) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.avatar = avatar;
     }
 
-    // Getter cho Server đọc dữ liệu
-    public String getUserId() { return userId; }
-    public String getFullName() { return fullName; }
-    public String getEmail() { return email; }
-    public String getPhoneNumber() { return phoneNumber; }
-    public String getAddress() { return address; }
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public FileUploadData getAvatar() {
+        return avatar;
+    }
 }

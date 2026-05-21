@@ -12,6 +12,7 @@ public class User implements Serializable {
     private Role role;
     private String address;
     private BigDecimal balance;
+    private String avatarPath;
     private boolean active;
 
     public User() {
@@ -99,5 +100,13 @@ public class User implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 }

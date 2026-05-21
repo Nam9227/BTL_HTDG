@@ -2,6 +2,8 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
+import com.uet.common.network.FileUploadData;
+import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
 //import com.uet.common.network.TransactionRequest;
 import javafx.application.Platform;
@@ -10,9 +12,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.Optional;
 
 public class ProfileController {
@@ -23,6 +30,8 @@ public class ProfileController {
     @FXML private ImageView avatarImage;
 
     private User currentUser;
+    private boolean editing = false;
+    private FileUploadData selectedAvatar;
 
     public void setUser(User user) {
         this.currentUser = user;
@@ -36,11 +45,20 @@ public class ProfileController {
         emailField.setText(user.getEmail());
         phoneField.setText(user.getPhone());
         addressField.setText(user.getAddress());
+
+        if (user.getAvatarPath() != null && !user.getAvatarPath().isBlank()) {
+            File avatarFile = new File(user.getAvatarPath());
+            if (avatarFile.exists()) {
+                avatarImage.setImage(new Image(avatarFile.toURI().toString()));
+            }
+        }
     }
 
     // 🛠 LOGIC CHỈNH SỬA: Cập nhật màu nền sáng hơn để phân biệt
     @FXML
     private void handleEdit() {
+        editing = true;
+
         fullNameField.setEditable(true);
         emailField.setEditable(true);
         phoneField.setEditable(true);
@@ -71,29 +89,46 @@ public class ProfileController {
         }
 
         try {
-            // 1. Đóng gói gói tin gửi lên Server xử lý
             UpdateProfileRequest req = new UpdateProfileRequest(
                     currentUser.getId(),
                     fullName,
                     email,
                     phone,
-                    address
+                    address,
+                    selectedAvatar
             );
 
-            // 2. Bắn qua Socket duy nhất của Client
+            java.util.function.Consumer<Object> updateProfileListener = new java.util.function.Consumer<>() {
+                @Override
+                public void accept(Object response) {
+                    if (response instanceof Response res) {
+                        Platform.runLater(() -> {
+                            if (res.isSuccess()) {
+                                currentUser.setFullName(fullName);
+                                currentUser.setEmail(email);
+                                currentUser.setPhone(phone);
+                                currentUser.setAddress(address);
+
+                                if (res.getData() instanceof String avatarPath) {
+                                    currentUser.setAvatarPath(avatarPath);
+                                }
+
+                                fullNameLabel.setText(fullName);
+
+                                lockForm();
+                                showAlert("Thành công", res.getMessage(), Alert.AlertType.INFORMATION);
+                            } else {
+                                showAlert("Thất bại", res.getMessage(), Alert.AlertType.ERROR);
+                            }
+                        });
+
+                        ClientSocket.getInstance().removeMessageListener(this);
+                    }
+                }
+            };
+
+            ClientSocket.getInstance().addMessageListener(updateProfileListener);
             ClientSocket.getInstance().send(req);
-
-            // 3. Tạm thời cập nhật luôn thông tin cho cục currentUser ở Client để đồng bộ UI
-            currentUser.setFullName(fullName);
-            currentUser.setEmail(email);
-            currentUser.setPhone(phone);
-            currentUser.setAddress(address);
-
-            fullNameLabel.setText(fullName);
-
-            // Khóa form lại cho đẹp
-            lockForm();
-            showAlert("Thành công", "Đã gửi yêu cầu cập nhật thông tin lên hệ thống!", Alert.AlertType.INFORMATION);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,6 +138,9 @@ public class ProfileController {
 
     // Hàm khóa lại Form (trả lại màu sẫm)
     private void lockForm() {
+        editing = false;
+        selectedAvatar = null;
+
         fullNameField.setEditable(false);
         emailField.setEditable(false);
         phoneField.setEditable(false);
@@ -160,7 +198,42 @@ public class ProfileController {
         });
     }
 
-    @FXML private void handleAvatarChange() { /* Nam viết tiếp Logic chọn ảnh */ }
+    @FXML
+    private void handleAvatarChange() {
+        if (!editing) {
+            showAlert("Thông báo", "Bạn cần bấm 'Chỉnh sửa thông tin' trước khi đổi avatar!", Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh avatar");
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Ảnh", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp"),
+                new FileChooser.ExtensionFilter("Tất cả file", "*.*")
+        );
+
+        Stage stage = (Stage) avatarImage.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            try {
+                byte[] fileBytes = Files.readAllBytes(selectedFile.toPath());
+
+                selectedAvatar = new FileUploadData(
+                        selectedFile.getName(),
+                        Files.probeContentType(selectedFile.toPath()),
+                        fileBytes
+                );
+
+                avatarImage.setImage(new Image(selectedFile.toURI().toString()));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Lỗi", "Không thể đọc ảnh avatar!", Alert.AlertType.ERROR);
+            }
+        }
+    }
     @FXML private void handleChangePassword() { /* Logic đổi mật khẩu */ }
 
     // Nút quay lại Trang chủ full màn hình

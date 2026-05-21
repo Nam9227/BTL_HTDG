@@ -52,6 +52,11 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof UpdateProfileRequest request) {
+            handleUpdateProfile(request, client);
+            return true;
+        }
+
         if ("LOGOUT".equals(obj)) {
             client.send(Response.success("Đăng xuất thành công", null));
             return false;
@@ -78,5 +83,10 @@ public class ClientRequestDispatcher {
     private void handleGetActiveAuctions(ClientHandler client) {
         List<AuctionItem> auctions = auctionDAO.getActiveAuctions();
         client.send(new GetActiveAuctionsResponse(auctions));
+    }
+
+    private void handleUpdateProfile(UpdateProfileRequest request, ClientHandler client) {
+        Response response = userDAO.updateProfile(request);
+        client.send(response);
     }
 }
