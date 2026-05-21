@@ -208,7 +208,7 @@ public class AdminUsersController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             stage.getScene().setRoot(root);
-            
+
             stage.setTitle(title);
 
         } catch (IOException e) {
