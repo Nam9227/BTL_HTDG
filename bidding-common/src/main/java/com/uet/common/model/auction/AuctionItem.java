@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class AuctionItem implements Serializable {
 
     private String auctionId;
-
+    private LocalDateTime startTime;
     private String productId;
     private String productName;
     private String description;
@@ -130,5 +130,13 @@ public class AuctionItem implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 }
