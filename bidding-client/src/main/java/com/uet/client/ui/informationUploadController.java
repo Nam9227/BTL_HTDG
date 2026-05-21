@@ -3,6 +3,9 @@ package com.uet.client.ui;
 import com.uet.common.model.user.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -16,6 +19,9 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,6 +30,12 @@ public class informationUploadController {
     @FXML private ComboBox<String> ProductType;
     @FXML private VBox dropImageZone;
     @FXML private HBox imageContainer;
+    @FXML private DatePicker startDatePicker;
+    @FXML private DatePicker endDatePicker;
+    @FXML private Spinner<Integer> hourStartSpinner;
+    @FXML private Spinner<Integer> minuteStartSpinner;
+    @FXML private Spinner<Integer> hourEndSpinner;
+    @FXML private Spinner<Integer> minuteEndSpinner;
     // Danh sách lưu trữ các file thực tế để sau này bạn gửi lên Server xử lý (Task 3)
     private final List<File> selectedFilesList = new ArrayList<>();
     private final List<String> VALID_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".mp4");
@@ -38,6 +50,16 @@ public class informationUploadController {
 
     @FXML
     public void initialize() {
+        hourStartSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+
+        minuteStartSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        hourEndSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+
+        minuteEndSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         if (ProductType != null) {
             ProductType.getItems().addAll(
                     "Thiết bị điện tử & Máy tính",
@@ -161,4 +183,22 @@ public class informationUploadController {
             System.out.println("Không thể hiển thị thumbnail cho file: " + file.getName());
         }
     }
+    /*LocalDate startDate = startDatePicker.getValue();
+
+    int startHour = hourStartSpinner.getValue();
+    int startMinute = minuteStartSpinner.getValue();
+
+    LocalDateTime startTime =
+            LocalDateTime.of(startDate, LocalTime.of(startHour, startMinute));
+
+System.out.println(startTime);
+    LocalDate endDate = endDatePicker.getValue();
+
+    int endHour = hourEndSpinner.getValue();
+    int endMinute = minuteEndSpinner.getValue();
+
+    LocalDateTime endTime =
+            LocalDateTime.of(startDate, LocalTime.of(endHour, endMinute));
+
+System.out.println(endTime);*/
 }
