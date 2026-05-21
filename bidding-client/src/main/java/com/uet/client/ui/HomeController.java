@@ -29,7 +29,7 @@ public class HomeController{
         @FXML private Button openBtn;   // Nút 3 gạch (nằm ngoài sidebar)
         @FXML private Button closeBtn;  // Nút X (nằm trong sidebar)
 
-
+        @FXML private Button addProductBtn;
         @FXML private Label userNameLabel;
         @FXML private Label balanceLabel;
         @FXML private FlowPane productContainer;
@@ -111,12 +111,20 @@ public class HomeController{
                 productContainer.setVisible(true);
                 productContainer.setManaged(true);
 
+                // Nếu là Người mua (Bidder): Ẩn hoàn toàn nút thêm sản phẩm đi
+                addProductBtn.setVisible(false);
+                addProductBtn.setManaged(false);
+
             } else if (currentUser.getRole() == Role.SELLER) {
                 System.out.println("Người bán hàng");
 
-                // Nếu người bán KHÔNG được thấy danh sách đấu giá thì mở 2 dòng này:
-                // productContainer.setVisible(false);
-                // productContainer.setManaged(false);
+                // Nếu là Người bán (Seller): Hiện nút Thêm sản phẩm lên ngay!
+                addProductBtn.setVisible(true);
+                addProductBtn.setManaged(true);
+
+                // Tùy chọn: Người bán vẫn có thể xem danh sách sản phẩm chung
+                productContainer.setVisible(true);
+                productContainer.setManaged(true);
             }
         }
 
@@ -289,5 +297,65 @@ public class HomeController{
             alert.setHeaderText(null);
             alert.setContentText(message);
             alert.showAndWait();
+        }
+        @FXML
+        public void handleOpenProfile() {
+            try {
+                // 1. Tải file giao diện profile.fxml
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/view/profile_view.fxml") // Nam nhớ check đúng đường dẫn file fxml của Nam nhé
+                );
+                Parent root = loader.load();
+
+                // 2. Lấy Controller của trang Profile và bắn currentUser sang để nó hiển thị thông tin
+                ProfileController controller = loader.getController();
+                controller.setUser(currentUser); // Truyền user đăng nhập sang ở đây!
+
+                // 3. Lấy Stage hiện tại và đổi Scene sang trang Profile
+                Stage stage = (Stage) productContainer.getScene().getWindow();
+                stage.setScene(new Scene(root));
+
+                // 4. Ép màn hình hiển thị bung lụa full toàn màn hình cho đẹp
+                stage.setMaximized(true);
+                stage.show();
+
+                // Mẹo bảo hiểm của JavaFX giúp giao diện không bị co vỡ layout khi đổi màn hình
+                Platform.runLater(() -> {
+                    stage.setMaximized(false);
+                    stage.setMaximized(true);
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showError("Lỗi", "Không thể mở trang thông tin tài khoản!");
+            }
+        }
+        @FXML
+        public void handleOpenAddProduct() {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/view/informationUpload_view.fxml")
+                );
+                Parent root = loader.load();
+
+                // 1. Lấy Controller của màn hình thêm sản phẩm và truyền User sang
+                informationUploadController controller = loader.getController();
+                controller.setUser(currentUser); // Ép truyền dữ liệu ở đây!
+
+                Stage stage = (Stage) productContainer.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setResizable(true);
+                stage.setMaximized(true);
+                stage.show();
+
+                Platform.runLater(() -> {
+                    stage.setMaximized(false);
+                    stage.setMaximized(true);
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                showError("Lỗi", "Không mở được giao diện thêm sản phẩm!");
+            }
         }
 }

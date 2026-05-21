@@ -10,6 +10,7 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private Role role;
+    private String address;
     private BigDecimal balance;
     private boolean active;
 
@@ -90,5 +91,13 @@ public class User implements Serializable {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -45,7 +45,8 @@
                             </children>
                         </VBox>
                         <Separator opacity="0.3" prefWidth="200.0" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Thông tin tài khoản" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenProfile" text="Thông tin tài khoản" />
+                  <Button fx:id="addProductBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenAddProduct" text="Thêm Sản Phẩm" />
                         <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
                         <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
                         <Region VBox.vgrow="ALWAYS" />
@@ -85,18 +86,7 @@
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
-                            <VBox prefHeight="220.0" prefWidth="180.0" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 10; -fx-background-radius: 10;">
-                                <children>
-                                    <ImageView fitHeight="100.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label style="-fx-font-weight: bold;" text="iPhone 15 Pro Max" />
-                                    <Label text="Giá hiện tại: 25,000,000đ" textFill="#27ae60" />
-                                    <Label text="Còn lại: 00:45:12" textFill="#e67e22" />
-                                    <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #f1c40f;" text="Đặt Giá" />
-                                </children>
-                                <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                </padding>
-                            </VBox>
+
                         </FlowPane>
                     </content>
                 </ScrollPane>

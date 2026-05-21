@@ -1,5 +1,6 @@
 package com.uet.client.ui;
 
+import com.uet.common.model.user.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
@@ -28,6 +29,13 @@ public class informationUploadController {
     private final List<String> VALID_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".mp4");
     private final long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
     private final int MAX_FILES_ALLOWED = 10;
+    private User currentUser;
+
+    public void setUser(User user) {
+        this.currentUser = user;
+        System.out.println("Màn hình Thêm sản phẩm đã nhận diện Người bán: " + currentUser.getUsername());
+    }
+
     @FXML
     public void initialize() {
         if (ProductType != null) {

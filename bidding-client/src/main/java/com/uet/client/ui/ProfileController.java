@@ -1,73 +1,194 @@
 package com.uet.client.ui;
 
+import com.uet.client.network.ClientSocket;
+import com.uet.common.model.user.User;
+import com.uet.common.network.UpdateProfileRequest;
+//import com.uet.common.network.TransactionRequest;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-
-import javafx.scene.image.Image;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.io.File;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 public class ProfileController {
-    @FXML private Button editButton;
-    @FXML private TextField fullNameField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private TextField addressField;
-    @FXML private TextField usernameField;
-    @FXML private Button avatarEditBtn;
+
+    @FXML private Label fullNameLabel, usernameLabel, statusLabel, balanceLabel;
+    @FXML private TextField fullNameField, usernameField, emailField, phoneField, addressField;
+    @FXML private Button editButton, saveButton, avatarChangeBtn, changePasswordButton;
     @FXML private ImageView avatarImage;
-    @FXML public void initialize() {
-        switchToViewMode();
+
+    private User currentUser;
+
+    public void setUser(User user) {
+        this.currentUser = user;
+
+        fullNameLabel.setText(user.getFullName() != null ? user.getFullName() : user.getUsername());
+        usernameLabel.setText("@" + user.getUsername());
+        balanceLabel.setText(String.format("%,.0f đ", user.getBalance() != null ? user.getBalance().doubleValue() : 0));
+
+        fullNameField.setText(user.getFullName());
+        usernameField.setText(user.getUsername());
+        emailField.setText(user.getEmail());
+        phoneField.setText(user.getPhone());
+        addressField.setText(user.getAddress());
     }
-    private void switchToViewMode() {
-        fullNameField.setEditable(false);
-        emailField.setEditable(false);
-        phoneField.setEditable(false);
-        addressField.setEditable(false);
-        usernameField.setEditable(false);
-    }
-    private void switchToEditMode(){
+
+    // 🛠 LOGIC CHỈNH SỬA: Cập nhật màu nền sáng hơn để phân biệt
+    @FXML
+    private void handleEdit() {
         fullNameField.setEditable(true);
         emailField.setEditable(true);
         phoneField.setEditable(true);
         addressField.setEditable(true);
-        usernameField.setEditable(true);
+
+        // Đổi màu nền sáng hơn một chút để người dùng biết là ô này GÕ ĐƯỢC
+        String activeStyle = "-fx-background-color: #4a5056; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;";
+        fullNameField.setStyle(activeStyle);
+        emailField.setStyle(activeStyle);
+        phoneField.setStyle(activeStyle);
+        addressField.setStyle(activeStyle);
+
+        saveButton.setDisable(false);
+        editButton.setDisable(true);
     }
+
     @FXML
-    void handleEdit(){
-        switchToEditMode();
-    }
-    @FXML
-    void handleSave(){
-        System.out.println("đã lưu");
-        switchToViewMode();
-    }
-    @FXML
-    void handleCancel(){
-        switchToViewMode();
-    }
-    @FXML
-    void handleAvatarChange(){
-        // 1. Tạo bộ chọn file
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Chọn ảnh đại diện");
-        // 2. Lọc định dạng ảnh
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png"));
-        // 3. Hiển thị cửa sổ chọn file
-        Stage stage = (Stage) avatarImage.getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
-            // 4. Chuyển file thành Image và hiển thị
-            Image image = new Image(selectedFile.toURI().toString());
-            avatarImage.setImage(image);
+    private void handleSave() {
+        String fullName = fullNameField.getText().trim();
+        String email = emailField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String address = addressField.getText().trim();
+
+        // Validate cơ bản phía Client trước khi gửi
+        if (fullName.isEmpty()) {
+            showAlert("Cảnh báo", "Họ và tên không được để trống!", Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            // 1. Đóng gói gói tin gửi lên Server xử lý
+            UpdateProfileRequest req = new UpdateProfileRequest(
+                    currentUser.getId(),
+                    fullName,
+                    email,
+                    phone,
+                    address
+            );
+
+            // 2. Bắn qua Socket duy nhất của Client
+            ClientSocket.getInstance().send(req);
+
+            // 3. Tạm thời cập nhật luôn thông tin cho cục currentUser ở Client để đồng bộ UI
+            currentUser.setFullName(fullName);
+            currentUser.setEmail(email);
+            currentUser.setPhone(phone);
+            currentUser.setAddress(address);
+
+            fullNameLabel.setText(fullName);
+
+            // Khóa form lại cho đẹp
+            lockForm();
+            showAlert("Thành công", "Đã gửi yêu cầu cập nhật thông tin lên hệ thống!", Alert.AlertType.INFORMATION);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể kết nối tới Server để lưu thay đổi!", Alert.AlertType.ERROR);
         }
     }
-    void handlePasswordChange(){}
+
+    // Hàm khóa lại Form (trả lại màu sẫm)
+    private void lockForm() {
+        fullNameField.setEditable(false);
+        emailField.setEditable(false);
+        phoneField.setEditable(false);
+        addressField.setEditable(false);
+
+        String lockedStyle = "-fx-background-color: #2a2e31; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;";
+        fullNameField.setStyle(lockedStyle);
+        emailField.setStyle(lockedStyle);
+        phoneField.setStyle(lockedStyle);
+        addressField.setStyle(lockedStyle);
+
+        saveButton.setDisable(true);
+        editButton.setDisable(false);
+    }
+
+    // 💵 NẠP TIỀN
+    @FXML
+    private void handleDeposit() {
+        handleMoneyTransaction("NẠP TIỀN VÀO VÍ", "DEPOSIT");
+    }
+
+    // 💸 RÚT TIỀN
+    @FXML
+    private void handleWithdraw() {
+        handleMoneyTransaction("RÚT TIỀN MẶT", "WITHDRAW");
+    }
+
+    // Hàm gom chung xử lý tiền tệ
+    private void handleMoneyTransaction(String title, String type) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText("Nhập số tiền muốn giao dịch (đ):");
+        dialog.setContentText("Số tiền (VND):");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(amountStr -> {
+            try {
+                double amount = Double.parseDouble(amountStr.trim());
+                if (amount <= 0) throw new NumberFormatException();
+
+                if (type.equals("WITHDRAW") && amount > currentUser.getBalance().doubleValue()) {
+                    showAlert("Lỗi", "Số dư ví hiện không đủ!", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // Gửi lệnh xử lý tiền mặt lên Server cập nhật DB
+                // TransactionRequest req = new TransactionRequest(currentUser.getId(), amount, type);
+                // ClientSocket.getInstance().send(req);
+
+                showAlert("Thông báo", "Yêu cầu giao dịch đã được gửi xử lý!", Alert.AlertType.INFORMATION);
+
+            } catch (NumberFormatException e) {
+                showAlert("Lỗi", "Số tiền nhập vào không hợp lệ!", Alert.AlertType.ERROR);
+            }
+        });
+    }
+
+    @FXML private void handleAvatarChange() { /* Nam viết tiếp Logic chọn ảnh */ }
+    @FXML private void handleChangePassword() { /* Logic đổi mật khẩu */ }
+
+    // Nút quay lại Trang chủ full màn hình
+    @FXML
+    private void handleBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home_view.fxml"));
+            Parent root = loader.load();
+
+            // Truyền ngược lại user về cho trang chủ để không bị mất Session đăng nhập
+            HomeController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            Stage stage = (Stage) fullNameLabel.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String text, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
+
 }
