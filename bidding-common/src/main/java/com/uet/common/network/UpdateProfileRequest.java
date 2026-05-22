@@ -10,9 +10,9 @@ public class UpdateProfileRequest implements Serializable {
     private String email;
     private String phoneNumber;
     private String address;
-    private FileUploadData avatar;
+    private ImageData avatar;
 
-    public UpdateProfileRequest(String userId, String fullName, String email, String phoneNumber, String address, FileUploadData avatar) {
+    public UpdateProfileRequest(String userId, String fullName, String email, String phoneNumber, String address, ImageData avatar) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
@@ -41,7 +41,7 @@ public class UpdateProfileRequest implements Serializable {
         return address;
     }
 
-    public FileUploadData getAvatar() {
+    public ImageData getAvatar() {
         return avatar;
     }
 }

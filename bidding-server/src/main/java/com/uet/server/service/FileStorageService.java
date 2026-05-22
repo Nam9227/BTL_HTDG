@@ -1,6 +1,6 @@
 package com.uet.server.service;
 
-import com.uet.common.network.FileUploadData;
+import com.uet.common.network.ImageData;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,13 +9,26 @@ import java.util.UUID;
 
 public class FileStorageService {
 
-    private static final Path UPLOAD_ROOT = Path.of("uploads");
+    private static final Path UPLOAD_ROOT = Path.of(
+            System.getProperty(
+                    "app.upload.dir",
+                    System.getenv().getOrDefault("APP_UPLOAD_DIR", "/root/uploads")  // ✅ Đúng path thực tế
+            )
+    ).toAbsolutePath().normalize();
+
+    private static final String PUBLIC_UPLOAD_BASE_URL = System.getProperty(
+            "app.upload.base-url",
+            System.getenv().getOrDefault(
+                    "APP_UPLOAD_BASE_URL",
+                    "file://" + UPLOAD_ROOT.toString()  // ✅ Sẽ trả về file:///root/uploads
+            )
+    );
 
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
             ".png", ".jpg", ".jpeg", ".gif", ".webp"
     );
 
-    public String save(FileUploadData fileUploadData, String folderName, String filePrefix) {
+    public String save(ImageData fileUploadData, String folderName, String filePrefix) {
         if (fileUploadData == null || fileUploadData.isEmpty()) {
             return null;
         }
@@ -23,16 +36,16 @@ public class FileStorageService {
         try {
             String extension = getSafeExtension(fileUploadData.getOriginalFileName());
 
-            Path uploadDir = UPLOAD_ROOT.resolve(folderName);
+            Path uploadDir = UPLOAD_ROOT.resolve(folderName).normalize();
             Files.createDirectories(uploadDir);
 
             String safePrefix = sanitizeFileName(filePrefix);
             String fileName = safePrefix + "_" + UUID.randomUUID() + extension;
 
-            Path filePath = uploadDir.resolve(fileName);
+            Path filePath = uploadDir.resolve(fileName).normalize();
             Files.write(filePath, fileUploadData.getData());
 
-            return filePath.toAbsolutePath().toString();
+            return PUBLIC_UPLOAD_BASE_URL + "/" + folderName + "/" + fileName;
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,7 +2,7 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
-import com.uet.common.network.FileUploadData;
+import com.uet.common.network.ImageData;
 import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
 //import com.uet.common.network.TransactionRequest;
@@ -18,7 +18,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.Optional;
 
@@ -31,7 +30,7 @@ public class ProfileController {
 
     private User currentUser;
     private boolean editing = false;
-    private FileUploadData selectedAvatar;
+    private ImageData selectedAvatar;
 
     public void setUser(User user) {
         this.currentUser = user;
@@ -46,15 +45,26 @@ public class ProfileController {
         phoneField.setText(user.getPhone());
         addressField.setText(user.getAddress());
 
-        if (user.getAvatarPath() != null && !user.getAvatarPath().isBlank()) {
-            File avatarFile = new File(user.getAvatarPath());
-            if (avatarFile.exists()) {
-                avatarImage.setImage(new Image(avatarFile.toURI().toString()));
+        if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0) {
+            try {
+                javafx.scene.image.Image img = new javafx.scene.image.Image(
+                        new java.io.ByteArrayInputStream(user.getAvatarBytes())
+                );
+                avatarImage.setImage(img);
+                System.out.println("ProfileController: displayed avatar from bytes, len=" + user.getAvatarBytes().length);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (user.getAvatarPath() != null && !user.getAvatarPath().isBlank()) {
+            try {
+                avatarImage.setImage(new javafx.scene.image.Image(user.getAvatarPath()));
+                System.out.println("ProfileController: displayed avatar from path: " + user.getAvatarPath());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
-    // 🛠 LOGIC CHỈNH SỬA: Cập nhật màu nền sáng hơn để phân biệt
     @FXML
     private void handleEdit() {
         editing = true;
@@ -64,7 +74,7 @@ public class ProfileController {
         phoneField.setEditable(true);
         addressField.setEditable(true);
 
-        // Đổi màu nền sáng hơn một chút để người dùng biết là ô này GÕ ĐƯỢC
+        // Đổi màu nền sáng hơn cho TẤT CẢ các ô được phép gõ
         String activeStyle = "-fx-background-color: #4a5056; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;";
         fullNameField.setStyle(activeStyle);
         emailField.setStyle(activeStyle);
@@ -75,6 +85,7 @@ public class ProfileController {
         editButton.setDisable(true);
     }
 
+
     @FXML
     private void handleSave() {
         String fullName = fullNameField.getText().trim();
@@ -82,7 +93,6 @@ public class ProfileController {
         String phone = phoneField.getText().trim();
         String address = addressField.getText().trim();
 
-        // Validate cơ bản phía Client trước khi gửi
         if (fullName.isEmpty()) {
             showAlert("Cảnh báo", "Họ và tên không được để trống!", Alert.AlertType.WARNING);
             return;
@@ -90,12 +100,7 @@ public class ProfileController {
 
         try {
             UpdateProfileRequest req = new UpdateProfileRequest(
-                    currentUser.getId(),
-                    fullName,
-                    email,
-                    phone,
-                    address,
-                    selectedAvatar
+                    currentUser.getId(), fullName, email, phone, address, selectedAvatar
             );
 
             java.util.function.Consumer<Object> updateProfileListener = new java.util.function.Consumer<>() {
@@ -104,24 +109,27 @@ public class ProfileController {
                     if (response instanceof Response res) {
                         Platform.runLater(() -> {
                             if (res.isSuccess()) {
-                                currentUser.setFullName(fullName);
-                                currentUser.setEmail(email);
-                                currentUser.setPhone(phone);
-                                currentUser.setAddress(address);
 
-                                if (res.getData() instanceof String avatarPath) {
-                                    currentUser.setAvatarPath(avatarPath);
+                                if (res.getData() instanceof com.uet.common.model.user.User updatedUser) {
+                                    ProfileController.this.currentUser = updatedUser;
+                                    System.out.println(" Đã cập nhật updatedUser từ Server vào Session Client thành công!");
                                 }
 
-                                fullNameLabel.setText(fullName);
+                                if (ProfileController.this.currentUser.getAvatarBytes() != null && ProfileController.this.currentUser.getAvatarBytes().length > 0) {
+                                    avatarImage.setImage(null); // Xóa bộ nhớ đệm
+                                    java.io.ByteArrayInputStream bis = new java.io.ByteArrayInputStream(ProfileController.this.currentUser.getAvatarBytes());
+                                    javafx.scene.image.Image img = new javafx.scene.image.Image(bis);
+                                    avatarImage.setImage(img);
+                                    System.out.println(" Đã ép JavaFX vẽ lại Avatar mới hoàn toàn!");
+                                }
 
+                                fullNameLabel.setText(ProfileController.this.currentUser.getFullName());
                                 lockForm();
                                 showAlert("Thành công", res.getMessage(), Alert.AlertType.INFORMATION);
                             } else {
                                 showAlert("Thất bại", res.getMessage(), Alert.AlertType.ERROR);
                             }
                         });
-
                         ClientSocket.getInstance().removeMessageListener(this);
                     }
                 }
@@ -146,6 +154,7 @@ public class ProfileController {
         phoneField.setEditable(false);
         addressField.setEditable(false);
 
+        // Khóa đồng bộ màu sẫm cho TẤT CẢ các ô
         String lockedStyle = "-fx-background-color: #2a2e31; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;";
         fullNameField.setStyle(lockedStyle);
         emailField.setStyle(lockedStyle);
@@ -220,7 +229,7 @@ public class ProfileController {
             try {
                 byte[] fileBytes = Files.readAllBytes(selectedFile.toPath());
 
-                selectedAvatar = new FileUploadData(
+                selectedAvatar = new ImageData(
                         selectedFile.getName(),
                         Files.probeContentType(selectedFile.toPath()),
                         fileBytes
@@ -243,14 +252,16 @@ public class ProfileController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home_view.fxml"));
             Parent root = loader.load();
 
-            // Truyền ngược lại user về cho trang chủ để không bị mất Session đăng nhập
+            // Truyền ngược lại user đã cập nhật về cho trang chủ để đồng bộ UI Sidebar Home
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
             Stage stage = (Stage) fullNameLabel.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
+
+            // Thay ruột scene cực mượt, không chớp màn hình
+            stage.getScene().setRoot(root);
+            stage.setTitle("Trang chủ Đấu giá");
+
         } catch (Exception e) {
             e.printStackTrace();
         }

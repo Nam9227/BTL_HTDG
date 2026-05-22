@@ -136,14 +136,16 @@ public class LoginController {
             Parent root = loader.load();
 
             Object controller = loader.getController();
-
             if (controller instanceof HomeController homeController) {
                 homeController.setUser(user);
             }
 
+            // Tạo scene mới và đập thẳng vào Stage
             Scene scene = new Scene(root);
             stage.setTitle(title);
             stage.setScene(scene);
+
+            // BẬT MAXIMIZED LUÔN, KHÔNG DÙNG MẸO CO GIÃN GÂY KHỰNG
             stage.setMaximized(true);
             stage.setResizable(true);
             stage.show();

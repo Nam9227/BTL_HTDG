@@ -51,7 +51,7 @@ public class RegisterDAO {
         String checkUserSql = "SELECT id FROM users WHERE username = ?";
         String checkEmailSql = "SELECT user_id FROM user_profiles WHERE email = ?";
         String insertUserSql = "INSERT INTO users (id, username, password, role, active) VALUES (?, ?, ?, ?, ?)";
-        String insertProfileSql = "INSERT INTO user_profiles (user_id, full_name, email, phone_number, avatar_url) VALUES (?, ?, ?, ?, ?)";
+        String insertProfileSql = "INSERT INTO user_profiles (user_id, full_name, email, phone_number, avatar_path) VALUES (?, ?, ?, ?, ?)";
         String sqlWallet = "INSERT INTO wallet(user_id, balance) VALUES (?, 0)";
 
         Connection conn = null;

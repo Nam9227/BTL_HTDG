@@ -14,6 +14,7 @@ public class User implements Serializable {
     private BigDecimal balance;
     private String avatarPath;
     private boolean active;
+    private byte[] avatarBytes;
 
     public User() {
     }
@@ -109,4 +110,8 @@ public class User implements Serializable {
     public void setAvatarPath(String avatarPath) {
         this.avatarPath = avatarPath;
     }
+
+    public byte[] getAvatarBytes() { return avatarBytes; }
+
+    public void setAvatarBytes(byte[] avatarBytes) { this.avatarBytes = avatarBytes; }
 }

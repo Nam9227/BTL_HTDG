@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 // ... existing code ...
 
+import javafx.scene.image.ImageView;
 import java.math.BigDecimal;
 import java.util.List;;
 
@@ -33,21 +34,36 @@ public class HomeController{
         @FXML private Label userNameLabel;
         @FXML private Label balanceLabel;
         @FXML private FlowPane productContainer;
+        @FXML private ImageView userAvatar;
         private User currentUser;
 
-        public void setUser(User user) {
-            this.currentUser = user;
+    public void setUser(User user) {
+        this.currentUser = user;
 
-            userNameLabel.setText(user.getUsername());
-            balanceLabel.setText("Số dư: " + formatMoney(user.getBalance()));
+        // Đồng bộ hiển thị chữ trên Sidebar trang chủ
+        userNameLabel.setText(user.getFullName() != null ? user.getFullName() : user.getUsername());
+        balanceLabel.setText("Số dư: " + formatMoney(user.getBalance()));
 
-            if (user.getRole() == null) {
-                showChooseRoleDialog();
-            } else {
-                applyRoleUI();
-                loadActiveAuctions();
-                }
+        // 🔥 THÊM ĐOẠN NÀY: Để khi từ Profile quay lại Home, ảnh đại diện ở Sidebar Home cũng được cập nhật mới tinh!
+        if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0) {
+            try {
+                userAvatar.setImage(null); // Xóa cache ảnh cũ trên Sidebar Home
+                javafx.scene.image.Image img = new javafx.scene.image.Image(
+                        new java.io.ByteArrayInputStream(user.getAvatarBytes())
+                );
+                userAvatar.setImage(img);
+            } catch (Exception e) {
+                System.out.println("Lỗi hiển thị avatar tại Sidebar Home: " + e.getMessage());
             }
+        }
+
+        if (user.getRole() == null) {
+            showChooseRoleDialog();
+        } else {
+            applyRoleUI();
+            loadActiveAuctions();
+        }
+    }
         private String formatMoney(BigDecimal amount) {
             if (amount==null)
                 return "0 đ";
@@ -131,7 +147,7 @@ public class HomeController{
         @FXML
         public void initialize() {
             productContainer.getStylesheets().add(
-                    getClass().getResource("/style/auction-card.css").toExternalForm()
+                    getClass().getResource("/style/home.css").toExternalForm()
             );
             productContainer.getStyleClass().add("root-container");
             productContainer.setHgap(20);
@@ -298,38 +314,26 @@ public class HomeController{
             alert.setContentText(message);
             alert.showAndWait();
         }
-        @FXML
-        public void handleOpenProfile() {
-            try {
-                // 1. Tải file giao diện profile.fxml
-                FXMLLoader loader = new FXMLLoader(
-                        getClass().getResource("/view/profile_view.fxml") // Nam nhớ check đúng đường dẫn file fxml của Nam nhé
-                );
-                Parent root = loader.load();
+    @FXML
+    public void handleOpenProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/profile_view.fxml"));
+            Parent root = loader.load();
 
-                // 2. Lấy Controller của trang Profile và bắn currentUser sang để nó hiển thị thông tin
-                ProfileController controller = loader.getController();
-                controller.setUser(currentUser); // Truyền user đăng nhập sang ở đây!
+            ProfileController controller = loader.getController();
+            controller.setUser(currentUser); // Bắn session user mới nhất sang Profile
 
-                // 3. Lấy Stage hiện tại và đổi Scene sang trang Profile
-                Stage stage = (Stage) productContainer.getScene().getWindow();
-                stage.setScene(new Scene(root));
+            Stage stage = (Stage) userNameLabel.getScene().getWindow(); // Lấy stage từ label bất kỳ
 
-                // 4. Ép màn hình hiển thị bung lụa full toàn màn hình cho đẹp
-                stage.setMaximized(true);
-                stage.show();
+            // Đổi scene mượt mà, giữ nguyên trạng thái maximized, tuyệt đối không co giãn màn hình
+            stage.getScene().setRoot(root);
+            stage.setTitle("Thông tin tài khoản");
 
-                // Mẹo bảo hiểm của JavaFX giúp giao diện không bị co vỡ layout khi đổi màn hình
-                Platform.runLater(() -> {
-                    stage.setMaximized(false);
-                    stage.setMaximized(true);
-                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                showError("Lỗi", "Không thể mở trang thông tin tài khoản!");
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Không thể mở trang thông tin tài khoản!");
         }
+    }
         @FXML
         public void handleOpenAddProduct() {
             try {

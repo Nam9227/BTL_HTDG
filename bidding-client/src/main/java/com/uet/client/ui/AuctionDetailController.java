@@ -12,11 +12,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.text.DecimalFormat;
@@ -61,17 +64,6 @@ public class AuctionDetailController {
 
     @FXML
     public void initialize() {
-
-        priceChart.getStylesheets().add(
-                "data:text/css," +
-                        /* 1. Đổi màu đường vẽ đồ thị sang màu tím Indigo (màu nút Đặt giá của Nam) và làm mỏng lại */
-                        ".chart-series-line { -fx-stroke: #4F46E5; -fx-stroke-width: 2px; }" +
-                        /* 2. Thu nhỏ chấm tròn to tướng thành điểm nếp nhỏ tinh tế */
-                        ".chart-line-symbol { -fx-background-color: #4F46E5, white; -fx-background-radius: 2.5px; -fx-padding: 2.5px; }" +
-                        /* 3. Đẩy nhẹ chữ thời gian xuống dưới một chút cho thoáng mắt */
-                        ".axis-tick-label { -fx-translate-y: 5px; }"
-        );
-
         priceChart.getData().add(priceSeries);
         startCountdown();
     }
@@ -306,24 +298,17 @@ public class AuctionDetailController {
                 ClientSocket.getInstance().send(new LeaveAuctionRequest(auctionItem.getAuctionId()));
             }
 
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                    getClass().getResource("/view/home_view.fxml")
-            );
-
-            javafx.scene.Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home_view.fxml"));
+            Parent root = loader.load();
 
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
-            javafx.stage.Stage stage = (javafx.stage.Stage) productNameLabel.getScene().getWindow();
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.setResizable(true);
-            stage.show();
+            Stage stage = (Stage) productNameLabel.getScene().getWindow();
 
-            javafx.application.Platform.runLater(() -> {
-                stage.setMaximized(false);
-                stage.setMaximized(true);
-            });
+            // Thay ruột scene mượt mà
+            stage.getScene().setRoot(root);
+            stage.setTitle("Trang chủ Đấu giá");
 
         } catch (Exception e) {
             e.printStackTrace();
