@@ -2,21 +2,25 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.model.auction.AuctionItem;
+import com.uet.common.model.auction.BidRecord; // 🌟 Đã import đối tượng lịch sử từ Common
 import com.uet.common.model.user.User;
 import com.uet.common.network.AuctionUpdateResponse;
 import com.uet.common.network.BidRequest;
 import com.uet.common.network.JoinAuctionRequest;
 import com.uet.common.network.LeaveAuctionRequest;
+import com.uet.common.network.GetBidHistoryRequest; // 🌟 Import gói tin xin lịch sử
 import com.uet.common.network.Response;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -25,6 +29,7 @@ import javafx.util.Duration;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class AuctionDetailController {
 
@@ -46,10 +51,11 @@ public class AuctionDetailController {
 
     @FXML private LineChart<String, Number> priceChart;
 
-    //@FXML private TableView<BidRow> bidHistoryTable;
-    //@FXML private TableColumn<BidRow, String> bidderColumn;
-    //@FXML private TableColumn<BidRow, String> amountColumn;
-    //@FXML private TableColumn<BidRow, String> timeColumn;
+    // 🌟 ĐÃ KHAI BÁO BẢNG ĐÚNG FX:ID VÀ KIỂU DỮ LIỆU BID_RECORD
+    @FXML private TableView<BidRecord> bidHistoryTable;
+    @FXML private TableColumn<BidRecord, String> bidderColumn;
+    @FXML private TableColumn<BidRecord, String> amountColumn;
+    @FXML private TableColumn<BidRecord, String> timeColumn;
 
     private final DecimalFormat moneyFormat = new DecimalFormat("#,###");
     private final XYChart.Series<String, Number> priceSeries = new XYChart.Series<>();
@@ -65,6 +71,24 @@ public class AuctionDetailController {
     @FXML
     public void initialize() {
         priceChart.getData().add(priceSeries);
+
+        // 🌟 BƯỚC CHÍ MẠNG: KẾT NỐI BIẾN CỦA BID_RECORD VÀO CỘT TRÊN GIAO DIỆN ĐỂ HIỆN CHỮ
+        bidderColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+
+        // Định dạng số double thành chuỗi tiền tệ #,###đ hiển thị lên bảng
+        amountColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(formatMoney(cellData.getValue().getBidAmount()))
+        );
+
+        // Định dạng hiển thị Giờ:Phút:Giây cho cột thời gian đặt
+        timeColumn.setCellValueFactory(cellData -> {
+            if (cellData.getValue().getBidTime() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                return new SimpleStringProperty(cellData.getValue().getBidTime().format(formatter));
+            }
+            return new SimpleStringProperty("");
+        });
+
         startCountdown();
     }
 
@@ -109,9 +133,13 @@ public class AuctionDetailController {
             }
         }
 
+        // Logic vẽ biểu đồ gốc ban đầu của Nam giữ nguyên 100%
         addBidHistory("Giá hiện tại", currentPrice);
 
         joinAuctionRoom();
+
+        // 🌟 LẤY LỊCH SỬ TỪ SERVER ĐỂ ĐỔ VÀO CHO BẢNG HIỂN THỊ LÊN LẦN ĐẦU
+        requestBidHistoryFromServer(item.getAuctionId());
     }
 
     private void joinAuctionRoom() {
@@ -133,6 +161,9 @@ public class AuctionDetailController {
                                     && !updateResponse.getMessage().isBlank()) {
                                 showMessage(updateResponse.getMessage(), true);
                             }
+
+                            // 🌟 REALTIME: Mỗi khi có ai đặt giá mới, cập nhật lại bảng lịch sử ngay
+                            requestBidHistoryFromServer(updatedItem.getAuctionId());
                         });
                     }
 
@@ -154,6 +185,35 @@ public class AuctionDetailController {
         }
     }
 
+    // 🌟 HÀM TẢI LỊCH SỬ CHỈ TÁC ĐỘNG VÀO BẢNG LỊCH SỬ THEO ĐÚNG Ý NAM
+    private void requestBidHistoryFromServer(String auctionId) {
+        try {
+            GetBidHistoryRequest historyReq = new GetBidHistoryRequest(auctionId);
+
+            java.util.function.Consumer<Object> historyListener = new java.util.function.Consumer<>() {
+                @Override
+                public void accept(Object response) {
+                    if (response instanceof Response res && "Tải lịch sử thành công".equals(res.getMessage())) {
+                        List<BidRecord> list = (List<BidRecord>) res.getData();
+
+                        Platform.runLater(() -> {
+                            // 🌟 CHỈ THÊM VÀO ĐÚNG BẢNG LỊCH SỬ ĐẶT GIÁ THÔI, GIỮ NGUYÊN BIỂU ĐỒ CỦA NAM
+                            bidHistoryTable.getItems().clear();
+                            bidHistoryTable.getItems().addAll(list);
+                        });
+
+                        ClientSocket.getInstance().removeMessageListener(this);
+                    }
+                }
+            };
+
+            ClientSocket.getInstance().addMessageListener(historyListener);
+            ClientSocket.getInstance().send(historyReq);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void updateAuctionUI(AuctionItem updatedItem) {
         this.auctionItem = updatedItem;
@@ -192,34 +252,36 @@ public class AuctionDetailController {
 
     @FXML
     private void handlePlaceBid() {
+        messageLabel.setText("");
         String text = bidAmountField.getText().trim();
 
         if (text.isEmpty()) {
-            showMessage("Vui lòng nhập giá muốn đặt.", false);
+            showMessage("Vui lòng nhập số tiền muốn đặt!", false);
             return;
         }
 
         double amount;
-
         try {
             amount = Double.parseDouble(text);
         } catch (NumberFormatException e) {
-            showMessage("Giá đặt không hợp lệ.", false);
+            showMessage("Số tiền nhập vào không hợp lệ (chỉ được nhập số)!", false);
             return;
         }
 
+        // 🌟 ĐỔI CÂU NÀY: Thông báo rõ ràng cho người dùng
         if (amount <= currentPrice) {
-            showMessage("Giá đặt phải cao hơn giá hiện tại.", false);
+            showMessage("Giá đặt mới phải LỚN HƠN giá hiện tại (" + formatMoney(currentPrice) + ")!", false);
             return;
         }
 
         if (currentUser == null || currentUser.getBalance() == null) {
-            showMessage("Không lấy được thông tin số dư tài khoản.", false);
+            showMessage("Lỗi: Không lấy được số dư tài khoản của bạn!", false);
             return;
         }
 
+        // 🌟 ĐỔI CÂU NÀY: Thông báo khi tài khoản hết tiền
         if (amount > currentUser.getBalance().doubleValue()) {
-            showMessage("Số dư không đủ để đặt giá này.", false);
+            showMessage("Số dư tài khoản không đủ để thực hiện lượt đặt giá này!", false);
             return;
         }
 
@@ -248,11 +310,6 @@ public class AuctionDetailController {
 
     private void addBidHistory(String bidder, double amount) {
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-
-        // bidHistoryTable.getItems().add(
-        //         0,
-        //         new BidRow(bidder, formatMoney(amount), time)
-        // );
 
         priceSeries.getData().add(new XYChart.Data<>(time, amount));
         if (priceSeries.getData().size() > 10) {
@@ -306,7 +363,6 @@ public class AuctionDetailController {
 
             Stage stage = (Stage) productNameLabel.getScene().getWindow();
 
-            // Thay ruột scene mượt mà
             stage.getScene().setRoot(root);
             stage.setTitle("Trang chủ Đấu giá");
 

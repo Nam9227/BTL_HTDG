@@ -1,6 +1,7 @@
 package com.uet.server.service;
 
 import com.uet.common.model.auction.AuctionItem;
+import com.uet.common.model.auction.BidRecord;
 import com.uet.common.network.*;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.RegisterDAO;
@@ -15,6 +16,7 @@ public class ClientRequestDispatcher {
     private final RegisterDAO registerDAO = new RegisterDAO();
     private final AuctionDAO auctionDAO = new AuctionDAO();
     private final AuctionRealtimeService auctionRealtimeService = new AuctionRealtimeService();
+    private final AuctionService auctionService = new AuctionService(this.auctionDAO);
 
     public boolean dispatch(Object obj, ClientHandler client) {
         if (obj instanceof LoginRequest request) {
@@ -61,7 +63,17 @@ public class ClientRequestDispatcher {
             client.send(Response.success("Đăng xuất thành công", null));
             return false;
         }
+        if (obj instanceof AddProductRequest req) {
+            // 🌟 Chỉ gọi duy nhất 1 hàm xử lý từ tầng Service, truyền đối tượng client vào để nó tự phản hồi kết quả
+            auctionService.handleRegisterProduct(req, client);
+        }
+        if (obj instanceof GetBidHistoryRequest req) {
+            // Gọi DAO lấy danh sách lịch sử (Hàm getBidHistory mình đã viết ở các câu trước)
+            List<BidRecord> history = auctionDAO.getBidHistory(req.getAuctionId());
 
+            // Bắn ngược danh sách về cho đúng Client vừa yêu cầu
+            client.send(Response.success("Tải lịch sử thành công", history));
+        }
         client.send(Response.fail("Yêu cầu không hợp lệ"));
         return true;
     }

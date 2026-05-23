@@ -21,7 +21,7 @@ public class BidDAO {
                 """;
 
         String insertBidSql = """
-                INSERT INTO bids(id, auction_id, bidder_id, amount, bid_time)
+                INSERT INTO bids(id, auction_id, user_id, bid_amount, bid_time)
                 VALUES (?, ?, ?, ?, ?)
                 """;
 

@@ -50,7 +50,7 @@
                         <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
                         <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Đăng Xuất" textFill="WHITE" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #e74c3c;" text="Đăng Xuất" textFill="WHITE" />
                     </children>
                     <padding>
                         <Insets bottom="20.0" left="15.0" right="15.0" top="30.0" />

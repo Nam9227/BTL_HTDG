@@ -1,204 +1,284 @@
 package com.uet.client.ui;
 
+import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
+import com.uet.common.network.ImageData;
+import com.uet.common.network.Response;
+import com.uet.common.network.AddProductRequest; // Nam nhớ tạo file Request này ở Common nhé
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.net.URL;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class informationUploadController {
+
+    @FXML private TextField productNameField;
+    @FXML private TextArea productDescriptionField;
     @FXML private ComboBox<String> ProductType;
-    @FXML private VBox dropImageZone;
-    @FXML private HBox imageContainer;
+    @FXML private TextField brandField;
+
+    @FXML private StackPane dropImageZone;
+    @FXML private VBox uploadPromptBox;
+    @FXML private ImageView productImageView;
+    @FXML private ProgressBar uploadProgressBar;
+
+    @FXML private TextField startPriceField;
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
+
     @FXML private Spinner<Integer> hourStartSpinner;
     @FXML private Spinner<Integer> minuteStartSpinner;
     @FXML private Spinner<Integer> hourEndSpinner;
     @FXML private Spinner<Integer> minuteEndSpinner;
-    // Danh sách lưu trữ các file thực tế để sau này bạn gửi lên Server xử lý (Task 3)
-    private final List<File> selectedFilesList = new ArrayList<>();
-    private final List<String> VALID_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".mp4");
-    private final long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-    private final int MAX_FILES_ALLOWED = 10;
+
     private User currentUser;
+    private ImageData selectedProductImage; // Lưu duy nhất 1 ảnh sản phẩm
 
     public void setUser(User user) {
         this.currentUser = user;
-        System.out.println("Màn hình Thêm sản phẩm đã nhận diện Người bán: " + currentUser.getUsername());
     }
 
     @FXML
     public void initialize() {
-        hourStartSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
-
-        minuteStartSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
-        hourEndSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
-
-        minuteEndSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
         if (ProductType != null) {
+            // Xóa sạch dữ liệu cũ
+            ProductType.getItems().clear();
+
+            // Nạp danh sách dựa trên các Class danh mục của Nam
             ProductType.getItems().addAll(
-                    "Thiết bị điện tử & Máy tính",
-                    "Điện thoại & Phụ kiện",
-                    "Thiết bị gia dụng",
-                    "Sách & Tài liệu học tập",
-                    "Thời trang & Phụ kiện",
-                    "Đồ sưu tầm & Giới hạn",
-                    "Khác"
+                    "Điện tử ",
+                    "Thời trang ",
+                    "Xe cộ ",
+                    "Sách ",
+                    "Nghệ thuật ",
+                    "Nội thất ",
+                    "Trò chơi "
             );
+
+            // Mặc định chọn phần tử đầu tiên
+            ProductType.getSelectionModel().selectFirst();
+        }
+
+        // Đống cấu hình Spinner và DatePicker phía dưới của Nam giữ nguyên 100% nhé...
+        hourStartSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
+        hourEndSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 18));
+        minuteStartSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        minuteEndSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+        startDatePicker.setValue(LocalDate.now());
+        endDatePicker.setValue(LocalDate.now().plusDays(1));
+    }
+
+    // 1. CLICK CHUỘT ĐỂ CHỌN 1 FILE ẢNH
+    @FXML
+    private void handleSelectFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn một ảnh sản phẩm duy nhất");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Hình ảnh", "*.png", "*.jpg", "*.jpeg", "*.webp")
+        );
+
+        Stage stage = (Stage) dropImageZone.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            processAndPreviewImage(file);
         }
     }
-    //Kéo file lướt qua vùng dropImageZone -> Đổi màu nền để báo hiệu có thể thả
+
+    // 2. KÉO FILE VÀO VÙNG DROP
     @FXML
     private void handleDragOver(DragEvent event) {
         if (event.getDragboard().hasFiles()) {
-            // Highlight vùng chọn: Đổi màu viền và màu nền tối nhẹ hơn một chút
-            dropImageZone.setStyle("-fx-border-color: #3f88c5; -fx-border-style: dashed; -fx-border-width: 2; -fx-background-color: #1e2530; -fx-border-radius: 5; -fx-background-radius: 5;");
-            event.acceptTransferModes(TransferMode.ANY);
+            event.acceptTransferModes(TransferMode.COPY);
         }
         event.consume();
     }
 
-    //Chuột kéo file ra khỏi vùng dropImageZone (nhưng không thả) -> Trả lại màu giao diện gốc
-    @FXML
-    private void handleDragExited(DragEvent event) {
-        dropImageZone.setStyle("-fx-border-color: #4f5b66; -fx-border-style: dashed; -fx-border-width: 2; -fx-background-color: transparent; -fx-border-radius: 5; -fx-background-radius: 5;");
-        event.consume();
-    }
-
-    //Người dùng thả chuột (Drop file) vào vùng dropImageZone
+    // 3. THẢ FILE VÀO VÙNG DROP
     @FXML
     private void handleDragDropped(DragEvent event) {
-        var dragboard = event.getDragboard();
         boolean success = false;
-
-        if (dragboard.hasFiles()) {
-            processFiles(dragboard.getFiles());
-            success = true;
+        if (event.getDragboard().hasFiles()) {
+            List<File> files = event.getDragboard().getFiles();
+            if (!files.isEmpty()) {
+                // CHỈ LẤY ĐÚNG FILE ĐẦU TIÊN
+                processAndPreviewImage(files.get(0));
+                success = true;
+            }
         }
-
         event.setDropCompleted(success);
         event.consume();
-
-        // Reset giao diện về trạng thái ban đầu sau khi hoàn tất thả
-        handleDragExited(event);
     }
 
-    //Click chuột trực tiếp vào vùng dropImageZone để mở FileChooser của hệ điều hành
-    @FXML
-    private void handleSelectFile(MouseEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Chọn Hình Ảnh / Video Đấu Giá");
-
-        // Tạo bộ lọc định dạng file tránh người dùng chọn nhầm file zip, pdf...
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Hình ảnh & Video (*.png, *.jpg, *.mp4)", "*.png", "*.jpg", "*.jpeg", "*.mp4")
-        );
-
-        // Lấy Stage hiện tại để làm Dialog Owner
-        Stage stage = (Stage) dropImageZone.getScene().getWindow();
-        List<File> files = fileChooser.showOpenMultipleDialog(stage);
-
-        if (files != null) {
-            processFiles(files);
-        }
-    }
-
-    private void processFiles(List<File> files) {
-        for (File file : files) {
-            // Kiểm tra nếu vượt quá số lượng 10 file cho phép thì dừng lại
-            if (selectedFilesList.size() >= MAX_FILES_ALLOWED) {
-                System.out.println("Cảnh báo: Đã đạt giới hạn tối đa 10 files.");
-                break;
-            }
-
-            // Kiểm tra định dạng đuôi và dung lượng < 50MB
-            if (isValidFile(file)) {
-                selectedFilesList.add(file);
-                System.out.println("Đã thêm file: " + file.getName());
-
-                // Vẽ ảnh động lên giao diện
-                renderImage(file);
-            } else {
-                System.out.println("File không hợp lệ hoặc kích thước vượt quá 50MB: " + file.getName());
-            }
-        }
-    }
-
-
-    //Validate đuôi file và kích thước
-
-    private boolean isValidFile(File file) {
-        String name = file.getName().toLowerCase();
-        boolean hasValidExt = VALID_EXTENSIONS.stream().anyMatch(name::endsWith);
-        boolean isUnderSize = file.length() <= MAX_FILE_SIZE;
-        return hasValidExt && isUnderSize;
-    }
-
-    private void renderImage(File file) {
+    // Xử lý đọc Byte file ảnh đưa vào bộ nhớ đệm
+    private void processAndPreviewImage(File file) {
         try {
-            // Tạo ImageView hiển thị ảnh thu nhỏ
-            Image image = new Image(file.toURI().toString(), 80, 60, true, true);
-            ImageView imageView = new ImageView(image);
+            byte[] fileBytes = Files.readAllBytes(file.toPath());
 
-            // Bọc ImageView vào một StackPane để dễ quản lý border bo góc giống UI mẫu
-            StackPane imageWrapper = new StackPane(imageView);
-            imageWrapper.setStyle("-fx-border-color: #4f5b66; -fx-border-width: 1; -fx-border-radius: 4; -fx-padding: 3; -fx-background-color: #1a222d;");
+            // Đóng gói mảng byte ảnh đơn
+            this.selectedProductImage = new ImageData(
+                    file.getName(),
+                    Files.probeContentType(file.toPath()),
+                    fileBytes
+            );
 
-            // Thêm hiệu ứng click vào thumbnail để xóa file nếu người dùng chọn nhầm
-            imageWrapper.setOnMouseClicked(e -> {
-                imageContainer.getChildren().remove(imageWrapper);
-                selectedFilesList.remove(file);
-                System.out.println("Đã xóa file: " + file.getName());
-            });
+            // Ẩn lớp thông báo chữ, đẩy ảnh lên preview đè khít khịt
+            uploadPromptBox.setVisible(false);
+            productImageView.setImage(new Image(file.toURI().toString()));
 
-            // Đẩy vào thanh ngang chứa ảnh preview dưới vùng drop
-            imageContainer.getChildren().add(imageWrapper);
+            System.out.println("📸 Client: Đã nạp mảng byte của 1 ảnh duy nhất thành công!");
 
         } catch (Exception e) {
-            System.out.println("Không thể hiển thị thumbnail cho file: " + file.getName());
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể đọc dữ liệu file ảnh này!", Alert.AlertType.ERROR);
         }
     }
-    /*LocalDate startDate = startDatePicker.getValue();
 
-    int startHour = hourStartSpinner.getValue();
-    int startMinute = minuteStartSpinner.getValue();
+    // XỬ LÝ KHI BẤM NÚT XÁC NHẬN (GỬI LÊN SERVER)
+    @FXML
+    private void handleConfirmUpload() {
+        String name = productNameField.getText().trim();
+        String desc = productDescriptionField.getText().trim();
+        String priceText = startPriceField.getText().trim();
+        String brand = brandField.getText().trim();
 
-    LocalDateTime startTime =
-            LocalDateTime.of(startDate, LocalTime.of(startHour, startMinute));
+        // 1. Kiểm tra rỗng bắt buộc phải có ảnh sản phẩm
+        if (name.isEmpty() || priceText.isEmpty() || selectedProductImage == null) {
+            showAlert("Cảnh báo", "Vui lòng điền tên, giá và CHỌN 1 ẢNH SẢN PHẨM!", Alert.AlertType.WARNING);
+            return;
+        }
 
-System.out.println(startTime);
-    LocalDate endDate = endDatePicker.getValue();
+        try {
+            double startPrice = Double.parseDouble(priceText);
 
-    int endHour = hourEndSpinner.getValue();
-    int endMinute = minuteEndSpinner.getValue();
+            // 2. Gom ngày và giờ từ DatePicker + Spinner thành LocalDateTime hoàn chỉnh
+            LocalDateTime startDateTime = LocalDateTime.of(
+                    startDatePicker.getValue(),
+                    LocalTime.of(hourStartSpinner.getValue(), minuteStartSpinner.getValue())
+            );
 
-    LocalDateTime endTime =
-            LocalDateTime.of(startDate, LocalTime.of(endHour, endMinute));
+            LocalDateTime endDateTime = LocalDateTime.of(
+                    endDatePicker.getValue(),
+                    LocalTime.of(hourEndSpinner.getValue(), minuteEndSpinner.getValue())
+            );
 
-System.out.println(endTime);*/
+            if (endDateTime.isBefore(startDateTime)) {
+                showAlert("Cảnh báo", "Thời gian kết thúc không được trước thời gian bắt đầu!", Alert.AlertType.WARNING);
+                return;
+            }
+
+            String selectedType = ProductType.getSelectionModel().getSelectedItem().trim();
+            String itemType;
+            switch (selectedType) {
+                case "Điện tử":
+                    itemType = "Electronics";
+                    break;
+                case "Thời trang":
+                    itemType = "Fashion";
+                    break;
+                case "Xe cộ":
+                    itemType = "Vehicle";
+                    break;
+                case "Sách":
+                    itemType = "Book";
+                    break;
+                case "Nghệ thuật":
+                    itemType = "Art";
+                    break;
+                case "Nội thất":
+                    itemType = "Furniture";
+                    break;
+                case "Trò chơi":
+                    itemType = "Gaming";
+                    break;
+                default:
+                    itemType = "Item";
+                    break;
+            }
+
+            // 🌟 4. ĐÓNG GÓI ĐỦ 9 THAM SỐ KHỚP KHÍT FILE COMMON MỚI SỬA
+            AddProductRequest req = new AddProductRequest(
+                    currentUser.getId(),
+                    name,
+                    desc,
+                    startPrice,
+                    selectedProductImage,
+                    itemType,     // Thuộc tính category
+                    brand,        // Thuộc tính extra_1
+                    startDateTime, // Thuộc tính start_time
+                    endDateTime   // Thuộc tính end_time
+            );
+
+            // 4. Thiết lập Listener hứng kết quả trả về từ Server
+            java.util.function.Consumer<Object> addProductListener = new java.util.function.Consumer<>() {
+                @Override
+                public void accept(Object response) {
+                    if (response instanceof Response res) {
+                        Platform.runLater(() -> {
+                            if (res.isSuccess()) {
+                                showAlert("Thành công", res.getMessage(), Alert.AlertType.INFORMATION);
+                                handleCancel(); // Quay về trang chủ
+                            } else {
+                                showAlert("Thất bại", res.getMessage(), Alert.AlertType.ERROR);
+                            }
+                        });
+                        ClientSocket.getInstance().removeMessageListener(this);
+                    }
+                }
+            };
+
+            ClientSocket.getInstance().addMessageListener(addProductListener);
+            ClientSocket.getInstance().send(req); // Bắn lệnh lên Server
+
+        } catch (NumberFormatException e) {
+            showAlert("Lỗi", "Giá khởi điểm nhập vào không hợp lệ!", Alert.AlertType.ERROR);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể kết nối đến hệ thống Server!", Alert.AlertType.ERROR);
+        }
+    }
+
+    // NÚT HỦY: QUAY VỀ TRANG CHỦ MƯỢT MÀ KHÔNG CHỚP GIẬT
+    @FXML
+    private void handleCancel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home_view.fxml"));
+            Parent root = loader.load();
+
+            HomeController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            Stage stage = (Stage) dropImageZone.getScene().getWindow();
+            stage.getScene().setRoot(root); // Thay thế ruột scene cực mượt
+            stage.setTitle("Trang chủ Đấu giá");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML private void handleDragExited() {} // Để trống để khớp với FXML cũ nếu có gọi
+
+    private void showAlert(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

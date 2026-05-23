@@ -362,4 +362,31 @@ public class HomeController{
                 showError("Lỗi", "Không mở được giao diện thêm sản phẩm!");
             }
         }
+    @FXML
+    public void handleLogout() {
+        try {
+            // 1. Gửi chuỗi "LOGOUT" báo Server đóng luồng phía Server
+            ClientSocket.getInstance().send("LOGOUT");
+
+            // 🌟 2. GỌI HÀM CLOSE() VỪA SỬA ĐỂ ĐẬP VỠ SOCKET CŨ Ở CLIENT AN TOÀN TRƯỚC KHI VỀ LOGIN
+            ClientSocket.getInstance().close();
+
+            this.currentUser = null;
+
+            // 3. Chuyển Scene về Login mượt mà như cũ...
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) userNameLabel.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Đăng nhập hệ thống");
+
+            stage.setMaximized(false);
+            stage.setWidth(800);
+            stage.setHeight(600);
+            stage.centerOnScreen();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
