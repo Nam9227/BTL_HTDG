@@ -150,27 +150,26 @@ public class AuctionDetailController {
                 if (message instanceof AuctionUpdateResponse updateResponse) {
                     AuctionItem updatedItem = updateResponse.getAuctionItem();
 
-                    if (updatedItem != null
-                            && auctionItem != null
-                            && auctionItem.getAuctionId().equals(updatedItem.getAuctionId())) {
+                    if (updatedItem != null && auctionItem != null && auctionItem.getAuctionId().equals(updatedItem.getAuctionId())) {
 
                         Platform.runLater(() -> {
+                            // 1. Cập nhật thông tin chữ nghĩa giá cả và vẽ biểu đồ cục bộ
                             updateAuctionUI(updatedItem);
 
-                            if (updateResponse.getMessage() != null
-                                    && !updateResponse.getMessage().isBlank()) {
-                                showMessage(updateResponse.getMessage(), true);
+                            // 2. 🌟 GỘP CHUNG REALTIME: Bốc luôn danh sách lịch sử đi kèm đổ thẳng vào bảng!
+                            if (updateResponse.getBidHistory() != null) {
+                                bidHistoryTable.getItems().clear();
+                                bidHistoryTable.getItems().addAll(updateResponse.getBidHistory());
                             }
 
-                            // 🌟 REALTIME: Mỗi khi có ai đặt giá mới, cập nhật lại bảng lịch sử ngay
-                            requestBidHistoryFromServer(updatedItem.getAuctionId());
+                            // 3. Hiển thị dòng chữ thông báo xanh/vàng nếu có
+                            if (updateResponse.getMessage() != null && !updateResponse.getMessage().isBlank()) {
+                                showMessage(updateResponse.getMessage(), true);
+                            } else {
+                                messageLabel.setText(""); // Xóa sạch chữ báo lỗi cũ của lượt trước
+                            }
                         });
                     }
-
-                } else if (message instanceof Response responseMessage) {
-                    Platform.runLater(() ->
-                            showMessage(responseMessage.getMessage(), responseMessage.isSuccess())
-                    );
                 }
             };
 

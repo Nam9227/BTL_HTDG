@@ -68,7 +68,7 @@ public class ClientRequestDispatcher {
             auctionService.handleRegisterProduct(req, client);
         }
         if (obj instanceof GetBidHistoryRequest req) {
-            // Gọi DAO lấy danh sách lịch sử (Hàm getBidHistory mình đã viết ở các câu trước)
+
             List<BidRecord> history = auctionDAO.getBidHistory(req.getAuctionId());
 
             // Bắn ngược danh sách về cho đúng Client vừa yêu cầu
