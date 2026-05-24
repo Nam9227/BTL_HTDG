@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -218,7 +217,7 @@ public class AdminUsersController {
     }
 
     @FXML private void goDashboard(ActionEvent event) { switchScene(event, "/view/admin/admin_dashboard.fxml", "Dashboard"); }
-    @FXML private void goProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_products.fxml", "Quản lý sản phẩm"); }
+    @FXML private void goProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_wallet.fxml", "Quản lý sản phẩm"); }
     @FXML private void goPendingProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_pending.fxml", "Duyệt sản phẩm"); }
     @FXML private void goReports(ActionEvent event) { switchScene(event, "/view/admin/admin_reports.fxml", "Thống kê báo cáo"); }
 

@@ -63,17 +63,33 @@ public class ClientRequestDispatcher {
             client.send(Response.success("Đăng xuất thành công", null));
             return false;
         }
+
         if (obj instanceof AddProductRequest req) {
-            // 🌟 Chỉ gọi duy nhất 1 hàm xử lý từ tầng Service, truyền đối tượng client vào để nó tự phản hồi kết quả
             auctionService.handleRegisterProduct(req, client);
+            return true; // 🌟 Thêm return để ngắt luồng ngay sau khi xử lý thành công
         }
+
         if (obj instanceof GetBidHistoryRequest req) {
-
             List<BidRecord> history = auctionDAO.getBidHistory(req.getAuctionId());
-
-            // Bắn ngược danh sách về cho đúng Client vừa yêu cầu
             client.send(Response.success("Tải lịch sử thành công", history));
+            return true; // 🌟 Thêm return
         }
+
+        if (obj instanceof GetPendingAuctionsRequest) {
+            auctionRealtimeService.handleGetPendingAuctions(client);
+            return true; // 🌟 Thêm return
+        }
+
+        if (obj instanceof ApproveAuctionRequest approveReq) {
+            auctionRealtimeService.handleApproveAuction(approveReq, client);
+            return true; // 🌟 Thêm return
+        }
+
+        if (obj instanceof ForceEndRequest forceEndReq) {
+            auctionRealtimeService.handleForceEndAuction(forceEndReq.getAuctionId(), client);
+            return true;
+        }
+
         client.send(Response.fail("Yêu cầu không hợp lệ"));
         return true;
     }
@@ -101,4 +117,6 @@ public class ClientRequestDispatcher {
         Response response = userDAO.updateProfile(request);
         client.send(response);
     }
+
+
 }

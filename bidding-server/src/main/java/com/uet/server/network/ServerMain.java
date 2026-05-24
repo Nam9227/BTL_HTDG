@@ -1,6 +1,7 @@
 package com.uet.server.network;
 
 import com.uet.server.service.AuctionBroadcastService;
+import com.uet.server.service.AuctionScheduler;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,6 +9,8 @@ import java.net.Socket;
 public class ServerMain {
     public static void main(String[] args){
         AuctionBroadcastService.start();
+        AuctionScheduler scheduler = new AuctionScheduler();
+        scheduler.start();
         new ServerMain().start();
     }
     public void start() {

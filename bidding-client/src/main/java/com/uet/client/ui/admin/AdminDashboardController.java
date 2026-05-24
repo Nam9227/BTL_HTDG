@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -90,7 +89,7 @@ public class AdminDashboardController {
 
     @FXML
     private void showProducts(ActionEvent event) {
-        switchScene(event, "/view/admin/admin_products.fxml", "Quản lý sản phẩm");
+        switchScene(event, "/view/admin/admin_wallet.fxml", "Quản lý sản phẩm");
     }
 
     @FXML

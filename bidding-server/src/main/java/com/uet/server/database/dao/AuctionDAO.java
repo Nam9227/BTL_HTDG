@@ -299,4 +299,94 @@ public class AuctionDAO {
         }
         return history;
     }
+
+    public List<AuctionItem> getAllAuctionsForAdmin() {
+        List<AuctionItem> list = new java.util.ArrayList<>();
+
+        // 🌟 Câu lệnh SQL đã được khớp 100% với tên cột thực tế của Nam:
+        // a.product_id kết nối với i.id
+        // Sắp xếp theo thời gian bắt đầu a.start_time DESC
+        String sql = "SELECT a.id AS auction_id, " +
+                "       i.name AS product_name, " +
+                "       i.seller_id, " +
+                "       a.start_price, " +
+                "       a.current_price, " +
+                "       i.description, " +
+                "       i.image_url, " +
+                "       a.status, " +
+                "       a.end_time " +
+                "FROM auctions a " +
+                "INNER JOIN items i ON a.product_id = i.id " +
+                "ORDER BY a.start_time DESC";
+
+        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                AuctionItem item = new AuctionItem();
+
+                item.setAuctionId(rs.getString("auction_id"));
+                item.setProductName(rs.getString("product_name"));
+                item.setSellerId(rs.getString("seller_id"));
+                item.setStartPrice(rs.getDouble("start_price"));
+                item.setCurrentPrice(rs.getDouble("current_price"));
+                item.setDescription(rs.getString("description"));
+                item.setImageUrl(rs.getString("image_url"));
+                item.setStatus(rs.getString("status"));
+
+                if (rs.getTimestamp("end_time") != null) {
+                    item.setEndTime(rs.getTimestamp("end_time").toLocalDateTime());
+                }
+                list.add(item);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean updateAuctionStatus(String auctionId, String status) {
+        String sql = "UPDATE auctions SET status = ? WHERE id = ?";
+        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setString(2, auctionId);
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void startEligibleAuctions() {
+        String sql = "UPDATE auctions SET status = 'RUNNING' " +
+                "WHERE status = 'ACTIVE' AND start_time <= NOW()";
+        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("[Scheduler] Đã kích hoạt " + rows + " phiên đấu giá sang trạng thái RUNNING!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 2. Hàm quét các phiên RUNNING đã hết giờ để chuyển sang FINISHED
+    public void finishExpiredAuctions() {
+        String sql = "UPDATE auctions SET status = 'FINISHED' " +
+                "WHERE status = 'RUNNING' AND end_time <= NOW()";
+        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("[Scheduler] Đã tự động kết thúc " + rows + " phiên đấu giá hết hạn!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
