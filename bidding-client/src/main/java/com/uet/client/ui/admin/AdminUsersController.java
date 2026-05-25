@@ -1,7 +1,11 @@
 package com.uet.client.ui.admin;
 
+import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
 import com.uet.common.model.user.Role;
+import com.uet.common.network.GetAllUsersRequest;
+import com.uet.common.network.GetAllUsersResponse;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -14,7 +18,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.function.Consumer;
+import com.uet.common.network.Response;
 
 public class AdminUsersController {
 
@@ -31,11 +37,15 @@ public class AdminUsersController {
     @FXML private TableColumn<User, String> roleColumn;
     @FXML private TableColumn<User, Boolean> statusColumn;
 
-    private ObservableList<User> masterData = FXCollections.observableArrayList();
+    private final ObservableList<User> masterData = FXCollections.observableArrayList();
     private FilteredList<User> filteredData;
+
+    // Bộ lắng nghe phản hồi từ Socket Server ngầm
+    private Consumer<Object> serverMessageListener;
 
     @FXML
     public void initialize() {
+        // 1. Map dữ liệu vào các cột TableView
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -50,6 +60,7 @@ public class AdminUsersController {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
+                    setStyle("");
                 } else {
                     setText(item ? "Hoạt động" : "Bị khóa");
                     setStyle(item ? "-fx-text-fill: #2e7d32; -fx-font-weight: bold;" : "-fx-text-fill: #d32f2f; -fx-font-weight: bold;");
@@ -57,8 +68,7 @@ public class AdminUsersController {
             }
         });
 
-        loadMockData();
-
+        // 2. Thiết lập dữ liệu lọc cho TableView
         filteredData = new FilteredList<>(masterData, p -> true);
         userTable.setItems(filteredData);
 
@@ -71,12 +81,57 @@ public class AdminUsersController {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
         roleFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
         statusFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+
+        // 3. Đăng ký nhận gói tin kết quả từ Socket và kéo dữ liệu thời gian thực
+        setupSocketListener();
+        fetchUsersFromServer();
     }
 
-    private void loadMockData() {
-        masterData.add(new User("U001", "nguyenvana", "Nguyễn Văn A", "a@gmail.com", "0987654321", Role.BIDDER, new BigDecimal("0"), true));
-        masterData.add(new User("U002", "admin_tuan", "Trần Anh Tuấn", "tuan@uet.vn", "0123456789", Role.ADMIN, new BigDecimal("0"), true));
-        masterData.add(new User("U003", "bad_boy", "Lê Văn B", "b@yahoo.com", "0999999999", Role.SELLER, new BigDecimal("0"), false));
+    /**
+     * Lắng nghe gói tin GetAllUsersResponse được trả về từ Server Dispatcher
+     */
+    private void setupSocketListener() {
+        serverMessageListener = message -> {
+            System.out.println("📩 [Client] Nhận gói tin từ Server: " + message.getClass().getSimpleName());
+
+            // Trường hợp 1: Nhận danh sách người dùng đổ lên TableView
+            if (message instanceof GetAllUsersResponse response) {
+                List<User> userList = response.getUsers();
+                Platform.runLater(() -> {
+                    masterData.clear();
+                    masterData.addAll(userList);
+                    handleSearch();
+                });
+            }
+
+            // 🌟 Trường hợp 2: Nhận phản hồi báo Khóa/Mở khóa/Xóa thành công từ Server
+            else if (message instanceof Response response) {
+                Platform.runLater(() -> {
+                    if (response.isSuccess()) {
+                        System.out.println("✅ [Client] Server báo lệnh thực thi thành công!");
+                        // Ép Client chủ động kéo lại dữ liệu mới nhất từ DB lên giao diện
+                        fetchUsersFromServer();
+                    } else {
+                        showWarning(response.getMessage());
+                    }
+                });
+            }
+        };
+        ClientSocket.getInstance().addMessageListener(serverMessageListener);
+    }
+
+    /**
+     * Gửi yêu cầu lấy dữ liệu lên Server qua Socket
+     */
+    private void fetchUsersFromServer() {
+        new Thread(() -> {
+            try {
+                ClientSocket.getInstance().send(new GetAllUsersRequest());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> showWarning("Không thể gửi yêu cầu lấy dữ liệu đến Server!"));
+            }
+        }).start();
     }
 
     @FXML
@@ -110,9 +165,15 @@ public class AdminUsersController {
                 showWarning("Tài khoản này đã bị khóa từ trước!");
                 return;
             }
-            selected.setActive(false);
-            userTable.refresh();
-            handleSearch();
+            new Thread(() -> {
+                try {
+                    ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false));
+                    System.out.println("🚀 [Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> showWarning("Không thể kết nối đến server để khóa tài khoản!"));
+                }
+            }).start();
         } else {
             showWarning("Vui lòng chọn một người dùng để khóa!");
         }
@@ -126,9 +187,15 @@ public class AdminUsersController {
                 showWarning("Tài khoản này đang ở trạng thái hoạt động!");
                 return;
             }
-            selected.setActive(true);
-            userTable.refresh();
-            handleSearch();
+            new Thread(() -> {
+                try {
+                    ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), true));
+                    System.out.println("🚀 [Client] Đã gửi yêu cầu MỞ KHÓA user ID: " + selected.getId());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Platform.runLater(() -> showWarning("Không thể kết nối đến server để mở khóa tài khoản!"));
+                }
+            }).start();
         } else {
             showWarning("Vui lòng chọn một người dùng để mở khóa!");
         }
@@ -144,7 +211,16 @@ public class AdminUsersController {
             confirmAlert.setContentText("Bạn có chắc chắn muốn xóa người dùng " + selected.getUsername() + " không?");
 
             if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                masterData.remove(selected);
+                new Thread(() -> {
+                    try {
+                        ClientSocket.getInstance().send(new com.uet.common.network.DeleteUserRequest(selected.getId()));
+                        System.out.println("🚀 [Client] Đã gửi yêu cầu XÓA user ID: " + selected.getId());
+                        fetchUsersFromServer();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Platform.runLater(() -> showWarning("Không thể kết nối đến server để xóa tài khoản!"));
+                    }
+                }).start();
             }
         } else {
             showWarning("Vui lòng chọn một người dùng để xóa!");
@@ -156,7 +232,7 @@ public class AdminUsersController {
         searchField.clear();
         roleFilter.getSelectionModel().selectFirst();
         statusFilter.getSelectionModel().selectFirst();
-        handleSearch();
+        fetchUsersFromServer(); // Kéo lại dữ liệu mới nhất sạch từ DB
     }
 
     @FXML
@@ -201,13 +277,15 @@ public class AdminUsersController {
 
     private void switchScene(ActionEvent event, String fxmlPath, String title) {
         try {
+            // Giải phóng bộ lắng nghe socket của trang cũ trước khi hủy view
+            if (serverMessageListener != null) {
+                ClientSocket.getInstance().removeMessageListener(serverMessageListener);
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             stage.getScene().setRoot(root);
-
             stage.setTitle(title);
 
         } catch (IOException e) {

@@ -34,6 +34,81 @@ public class UserDAO {
 
         return Response.success("Đăng nhập thành công", user);
     }
+    public java.util.List<User> getAllUsers() {
+        java.util.List<User> userList = new java.util.ArrayList<>();
+
+        // Sử dụng câu lệnh câu SQL gom dữ liệu từ 3 bảng tương tự hàm findUserByUserId của bạn
+        String sql = """
+            SELECT 
+                u.id,
+                u.username,
+                u.role,
+                u.active,
+                p.full_name,
+                p.email,
+                p.phone_number,
+                p.address,
+                p.avatar_path,
+                COALESCE(w.balance, 0) AS balance
+            FROM users u
+            LEFT JOIN user_profiles p ON u.id = p.user_id
+            LEFT JOIN wallet w ON u.id = w.user_id
+            """;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getString("id"));
+                user.setUsername(rs.getString("username"));
+                user.setFullName(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone_number"));
+                user.setAddress(rs.getString("address"));
+                user.setAvatarPath(rs.getString("avatar_path"));
+                user.setRole(parseRole(rs.getString("role")));
+                user.setActive(rs.getBoolean("active"));
+                user.setBalance(rs.getBigDecimal("balance"));
+
+                // Đọc dữ liệu ảnh avatar dưới dạng bytes nếu Admin cần hiển thị hoặc xử lý sau này
+                String avatarPath = rs.getString("avatar_path");
+                if (avatarPath != null && !avatarPath.isBlank()) {
+                    try {
+                        byte[] bytes = null;
+                        if (avatarPath.startsWith("file://")) {
+                            String p = avatarPath.replaceFirst("^file:///*", "/");
+                            java.nio.file.Path filePath = java.nio.file.Paths.get(p);
+                            if (java.nio.file.Files.exists(filePath)) {
+                                bytes = java.nio.file.Files.readAllBytes(filePath);
+                            }
+                        } else {
+                            java.nio.file.Path filePath = java.nio.file.Paths.get(avatarPath);
+                            if (java.nio.file.Files.exists(filePath)) {
+                                bytes = java.nio.file.Files.readAllBytes(filePath);
+                            }
+                        }
+                        if (bytes != null && bytes.length > 0) {
+                            user.setAvatarBytes(bytes);
+                        }
+                    } catch (Exception e) {
+                        // Bỏ qua lỗi đọc file lẻ của từng user để không làm gián đoạn việc tải danh sách
+                        System.out.println("⚠️ Không thể đọc file ảnh của user ID: " + user.getId());
+                    }
+                }
+
+                userList.add(user);
+            }
+            System.out.println("📊 [UserDAO] Đã tải thành công " + userList.size() + " người dùng cho Admin.");
+
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB:");
+            e.printStackTrace();
+        }
+
+        return userList;
+    }
 
     public void updateRole(String userId, Role role) {
         String sql = "UPDATE users SET role = ? WHERE id = ?";
@@ -51,6 +126,25 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void deleteUser(String userId) {
+        // Lệnh xóa tài khoản dựa trên ID
+        String sql = "DELETE FROM users WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("🗑️ [UserDAO] Đã xóa thành công user ID: " + userId + " khỏi Database.");
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi khi xóa user trong UserDAO:");
             e.printStackTrace();
         }
     }
