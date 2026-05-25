@@ -22,7 +22,7 @@
             <Button maxWidth="Infinity" onAction="#goDashboard" text="Dashboard" />
             <Button maxWidth="Infinity" style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold;" text="Quản lý người dùng" />
             <Button maxWidth="Infinity" onAction="#goProducts" text="Quản lý nạp rút" />
-            <Button maxWidth="Infinity" onAction="#goPendingProducts" text="Duyệt sản phẩm" />
+            <Button maxWidth="Infinity" onAction="#goApprove" text="Duyệt sản phẩm" />
 
 
             <Region VBox.vgrow="ALWAYS" />

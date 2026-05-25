@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class AdminProductsController {
+public class AdminWalletController {
 
     @FXML private TextField searchField;
     @FXML private ComboBox<String> statusFilter;
@@ -98,8 +97,8 @@ public class AdminProductsController {
     }
 
     @FXML
-    private void goAuctions(ActionEvent event) {
-        switchScene(event, "/view/admin/admin_auctions.fxml", "Quản lý phiên đấu giá");
+    private void goApprove(ActionEvent event) {
+        switchScene(event, "/view/admin/admin_approve.fxml", "Quản lý phiên đấu giá");
     }
 
     @FXML

@@ -70,7 +70,7 @@
                <graphic>
                   <ImageView fx:id="eyeIcon" fitHeight="29.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../photo/closeeye.png" />
+                        <Image url="@../photo/closeEye.png" />
                      </image>
                   </ImageView>
                </graphic>

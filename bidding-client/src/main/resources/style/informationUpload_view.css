@@ -30,3 +30,15 @@
     -fx-border-radius: 8;
     -fx-text-fill: white;
 }
+/* Màu chữ mặc định và màu nền của các lựa chọn trong menu thả xuống */
+.combo-box .list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: #3a3f42; /* Nên để nền tối để thấy chữ màu trắng */
+}
+
+/* Đổi màu khi di chuột qua (Hover) hoặc khi được chọn */
+.combo-box .list-cell:hover,
+.combo-box .list-cell:selected {
+    -fx-text-fill: white;
+     /* Màu nền khi chọn */
+}

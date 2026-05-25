@@ -19,10 +19,10 @@
 
             <Separator />
 
-            <Button maxWidth="Infinity" onAction="#showDashboard" style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold;" text="Dashboard" />
-            <Button maxWidth="Infinity" onAction="#showUsers" text="Quản lý người dùng" />
-            <Button maxWidth="Infinity" onAction="#showProducts" text="Quản lý nạp rút " />
-            <Button maxWidth="Infinity" onAction="#showAuctions" text="Quản lý phiên đấu giá" />
+            <Button maxWidth="Infinity" onAction="#goDashboard" style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold;" text="Dashboard" />
+            <Button maxWidth="Infinity" onAction="#goUsers" text="Quản lý người dùng" />
+            <Button maxWidth="Infinity" onAction="#goProducts" text="Quản lý nạp rút " />
+            <Button maxWidth="Infinity" onAction="#goApprove" text="Duyệt sản phẩm" />
             
 
             <Region VBox.vgrow="ALWAYS" />

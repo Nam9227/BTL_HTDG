@@ -21,9 +21,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="951.0" prefWidth="1115.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" stylesheets="@../style/informationUpload_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.informationUploadController">
+<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="897.0" prefWidth="1115.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" stylesheets="@../style/informationUpload_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.informationUploadController">
    <content>
-      <VBox alignment="TOP_CENTER" prefHeight="945.0" prefWidth="965.0" spacing="30.0">
+      <VBox alignment="TOP_CENTER" prefHeight="897.0" prefWidth="1099.0" spacing="30.0">
          <padding>
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
          </padding>
@@ -42,7 +42,7 @@
                   </Label>
                </children>
             </VBox>
-            <HBox alignment="TOP_CENTER" prefHeight="695.0" prefWidth="1064.0" spacing="25.0">
+            <HBox alignment="TOP_CENTER" prefHeight="621.0" prefWidth="1033.0" spacing="25.0">
                <children>
                   <VBox prefHeight="529.0" prefWidth="415.0" spacing="20.0" style="-fx-background-color: #282b2d; -fx-background-radius: 12; -fx-border-color: #3e4347; -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 25;">
                      <children>
@@ -57,10 +57,10 @@
                               <TextField fx:id="productNameField" style="-fx-padding: 8; -fx-background-color: #3a3f42; -fx-text-fill: white; -fx-background-radius: 8;" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="79.0" prefWidth="221.0" spacing="8.0">
+                        <VBox prefHeight="133.0" prefWidth="363.0" spacing="8.0">
                            <children>
                               <Label text="Mô tả chi tiết" textFill="WHITE" />
-                              <TextArea fx:id="productDescriptionField" prefHeight="150.0" prefWidth="200.0" style="-fx-control-inner-background: #3a3f42; -fx-text-fill: white;" wrapText="true" />
+                              <TextArea fx:id="productDescriptionField" prefHeight="109.0" prefWidth="363.0" style="-fx-control-inner-background: #3a3f42; -fx-text-fill: white;" wrapText="true" />
                            </children>
                         </VBox>
                         <VBox prefHeight="40.0" prefWidth="377.0" spacing="8.0">
@@ -162,7 +162,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="111.0" prefWidth="885.0" spacing="50.0" style="-fx-background-color: transparent; -fx-padding: 20 0 0 0;">
+            <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="1033.0" spacing="50.0" style="-fx-background-color: transparent; -fx-padding: 20 0 0 0;">
                <children>
                   <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="43.0" prefWidth="143.0" style="-fx-background-color: #5a5f63; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 20; -fx-cursor: hand;" text="Hủy" />
                   <Button mnemonicParsing="false" onAction="#handleConfirmUpload" prefHeight="45.0" prefWidth="137.0" style="-fx-background-color: #2b667a; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20; -fx-cursor: hand;" text="Xác nhận" />

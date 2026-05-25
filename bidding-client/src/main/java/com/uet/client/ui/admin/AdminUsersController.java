@@ -296,7 +296,7 @@ public class AdminUsersController {
 
     @FXML private void goDashboard(ActionEvent event) { switchScene(event, "/view/admin/admin_dashboard.fxml", "Dashboard"); }
     @FXML private void goProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_wallet.fxml", "Quản lý sản phẩm"); }
-    @FXML private void goPendingProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_pending.fxml", "Duyệt sản phẩm"); }
+    @FXML private void goApprove(ActionEvent event) { switchScene(event, "/view/admin/admin_approve.fxml", "Duyệt sản phẩm"); }
     @FXML private void goReports(ActionEvent event) { switchScene(event, "/view/admin/admin_reports.fxml", "Thống kê báo cáo"); }
 
     @FXML
