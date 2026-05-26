@@ -27,30 +27,39 @@ public class ClientRequestDispatcher {
         }
 
         // 2. Xử lý yêu cầu Khóa/Mở khóa tài khoản từ Admin
+        // Trong hàm dispatch() của ClientRequestDispatcher:
+
+        // 2. Xử lý yêu cầu Khóa/Mở khóa tài khoản từ Admin
+        // Khúc xử lý UpdateUserStatusRequest phía Server
         if (obj instanceof UpdateUserStatusRequest request) {
             try {
+                // 1. Cập nhật vào DB
                 userDAO.updateActive(request.getUserId(), request.isActive());
-                client.send(Response.success("Cập nhật trạng thái tài khoản thành công!", null));
-                System.out.println("🎯 [Server] Đã cập nhật trạng thái active = " + request.isActive() + " cho user ID: " + request.getUserId());
+                System.out.println("🎯 [Server] Đã đổi trạng thái user " + request.getUserId());
+
+                // 2. ⚡ SIÊU TỐC: Tự quét DB và trả thẳng danh sách mới về cho Admin luôn
+                handleGetAllUsers(client);
+
             } catch (Exception e) {
                 e.printStackTrace();
-                client.send(Response.fail("Lỗi Server: Không thể cập nhật trạng thái người dùng."));
+                client.send(Response.fail("Lỗi Server: Không thể cập nhật trạng thái!"));
             }
             return true;
         }
 
-        // 🌟 3. CẬP NHẬT MỚI: Xử lý yêu cầu XÓA tài khoản từ Admin gửi lên
+// Khúc xử lý DeleteUserRequest phía Server
         if (obj instanceof DeleteUserRequest request) {
             try {
-                // Gọi hàm deleteUser đã chuẩn bị sẵn ở UserDAO
+                // 1. Xóa trong DB
                 userDAO.deleteUser(request.getUserId());
+                System.out.println("🗑️ [Server] Đã xóa thành công user: " + request.getUserId());
 
-                // Trả gói tin thông báo thành công về cho Client
-                client.send(Response.success("Xóa tài khoản người dùng thành công!", null));
-                System.out.println("🗑️ [Server] Đã xử lý xóa thành công user ID: " + request.getUserId());
+                // 2. ⚡ SIÊU TỐC: Trả ngay danh sách mới về cho Admin
+                handleGetAllUsers(client);
+
             } catch (Exception e) {
                 e.printStackTrace();
-                client.send(Response.fail("Lỗi Server: Không thể xóa tài khoản người dùng."));
+                client.send(Response.fail("Lỗi Server: Không thể xóa tài khoản!"));
             }
             return true;
         }

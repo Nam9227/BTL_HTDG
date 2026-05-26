@@ -35,11 +35,14 @@ public class ClientSocket {
     public synchronized void connect() throws IOException {
         if (socket == null || socket.isClosed()) {
             socket = new Socket(AppConfig.get("server.host"), AppConfig.getInt("server.port"));
+
+            // 🌟 THÊM DÒNG NÀY: Ép mạng gửi gói tin đi ngay, không chờ đệm
+            socket.setTcpNoDelay(true);
+
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
 
-            // Đảm bảo cờ hiệu được dựng lên trước khi kích hoạt luồng nghe
             this.listening = true;
             startListening();
             System.out.println("🔌 ClientSocket: Kết nối Server thành công!");
@@ -50,9 +53,11 @@ public class ClientSocket {
         if (socket == null || socket.isClosed()) {
             connect();
         }
-
         out.writeObject(msg);
         out.flush();
+
+        // 🌟 THÊM DÒNG NÀY: Xóa bộ đệm đối tượng cũ, tránh lag dữ liệu
+        out.reset();
     }
 
     private void startListening() {

@@ -27,6 +27,7 @@ public class ClientManager {
         }
     }
 
+
     public static void joinAuction(String auctionId, ClientHandler client) {
         auctionViewers
                 .computeIfAbsent(auctionId, key -> ConcurrentHashMap.newKeySet())
