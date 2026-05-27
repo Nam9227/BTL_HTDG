@@ -152,6 +152,12 @@ public class AuctionDetailController {
 
         // 🌟 LẤY LỊCH SỬ TỪ SERVER ĐỂ ĐỔ VÀO CHO BẢNG HIỂN THỊ LÊN LẦN ĐẦU
         requestBidHistoryFromServer(item.getAuctionId());
+
+        if (user.getId().equals(item.getSellerId())) {
+            bidAmountField.setDisable(true);
+            bidAmountField.setPromptText("Sản phẩm của chính bạn");
+            showMessage("Bạn không thể tự đấu giá sản phẩm của chính mình!", false);
+        }
     }
 
     private void joinAuctionRoom() {
@@ -270,6 +276,12 @@ public class AuctionDetailController {
     @FXML
     private void handlePlaceBid() {
         messageLabel.setText("");
+
+        if (auctionItem != null && currentUser != null && currentUser.getId().equals(auctionItem.getSellerId())) {
+            showMessage("Bạn không thể đấu giá sản phẩm của chính mình!", false);
+            return;
+        }
+
         String text = bidAmountField.getText().trim();
 
         if (text.isEmpty()) {

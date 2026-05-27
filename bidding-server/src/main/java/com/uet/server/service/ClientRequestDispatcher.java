@@ -34,7 +34,7 @@ public class ClientRequestDispatcher {
             try {
                 userDAO.updateActive(request.getUserId(), request.isActive());
                 client.send(Response.success("Cập nhật trạng thái tài khoản thành công!", null));
-                logger.info("🎯 [Server] Đã cập nhật trạng thái active = {} cho user ID: {}", request.isActive(), request.getUserId());
+                logger.info("[Server] Đã cập nhật trạng thái active = {} cho user ID: {}", request.isActive(), request.getUserId());
             } catch (Exception e) {
                 logger.error("Lỗi khi cập nhật trạng thái hoạt động của User ID: " + request.getUserId(), e);
                 client.send(Response.fail("Lỗi Server: Không thể cập nhật trạng thái người dùng."));
@@ -50,7 +50,7 @@ public class ClientRequestDispatcher {
 
                 // Trả gói tin thông báo thành công về cho Client
                 client.send(Response.success("Xóa tài khoản người dùng thành công!", null));
-                logger.info("🗑️ [Server] Đã xử lý xóa thành công user ID: {}", request.getUserId());
+                logger.info("[Server] Đã xử lý xóa thành công user ID: {}", request.getUserId());
             } catch (Exception e) {
                 logger.error("Lỗi khi xử lý xóa User ID: " + request.getUserId(), e);
                 client.send(Response.fail("Lỗi Server: Không thể xóa tài khoản người dùng."));

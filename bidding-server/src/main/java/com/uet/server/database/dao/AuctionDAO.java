@@ -209,11 +209,11 @@ public class AuctionDAO {
             }
 
             conn.commit();
-            logger.info("✅ [DATABASE SUCCESS] Tạo thành công Item ID: {} và Auction ID: {}", generatedItemId, generatedAuctionId);
+            logger.info("[DATABASE SUCCESS] Tạo thành công Item ID: {} và Auction ID: {}", generatedItemId, generatedAuctionId);
             return true;
 
         } catch (Exception e) {
-            logger.error("❌ [DATABASE ERROR] Gặp sự cố chèn luồng. Tiến hành khôi phục (Rollback)...", e);
+            logger.error("[DATABASE ERROR] Gặp sự cố chèn luồng. Tiến hành khôi phục (Rollback)...", e);
             if (conn != null) {
                 try {
                     conn.rollback();
@@ -267,11 +267,11 @@ public class AuctionDAO {
             }
 
             conn.commit();
-            logger.info("✅ [BID SUCCESS] User {} đã đặt giá {} cho phiên {}", userId, bidAmount, auctionId);
+            logger.info("[BID SUCCESS] User {} đã đặt giá {} cho phiên {}", userId, bidAmount, auctionId);
             return true;
 
         } catch (Exception e) {
-            logger.error("❌ [BID ERROR] Lỗi đặt giá, tiến hành khôi phục...", e);
+            logger.error("[BID ERROR] Lỗi đặt giá, tiến hành khôi phục...", e);
             if (conn != null) {
                 try { conn.rollback(); } catch (Exception ignored) {}
             }
@@ -320,7 +320,7 @@ public class AuctionDAO {
                 }
             }
         } catch (Exception e) {
-            logger.error("❌ Lỗi khi lấy lịch sử đặt giá: ", e);
+            logger.error("Lỗi khi lấy lịch sử đặt giá: ", e);
         }
         return history;
     }
@@ -391,7 +391,7 @@ public class AuctionDAO {
         }
     }
 
-    public void startEligibleAuctions() {
+    public int startEligibleAuctions() {
         String sql = "UPDATE auctions SET status = 'RUNNING' " +
                 "WHERE status = 'ACTIVE' AND start_time <= NOW()";
         try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
@@ -400,13 +400,15 @@ public class AuctionDAO {
             if (rows > 0) {
                 logger.info("[Scheduler] Đã kích hoạt {} phiên đấu giá sang trạng thái RUNNING!", rows);
             }
+            return rows;
         } catch (Exception e) {
             logger.error("Lỗi khi kích hoạt các phiên đấu giá: ", e);
+            return 0;
         }
     }
 
     // 2. Hàm quét các phiên RUNNING đã hết giờ để chuyển sang FINISHED
-    public void finishExpiredAuctions() {
+    public int finishExpiredAuctions() {
         // 1. Dùng INNER JOIN để bốc luôn mã người bán (i.sender_id hoặc i.seller_id) từ bảng items lên
         // 💡 Chú ý: Ở ảnh HeidiSQL trước Nam chụp, cột người bán trong bảng items tên là 'seller_id' nhé!
         String selectSql = "SELECT a.id AS auction_id, a.winner_id, a.current_price, i.seller_id " +
@@ -418,6 +420,7 @@ public class AuctionDAO {
 
         // Khởi tạo WalletDAO để xử lý luồng tiền
         com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
+        int finishedCount = 0;
 
         try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
              java.sql.PreparedStatement psSelect = conn.prepareStatement(selectSql);
@@ -434,6 +437,8 @@ public class AuctionDAO {
                     psUpdate.setString(1, auctionId);
                     psUpdate.executeUpdate();
                 }
+
+                finishedCount++;
 
                 // Có người thắng cuộc -> Tiến hành luân chuyển dòng tiền
                 if (winnerId != null && !winnerId.trim().isEmpty()) {
@@ -457,6 +462,7 @@ public class AuctionDAO {
         } catch (Exception e) {
             logger.error("Lỗi khi đóng các phiên đấu giá hết hạn: ", e);
         }
+        return finishedCount;
     }
 
     public boolean forceEndAuctionAndProcessTransaction(String auctionId) {
@@ -545,7 +551,7 @@ public class AuctionDAO {
             }
             return bytes;
         } catch (Exception e) {
-            logger.warn("⚠️ Không thể đọc file ảnh sản phẩm từ path: {}, lỗi: {}", imagePath, e.getMessage());
+            logger.warn("Không thể đọc file ảnh sản phẩm từ path: {}, lỗi: {}", imagePath, e.getMessage());
             return null;
         }
     }

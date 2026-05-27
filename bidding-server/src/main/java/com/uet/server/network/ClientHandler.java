@@ -84,7 +84,7 @@ public class ClientHandler implements Runnable {
                 socket.close();
             }
 
-            logger.info("🔌 [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.");
+            logger.info("[SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.");
 
         } catch (Exception ignored) {
             // Đúng bài Clean Code, những lỗi đóng tài nguyên này có thể bỏ qua
@@ -92,7 +92,7 @@ public class ClientHandler implements Runnable {
             // 🌟 BẮT BUỘC ĐỂ Ở ĐÂY: Dù đống đóng Socket ở trên có lỗi hay không,
             // thì Client này VẪN PHẢI được xóa khỏi danh sách quản lý để tránh rò rỉ RAM!
             ClientManager.removeClient(this);
-            logger.info("🗑️ [SERVER] Đã Xóa Client khỏi ClientManager thành công.");
+            logger.info("[SERVER] Đã Xóa Client khỏi ClientManager thành công.");
         }
     }
 }

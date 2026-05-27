@@ -92,7 +92,7 @@ public class AdminUsersController {
      */
     private void setupSocketListener() {
         serverMessageListener = message -> {
-            System.out.println("📩 [Client] Nhận gói tin từ Server: " + message.getClass().getSimpleName());
+            System.out.println("[Client] Nhận gói tin từ Server: " + message.getClass().getSimpleName());
 
             // Trường hợp 1: Nhận danh sách người dùng đổ lên TableView
             if (message instanceof GetAllUsersResponse response) {
@@ -104,11 +104,11 @@ public class AdminUsersController {
                 });
             }
 
-            // 🌟 Trường hợp 2: Nhận phản hồi báo Khóa/Mở khóa/Xóa thành công từ Server
+            // Trường hợp 2: Nhận phản hồi báo Khóa/Mở khóa/Xóa thành công từ Server
             else if (message instanceof Response response) {
                 Platform.runLater(() -> {
                     if (response.isSuccess()) {
-                        System.out.println("✅ [Client] Server báo lệnh thực thi thành công!");
+                        System.out.println("[Client] Server báo lệnh thực thi thành công!");
                         // Ép Client chủ động kéo lại dữ liệu mới nhất từ DB lên giao diện
                         fetchUsersFromServer();
                     } else {
@@ -168,7 +168,7 @@ public class AdminUsersController {
             new Thread(() -> {
                 try {
                     ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false));
-                    System.out.println("🚀 [Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
+                    System.out.println("[Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                     Platform.runLater(() -> showWarning("Không thể kết nối đến server để khóa tài khoản!"));
@@ -190,7 +190,7 @@ public class AdminUsersController {
             new Thread(() -> {
                 try {
                     ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), true));
-                    System.out.println("🚀 [Client] Đã gửi yêu cầu MỞ KHÓA user ID: " + selected.getId());
+                    System.out.println("[Client] Đã gửi yêu cầu MỞ KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                     Platform.runLater(() -> showWarning("Không thể kết nối đến server để mở khóa tài khoản!"));
@@ -214,7 +214,7 @@ public class AdminUsersController {
                 new Thread(() -> {
                     try {
                         ClientSocket.getInstance().send(new com.uet.common.network.DeleteUserRequest(selected.getId()));
-                        System.out.println("🚀 [Client] Đã gửi yêu cầu XÓA user ID: " + selected.getId());
+                        System.out.println("[Client] Đã gửi yêu cầu XÓA user ID: " + selected.getId());
                         fetchUsersFromServer();
                     } catch (IOException e) {
                         e.printStackTrace();

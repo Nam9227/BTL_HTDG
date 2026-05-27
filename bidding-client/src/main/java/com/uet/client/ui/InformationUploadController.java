@@ -9,7 +9,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,7 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public class informationUploadController {
+public class InformationUploadController {
 
     @FXML private TextField productNameField;
     @FXML private TextArea productDescriptionField;
@@ -264,6 +263,9 @@ public class informationUploadController {
 
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
+
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) dropImageZone.getScene().getWindow();
             stage.getScene().setRoot(root); // Thay thế ruột scene cực mượt

@@ -45,7 +45,7 @@ public class ClientSocket {
             // Đảm bảo cờ hiệu được dựng lên trước khi kích hoạt luồng nghe
             this.listening = true;
             startListening();
-            logger.info("🔌 ClientSocket: Kết nối Server thành công!");
+            logger.info("ClientSocket: Kết nối Server thành công!");
         }
     }
 
@@ -78,9 +78,9 @@ public class ClientSocket {
                     // 🌟 MẸO KHỬ LỖI ĐỎ: Nếu ta chủ động gọi close(), biến listening sẽ bằng false.
                     // Khi đó, việc dính EOFException là hoàn toàn bình thường, ta cho luồng chết êm ái, không in lỗi ra.
                     if (!listening) {
-                        logger.info("🔌 ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.");
+                        logger.info("ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.");
                     } else {
-                        logger.warn("⚠️ Đột ngột mất kết nối vật lý tới Server!");
+                        logger.warn("Đột ngột mất kết nối vật lý tới Server!");
                         stopListening();
                     }
                     break; // Thoát hẳn vòng lặp while để hủy Thread ngầm
@@ -137,7 +137,7 @@ public class ClientSocket {
             }
 
         } catch (Exception e) {
-            logger.error("⚠️ Lỗi xảy ra khi đang đóng tài nguyên Socket: ", e);
+            logger.error("Lỗi xảy ra khi đang đóng tài nguyên Socket: ", e);
         } finally {
             // 🌟 QUAN TRỌNG NHẤT: Xóa trắng toàn bộ Object cũ về null
             // Để lần sau khi quay lại màn Login bấm nút Đăng nhập, hàm connect() check (socket == null) sẽ tự tạo luồng mới tinh.
@@ -145,7 +145,7 @@ public class ClientSocket {
             this.in = null;
             this.out = null;
             this.listenerThread = null;
-            logger.info("🗑️ ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!");
+            logger.info("ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!");
         }
     }
 }

@@ -77,10 +77,10 @@ public class UserDAO {
 
                 userList.add(user);
             }
-            logger.info("📊 [UserDAO] Đã tải thành công {} người dùng cho Admin.", userList.size());
+            logger.info("[UserDAO] Đã tải thành công {} người dùng cho Admin.", userList.size());
 
         } catch (Exception e) {
-            logger.error("❌ Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: ", e);
+            logger.error("Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: ", e);
         }
 
         return userList;
@@ -116,11 +116,11 @@ public class UserDAO {
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                logger.info("🗑️ [UserDAO] Đã xóa thành công user ID: {} khỏi Database.", userId);
+                logger.info("[UserDAO] Đã xóa thành công user ID: {} khỏi Database.", userId);
             }
 
         } catch (Exception e) {
-            logger.error("❌ Lỗi khi xóa user trong UserDAO: ", e);
+            logger.error("Lỗi khi xóa user trong UserDAO: ", e);
         }
     }
 
@@ -169,14 +169,14 @@ public class UserDAO {
                     if (oldFile.exists()) {
                         boolean deleted = oldFile.delete();
                         if (deleted) {
-                            logger.info("🗑️ [Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: {}", cleanOldPath);
+                            logger.info("[Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: {}", cleanOldPath);
                         } else {
-                            logger.warn("⚠️ Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): {}", cleanOldPath);
+                            logger.warn("Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): {}", cleanOldPath);
                         }
                     }
                 }
             } catch (Exception e) {
-                logger.error("❌ Lỗi khi xử lý lưu file mới hoặc xóa file cũ: ", e);
+                logger.error("Lỗi khi xử lý lưu file mới hoặc xóa file cũ: ", e);
             }
         }
 

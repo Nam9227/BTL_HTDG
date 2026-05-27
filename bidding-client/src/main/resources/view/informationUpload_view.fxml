@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="897.0" prefWidth="1115.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" stylesheets="@../style/informationUpload_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.informationUploadController">
+<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="897.0" prefWidth="1115.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" stylesheets="@../style/informationUpload_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.InformationUploadController">
    <content>
       <VBox alignment="TOP_CENTER" prefHeight="897.0" prefWidth="1099.0" spacing="30.0">
          <padding>

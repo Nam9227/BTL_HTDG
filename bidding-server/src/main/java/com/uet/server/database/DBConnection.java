@@ -13,6 +13,7 @@ import java.util.Properties;
 public class DBConnection {
     private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
     private static Connection connection;
+    private static boolean loggedConnection = false;
 
     public static Connection getConnection() throws SQLException {
         try {
@@ -27,7 +28,10 @@ public class DBConnection {
                 String password = properties.getProperty("db.password");
 
                 connection = DriverManager.getConnection(url, username, password);
-                logger.info("Connected to database!");
+                if (!loggedConnection) {
+                    logger.info("Connected to database!");
+                    loggedConnection = true;
+                }
             }
             return connection;
         } catch (IOException e) {

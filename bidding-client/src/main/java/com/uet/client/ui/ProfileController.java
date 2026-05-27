@@ -259,6 +259,9 @@ public class ProfileController {
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
             Stage stage = (Stage) fullNameLabel.getScene().getWindow();
 
             // Thay ruột scene cực mượt, không chớp màn hình

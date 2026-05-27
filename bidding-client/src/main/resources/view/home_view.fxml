@@ -67,7 +67,7 @@
                         <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Sản phẩm đang đấu giá" />
                         <Region HBox.hgrow="ALWAYS" />
                         <TextField fx:id="searchField" prefWidth="250.0" promptText="Tìm kiếm sản phẩm..." HBox.hgrow="NEVER" />
-                        <Button mnemonicParsing="false" text="Tìm" />
+                        <Button mnemonicParsing="false" onAction="#handleSearch" text="Tìm" />
                         <Button fx:id="openBtn" mnemonicParsing="false" onAction="#handleOpenSidebar" prefHeight="43.0" prefWidth="46.0" style="-fx-text-fill: white; -fx-background-color: transparent;">
                      <graphic>
                         <ImageView fitHeight="41.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">

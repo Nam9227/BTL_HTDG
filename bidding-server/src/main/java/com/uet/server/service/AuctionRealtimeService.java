@@ -6,6 +6,7 @@ import com.uet.common.network.ApproveAuctionRequest;
 import com.uet.common.network.AuctionUpdateResponse;
 import com.uet.common.network.BidRequest;
 import com.uet.common.network.Response;
+import com.uet.common.network.GetActiveAuctionsResponse;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.BidDAO;
 import com.uet.server.network.ClientHandler;
@@ -46,6 +47,14 @@ public class AuctionRealtimeService {
                 bidderId,
                 bidAmount);
 
+        // Chặn người bán tự đấu giá sản phẩm của chính mình
+        AuctionItem auctionItem = auctionDAO.getAuctionById(request.getAuctionId(), false);
+        if (auctionItem != null && bidderId.equals(auctionItem.getSellerId())) {
+            logger.warn("[Chặn Bid] Người dùng {} cố tình đấu giá sản phẩm của chính mình!", bidderId);
+            client.send(Response.fail("Bạn không thể đấu giá sản phẩm của chính mình!"));
+            return;
+        }
+
         double availableBalance = walletDAO.getAvailableBalanceForAuction(bidderId, request.getAuctionId());
 
         if (bidAmount > availableBalance) {
@@ -68,6 +77,14 @@ public class AuctionRealtimeService {
                 request.getAuctionId(),
                 new AuctionUpdateResponse(updatedAuction, "Có giá mới từ người dùng!", updatedHistory)
         );
+
+        // Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ
+        try {
+            List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+            ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+        } catch (Exception e) {
+            logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi bid: ", e);
+        }
     }
 
     public void handleGetPendingAuctions(ClientHandler client) { // Giữ nguyên tên hàm ở Dispatcher đỡ phải sửa
@@ -96,6 +113,14 @@ public class AuctionRealtimeService {
                         auctionId,
                         new com.uet.common.network.AuctionUpdateResponse(auctionDAO.getAuctionById(auctionId, false), "Phiên đấu giá đã bị Admin kết thúc.")
                 );
+
+                // Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ để xóa phiên đấu giá đã đóng
+                try {
+                    List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                    ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                } catch (Exception e) {
+                    logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi ép kết thúc: ", e);
+                }
             } else {
                 client.send(Response.fail("Không thể kết thúc phiên đấu giá."));
             }
@@ -113,6 +138,20 @@ public class AuctionRealtimeService {
 
             if (success) {
                 client.send(Response.success(statusText + " phiên đấu giá thành công!", null));
+
+                // Nếu được phê duyệt, thử kích hoạt phiên đấu giá ngay lập tức nếu đến giờ
+                if (request.isApproved()) {
+                    try {
+                        int started = auctionDAO.startEligibleAuctions();
+                        if (started > 0) {
+                            logger.info("[Approve] Đã kích hoạt trực tiếp {} phiên đấu giá sang RUNNING. Tiến hành phát sóng...", started);
+                            List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                            ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                        }
+                    } catch (Exception e) {
+                        logger.error("Lỗi khi tự động chạy phiên sau khi phê duyệt: ", e);
+                    }
+                }
             } else {
                 client.send(Response.fail("Không thể cập nhật trạng thái phiên đấu giá."));
             }

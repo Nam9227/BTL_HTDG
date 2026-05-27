@@ -3,6 +3,7 @@ package com.uet.client.ui;
 import com.uet.client.network.ClientSocket;
 import com.uet.common.network.RegisterRequest;
 import com.uet.common.network.Response;
+import javafx.scene.Parent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javafx.fxml.FXML;

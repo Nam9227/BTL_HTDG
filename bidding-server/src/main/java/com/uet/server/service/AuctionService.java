@@ -36,7 +36,7 @@ public class AuctionService {
                         "products",
                         req.getSellerId()
                 );
-                logger.info("🔄 [SERVER] Đã lưu ảnh sản phẩm chờ duyệt tại path: {}", imageUrl);
+                logger.info("[SERVER] Đã lưu ảnh sản phẩm chờ duyệt tại path: {}", imageUrl);
             } else {
                 imageUrl = "/images/default_product.png"; // Ảnh mặc định nếu lỗi
             }
@@ -59,13 +59,13 @@ public class AuctionService {
             // 4. Trả phản hồi về cho Client
             if (isInserted) {
                 client.send(Response.success("Đăng bán sản phẩm đấu giá thành công! Vui lòng chờ Admin phê duyệt.", null));
-                logger.info("✅ [SERVER] Sản phẩm của User {} đang ở trạng thái PENDING.", req.getSellerId());
+                logger.info("[SERVER] Sản phẩm của User {} đang ở trạng thái PENDING.", req.getSellerId());
             } else {
                 client.send(Response.fail("Lỗi: Không thể ghi dữ liệu sản phẩm vào MySQL Database."));
             }
 
         } catch (Exception e) {
-            logger.error("❌ Lỗi khi xử lý lưu ảnh sản phẩm hoặc ghi DB: ", e);
+            logger.error("Lỗi khi xử lý lưu ảnh sản phẩm hoặc ghi DB: ", e);
             try {
                 client.send(Response.fail("Hệ thống Server gặp sự cố xử lý dữ liệu!"));
             } catch (Exception ignored) {}
