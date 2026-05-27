@@ -10,6 +10,7 @@ import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.BidDAO;
 import com.uet.server.network.ClientHandler;
 import com.uet.server.network.ClientManager;
+import com.uet.server.database.dao.WalletDAO;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class AuctionRealtimeService {
 
     private final AuctionDAO auctionDAO = new AuctionDAO();
     private final BidDAO bidDAO = new BidDAO();
+    private final WalletDAO walletDAO = new WalletDAO();
 
     public void joinAuction(String auctionId, ClientHandler client) {
         ClientManager.joinAuction(auctionId, client);
@@ -33,12 +35,24 @@ public class AuctionRealtimeService {
     }
 
     public void placeBid(BidRequest request, ClientHandler client) {
+        String bidderId = request.getBidderId();
+        double bidAmount = request.getAmount();
+
         System.out.println("Nhận đặt giá mới: auctionId="
                 + request.getAuctionId()
                 + ", bidderId="
-                + request.getBidderId()
+                + bidderId
                 + ", amount="
-                + request.getAmount());
+                + bidAmount);
+
+
+        double availableBalance = walletDAO.getAvailableBalanceForAuction(bidderId, request.getAuctionId());
+
+        if (bidAmount > availableBalance) {
+            System.out.println("-> [Chặn Bid] Người dùng " + bidderId + " không đủ số dư khả dụng! (Có: " + availableBalance + ")");
+            client.send(Response.fail("Số dư khả dụng không đủ! Bạn đang có khoản tiền bị đóng băng do dẫn đầu ở phiên đấu giá khác."));
+            return;
+        }
 
         Response response = bidDAO.handleBid(request);
         client.send(response);
@@ -46,8 +60,8 @@ public class AuctionRealtimeService {
         if (!response.isSuccess()) {
             return;
         }
-        AuctionItem updatedAuction = auctionDAO.getAuctionById(request.getAuctionId());
 
+        AuctionItem updatedAuction = auctionDAO.getAuctionById(request.getAuctionId());
         List<BidRecord> updatedHistory = auctionDAO.getBidHistory(request.getAuctionId());
 
         ClientManager.broadcastAuction(

@@ -377,13 +377,53 @@ public class AuctionDAO {
 
     // 2. Hàm quét các phiên RUNNING đã hết giờ để chuyển sang FINISHED
     public void finishExpiredAuctions() {
-        String sql = "UPDATE auctions SET status = 'FINISHED' " +
-                "WHERE status = 'RUNNING' AND end_time <= NOW()";
+        // 1. Dùng INNER JOIN để bốc luôn mã người bán (i.sender_id hoặc i.seller_id) từ bảng items lên
+        // 💡 Chú ý: Ở ảnh HeidiSQL trước Nam chụp, cột người bán trong bảng items tên là 'seller_id' nhé!
+        String selectSql = "SELECT a.id AS auction_id, a.winner_id, a.current_price, i.seller_id " +
+                "FROM auctions a " +
+                "INNER JOIN items i ON a.product_id = i.id " +
+                "WHERE a.status = 'RUNNING' AND a.end_time <= NOW()";
+
+        String updateSql = "UPDATE auctions SET status = 'FINISHED' WHERE id = ?";
+
+        // Khởi tạo WalletDAO để xử lý luồng tiền
+        com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
+
         try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
-             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
-            int rows = ps.executeUpdate();
-            if (rows > 0) {
-                System.out.println("[Scheduler] Đã tự động kết thúc " + rows + " phiên đấu giá hết hạn!");
+             java.sql.PreparedStatement psSelect = conn.prepareStatement(selectSql);
+             java.sql.ResultSet rs = psSelect.executeQuery()) {
+
+            while (rs.next()) {
+                String auctionId = rs.getString("auction_id");
+                String winnerId = rs.getString("winner_id");
+                String sellerId = rs.getString("seller_id"); // Mã của chủ sản phẩm (Người bán)
+                double finalPrice = rs.getDouble("current_price");
+
+                // Cập nhật trạng thái phiên này thành FINISHED
+                try (java.sql.PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
+                    psUpdate.setString(1, auctionId);
+                    psUpdate.executeUpdate();
+                }
+
+                // Có người thắng cuộc -> Tiến hành luân chuyển dòng tiền
+                if (winnerId != null && !winnerId.trim().isEmpty()) {
+
+                    // Dòng 1: TRỪ TIỀN THẬT CỦA NGƯỜI THẮNG CUỘC (Giá trị âm)
+                    boolean isDeducted = walletDAO.updateBalance(winnerId, -finalPrice);
+
+                    // Dòng 2: CỘNG TIỀN THẬT VÀO VÍ NGƯỜI BÁN (Giá trị dương)
+                    boolean isCredited = walletDAO.updateBalance(sellerId, finalPrice);
+
+                    if (isDeducted && isCredited) {
+                        System.out.println("[Scheduler] Giao dịch thành công phiên " + auctionId + ":");
+                        System.out.println("   -> Đã trừ " + finalPrice + "đ từ người mua (" + winnerId + ")");
+                        System.out.println("   -> Đã cộng " + finalPrice + "đ vào người bán (" + sellerId + ")");
+                    } else {
+                        System.out.println("[Scheduler] LỖI: Giao dịch dòng tiền thất bại tại phiên " + auctionId);
+                    }
+                } else {
+                    System.out.println("[Scheduler] Phiên " + auctionId + " đã đóng nhưng không có ai mua.");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
