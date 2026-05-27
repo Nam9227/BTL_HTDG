@@ -1714,3 +1714,72 @@ java.nio.file.InvalidPathException: Illegal char <:> at index 3: /D:\root\upload
 2026-05-28 00:17:12 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
 2026-05-28 00:18:04 [pool-2-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Phiên 8986833646 đã đóng nhưng không có ai mua.
 2026-05-28 00:18:04 [pool-2-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 1). Tiến hành Broadcast...
+2026-05-28 00:46:44 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 00:46:44 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 00:46:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database!
+2026-05-28 00:46:49 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 00:46:49 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 00:46:49 [Thread-0] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 00:47:18 [Thread-0] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 00:47:18 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 00:47:18 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 00:49:24 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 00:49:24 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 00:49:24 [Thread-1] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 00:49:44 [Thread-1] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 00:49:44 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 00:49:44 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 00:49:48 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 00:49:48 [Thread-2] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: 1
+2026-05-28 00:50:14 [Thread-2] INFO  c.uet.server.service.AuctionService - [SERVER] Đã lưu ảnh sản phẩm chờ duyệt tại path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:50:14 [Thread-2] INFO  c.uet.server.database.dao.AuctionDAO - [DATABASE SUCCESS] Tạo thành công Item ID: 8977268210 và Auction ID: 3424155264
+2026-05-28 00:50:14 [Thread-2] INFO  c.uet.server.service.AuctionService - [SERVER] Sản phẩm của User 6134901206 đang ở trạng thái PENDING.
+2026-05-28 00:50:20 [Thread-2] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 00:50:20 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 00:50:20 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 00:50:27 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 00:50:27 [Thread-3] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 00:50:28 [Thread-3] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-28 00:50:30 [Thread-3] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Đã kích hoạt 1 phiên đấu giá sang trạng thái RUNNING!
+2026-05-28 00:50:30 [Thread-3] INFO  c.u.s.service.AuctionRealtimeService - [Approve] Đã kích hoạt trực tiếp 1 phiên đấu giá sang RUNNING. Tiến hành phát sóng...
+2026-05-28 00:50:30 [Thread-3] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:50:30 [Thread-3] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-28 00:50:37 [Thread-3] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: 1
+2026-05-28 00:50:37 [Thread-3] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:50:41 [Thread-3] INFO  c.uet.server.network.ClientManager - Client joined auction: 3424155264
+2026-05-28 00:50:41 [Thread-3] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:50:41 [pool-1-thread-1] INFO  c.uet.server.network.ClientManager - Gửi cập nhật ngay cho 1 client đang xem auction: 3424155264
+2026-05-28 00:50:42 [Thread-3] INFO  c.uet.server.network.ClientManager - Client left auction: 3424155264
+2026-05-28 00:50:42 [Thread-3] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:56:17 [Thread-3] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 00:56:17 [Thread-3] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 00:56:17 [Thread-3] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 00:56:47 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 00:56:47 [Thread-4] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: 1
+2026-05-28 00:56:47 [Thread-4] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:56:52 [Thread-4] INFO  c.uet.server.network.ClientManager - Client joined auction: 3424155264
+2026-05-28 00:56:52 [Thread-4] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:56:54 [pool-1-thread-1] INFO  c.uet.server.network.ClientManager - Gửi cập nhật ngay cho 1 client đang xem auction: 3424155264
+2026-05-28 00:56:54 [Thread-4] INFO  c.uet.server.network.ClientManager - Client left auction: 3424155264
+2026-05-28 00:56:54 [Thread-4] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 00:57:07 [Thread-4] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 00:57:07 [Thread-4] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 00:57:07 [Thread-4] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 00:57:35 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 00:57:35 [Thread-5] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: 1
+2026-05-28 00:57:35 [Thread-5] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 01:04:26 [Thread-5] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 01:04:26 [Thread-5] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 01:04:26 [Thread-5] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 01:04:35 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 01:04:35 [Thread-6] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 01:04:35 [Thread-6] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 01:04:35 [Thread-6] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 01:04:40 [Thread-6] INFO  c.uet.server.network.ClientManager - Client joined auction: 3424155264
+2026-05-28 01:04:40 [Thread-6] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 01:04:41 [pool-1-thread-1] INFO  c.uet.server.network.ClientManager - Gửi cập nhật ngay cho 1 client đang xem auction: 3424155264
+2026-05-28 01:04:42 [Thread-6] INFO  c.uet.server.network.ClientManager - Client left auction: 3424155264
+2026-05-28 01:04:42 [Thread-6] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 01:04:51 [Thread-6] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 01:04:51 [Thread-6] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 01:04:51 [Thread-6] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.

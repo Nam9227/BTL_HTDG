@@ -1,0 +1,175 @@
+/* Tổng thể cấu trúc nền ứng dụng xám sáng */
+.root-container {
+    -fx-background-color: #f4f6f9;
+}
+
+/* THANH TIÊU ĐỀ TRÊN CÙNG */
+.back-button {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+}
+.back-button:hover {
+    -fx-background-color: #cbd5e1;
+}
+
+.page-title {
+    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+/* CÁC KHỐI THÔNG TIN BOX CHÍNH (CARD LAYOUT) */
+.profile-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16;
+}
+
+/* AVATAR KHỐI TRÒN */
+.avatar-stack-pane {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 50;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 50;
+    -fx-border-width: 2;
+}
+
+.user-full-name {
+    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.user-meta-text {
+    -fx-text-fill: #64748b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 14px;
+}
+
+.status-active {
+    -fx-text-fill: #10b981;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* KHỐI HIỂN THỊ SỐ DƯ */
+.balance-sub-box {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 20 30;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+}
+
+.balance-title {
+    -fx-text-fill: #64748b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 13px;
+}
+
+.balance-value {
+    -fx-text-fill: #10b981;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+/* NÚT THAO TÁC SỐ DƯ */
+.btn-deposit {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+}
+.btn-deposit:hover { -fx-background-color: #059669; }
+
+.btn-withdraw {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+}
+.btn-withdraw:hover { -fx-background-color: #dc2626; }
+
+/* GRID FORM NHẬP LIỆU */
+.form-label {
+    -fx-text-fill: #475569;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.form-textfield {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #1e293b;
+    -fx-background-radius: 8;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-padding: 10;
+    -fx-font-family: 'Segoe UI';
+}
+.form-textfield:focused {
+    -fx-border-color: #3498db;
+    -fx-background-color: white;
+}
+.form-textfield:disabled {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #94a3b8;
+    -fx-border-color: transparent;
+}
+
+/* CỤM NÚT ĐIỀU KHIỂN DƯỚI ĐÁY */
+.btn-action-edit {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 20;
+    -fx-padding: 10 30;
+    -fx-cursor: hand;
+}
+.btn-action-edit:hover { -fx-background-color: #2980b9; }
+
+.btn-action-save {
+    -fx-background-color: #10b981;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 20;
+    -fx-padding: 10 30;
+    -fx-cursor: hand;
+}
+.btn-action-save:hover { -fx-background-color: #059669; }
+.btn-action-save:disabled {
+    -fx-background-color: #cbd5e1;
+    -fx-text-fill: #94a3b8;
+}
+
+.btn-action-password {
+    -fx-background-color: #64748b;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 20;
+    -fx-padding: 10 30;
+    -fx-cursor: hand;
+}
+.btn-action-password:hover { -fx-background-color: #475569; }

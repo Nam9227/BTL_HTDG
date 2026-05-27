@@ -444,3 +444,496 @@ java.net.ConnectException: Connection refused: connect
 2026-05-28 00:17:04 [Thread-17] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
 2026-05-28 00:17:07 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
 2026-05-28 00:17:07 [Thread-17] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 00:46:49 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 00:46:49 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 00:46:49 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 00:46:49 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:46:56 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 00:46:57 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 00:46:57 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:47:10 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 00:47:11 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 00:47:11 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:47:18 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 00:47:18 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 00:49:24 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 00:49:24 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 00:49:24 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 00:49:24 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:49:32 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 00:49:34 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 00:49:34 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:49:44 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 00:49:44 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 00:49:48 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 00:49:48 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 00:49:48 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:49:48 [Thread-6] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:50:15 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:50:15 [Thread-6] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 00:50:20 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 00:50:20 [Thread-6] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 00:50:27 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 00:50:27 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 00:50:37 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 00:50:37 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:50:37 [Thread-9] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 00:50:42 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:50:42 [Thread-9] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 00:56:47 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 00:56:47 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 00:56:47 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:56:47 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 00:56:54 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:56:54 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 00:57:35 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 00:57:35 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 00:57:35 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 00:57:35 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:04:35 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:04:35 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:04:35 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:04:35 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:04:42 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:04:42 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:05:26 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:05:28 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:05:28 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:05:28 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:05:34 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:05:34 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:05:37 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from bytes, len=532046
+2026-05-28 01:05:38 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:05:39 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:05:46 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 01:05:46 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 01:07:41 [JavaFX Application Thread] INFO  c.uet.client.ui.RegisterController - Nút Đăng ký đã được bấm!
+2026-05-28 01:07:41 [JavaFX Application Thread] ERROR c.uet.client.ui.RegisterController - Lỗi khi đăng ký tài khoản: 
+java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:546)
+	at java.base/sun.nio.ch.Net.connect(Net.java:535)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:659)
+	at java.base/java.net.Socket.connect(Socket.java:597)
+	at java.base/java.net.Socket.<init>(Socket.java:464)
+	at java.base/java.net.Socket.<init>(Socket.java:276)
+	at com.uet.client.network.ClientSocket.connect(ClientSocket.java:40)
+	at com.uet.client.ui.RegisterController.handleRegister(RegisterController.java:132)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9026)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4061)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1947)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2784)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:975)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:168)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 01:07:52 [JavaFX Application Thread] INFO  c.uet.client.ui.RegisterController - Nút Đăng ký đã được bấm!
+2026-05-28 01:07:52 [JavaFX Application Thread] ERROR c.uet.client.ui.RegisterController - Lỗi khi đăng ký tài khoản: 
+java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:546)
+	at java.base/sun.nio.ch.Net.connect(Net.java:535)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:659)
+	at java.base/java.net.Socket.connect(Socket.java:597)
+	at java.base/java.net.Socket.<init>(Socket.java:464)
+	at java.base/java.net.Socket.<init>(Socket.java:276)
+	at com.uet.client.network.ClientSocket.connect(ClientSocket.java:40)
+	at com.uet.client.ui.RegisterController.handleRegister(RegisterController.java:132)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9026)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4061)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1947)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2784)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:975)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:168)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 01:08:17 [JavaFX Application Thread] INFO  c.uet.client.ui.RegisterController - Nút Đăng ký đã được bấm!
+2026-05-28 01:08:18 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:08:23 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 12
+2026-05-28 01:08:28 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:08:28 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:09:56 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:10:01 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 01:10:01 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:10:01 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:10:22 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:10:22 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:12:49 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:12:50 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 01:12:50 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:12:50 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:15:17 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:15:19 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:15:19 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:15:20 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:15:24 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from bytes, len=532046
+2026-05-28 01:16:35 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:16:36 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:16:36 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:16:36 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:16:41 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:16:41 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:17:31 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:17:32 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:17:32 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:17:32 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:18:10 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - Đã cập nhật updatedUser từ Server vào Session Client thành công!
+2026-05-28 01:18:10 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - Đã ép JavaFX vẽ lại Avatar mới hoàn toàn!
+2026-05-28 01:18:13 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:18:13 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:19:46 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:19:47 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:19:47 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:19:47 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:20:05 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:20:05 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:20:28 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:20:29 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:20:43 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:20:43 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:21:01 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:21:01 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:21:06 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 01:21:06 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 01:21:50 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:21:51 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 01:21:51 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:21:51 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:22:02 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:22:03 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:23:12 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:23:12 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:23:38 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - Đã cập nhật updatedUser từ Server vào Session Client thành công!
+2026-05-28 01:23:38 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - Đã ép JavaFX vẽ lại Avatar mới hoàn toàn!
+2026-05-28 01:23:40 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:23:41 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:28:15 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:28:15 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:28:15 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:28:15 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:28:20 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:28:21 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:28:23 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 01:28:23 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 01:28:26 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:28:27 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 01:28:27 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:28:27 [Thread-6] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:28:29 [JavaFX Application Thread] ERROR com.uet.client.ui.HomeController - Không mở được giao diện thêm sản phẩm: 
+javafx.fxml.LoadException: 
+/D:/BTL_HTDG/bidding-client/target/classes/view/informationUpload_view.fxml:54
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2692)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2670)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2503)
+	at com.uet.client.ui.HomeController.handleOpenAddProduct(HomeController.java:403)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9026)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4061)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1947)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2784)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:975)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:168)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: com.sun.javafx.fxml.PropertyNotFoundException: Property "placeholder" does not exist or is read-only.
+	at javafx.fxml.FXMLLoader$Element.processValue(FXMLLoader.java:347)
+	at javafx.fxml.FXMLLoader$Element.processPropertyAttribute(FXMLLoader.java:324)
+	at javafx.fxml.FXMLLoader$Element.processInstancePropertyAttributes(FXMLLoader.java:235)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:767)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2939)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2624)
+	... 55 common frames omitted
+2026-05-28 01:28:56 [JavaFX Application Thread] ERROR com.uet.client.ui.HomeController - Không mở được giao diện thêm sản phẩm: 
+javafx.fxml.LoadException: 
+/D:/BTL_HTDG/bidding-client/target/classes/view/informationUpload_view.fxml:54
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2692)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2670)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2503)
+	at com.uet.client.ui.HomeController.handleOpenAddProduct(HomeController.java:403)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9026)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4061)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1947)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2784)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:975)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:168)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: com.sun.javafx.fxml.PropertyNotFoundException: Property "placeholder" does not exist or is read-only.
+	at javafx.fxml.FXMLLoader$Element.processValue(FXMLLoader.java:347)
+	at javafx.fxml.FXMLLoader$Element.processPropertyAttribute(FXMLLoader.java:324)
+	at javafx.fxml.FXMLLoader$Element.processInstancePropertyAttributes(FXMLLoader.java:235)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:767)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2939)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2624)
+	... 55 common frames omitted
+2026-05-28 01:29:23 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:29:24 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 01:29:24 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:29:25 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:29:28 [JavaFX Application Thread] ERROR com.uet.client.ui.HomeController - Không mở được giao diện thêm sản phẩm: 
+javafx.fxml.LoadException: 
+/D:/BTL_HTDG/bidding-client/target/classes/view/InformationUpload_view.fxml:54
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2692)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2670)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2533)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2503)
+	at com.uet.client.ui.HomeController.handleOpenAddProduct(HomeController.java:403)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:65)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:112)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:78)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1847)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1718)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Node.fireEvent(Node.java:9026)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:199)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:4061)
+	at javafx.scene.Scene.processMouseEvent(Scene.java:1947)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2784)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:353)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.get(GlassViewEventHandler.java:255)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:573)
+	at com.sun.glass.ui.View.notifyMouse(View.java:975)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$0(WinApplication.java:168)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: com.sun.javafx.fxml.PropertyNotFoundException: Property "placeholder" does not exist or is read-only.
+	at javafx.fxml.FXMLLoader$Element.processValue(FXMLLoader.java:347)
+	at javafx.fxml.FXMLLoader$Element.processPropertyAttribute(FXMLLoader.java:324)
+	at javafx.fxml.FXMLLoader$Element.processInstancePropertyAttributes(FXMLLoader.java:235)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:767)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2939)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2624)
+	... 55 common frames omitted
+2026-05-28 01:32:08 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:32:08 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 01:32:08 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 01:32:08 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:32:11 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 01:32:11 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 01:32:14 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 01:32:15 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-28 01:32:15 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:32:16 [Thread-5] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:32:46 [JavaFX Application Thread] INFO  c.u.c.ui.InformationUploadController - 📸 Đã đọc và render thành công mảng byte của ảnh: tải xuống (1).jpg
+2026-05-28 01:33:07 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:33:08 [Thread-5] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 01:33:12 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-28 01:33:13 [Thread-5] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1

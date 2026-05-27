@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Optional;
@@ -50,13 +51,16 @@ public class ProfileController {
 
         if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0) {
             try {
-                javafx.scene.image.Image img = new javafx.scene.image.Image(
-                        new java.io.ByteArrayInputStream(user.getAvatarBytes())
-                );
+                Image img = new Image(new ByteArrayInputStream(user.getAvatarBytes()));
+
                 avatarImage.setImage(img);
-                logger.info("ProfileController: displayed avatar from bytes, len={}", user.getAvatarBytes().length);
+
+                // ⚡ BA DÒNG QUYẾT ĐỊNH: Ép ảnh tự động co giãn đều, không bị bóp méo
+                avatarImage.setPreserveRatio(false); // Ép vừa khít khung vuông 80x80
+                avatarImage.setSmooth(true);         // Khử răng cưa giúp viền ảnh mượt
+
             } catch (Exception e) {
-                logger.error("Lỗi khi hiển thị avatar từ bytes: ", e);
+                logger.error("Lỗi hiển thị avatar: ", e);
             }
         } else if (user.getAvatarPath() != null && !user.getAvatarPath().isBlank()) {
             try {

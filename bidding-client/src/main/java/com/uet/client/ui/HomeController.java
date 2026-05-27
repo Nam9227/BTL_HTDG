@@ -11,6 +11,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -220,25 +221,28 @@ public class HomeController {
     }
 
     private void renderAuctions(List<AuctionItem> auctions) {
-
         productContainer.getChildren().clear();
 
         if (auctions == null || auctions.isEmpty()) {
             Label emptyLabel = new Label("Chưa có sản phẩm đấu giá nào.");
+            emptyLabel.setStyle("-fx-font-family: 'Segoe UI'; -fx-text-fill: #64748b; -fx-font-size: 14px;");
             productContainer.getChildren().add(emptyLabel);
             return;
         }
 
         for (AuctionItem item : auctions) {
+            // 1. Khởi tạo Khung VBox cho Thẻ Card và gán Class CSS đổ bóng, bo góc
+            VBox card = new VBox(10);
+            card.getStyleClass().add("product-card-node"); // Ăn theo .product-card-node trong CSS
+            card.setPrefWidth(210);
+            card.setPadding(new Insets(15));
 
-            VBox card = new VBox(12);
-            card.getStyleClass().add("auction-card");
-
+            // 2. Xử lý ảnh sản phẩm mẫu/Bytes
             ImageView cardImageView = new ImageView();
-            cardImageView.setFitWidth(220);
+            cardImageView.setFitWidth(180);
             cardImageView.setFitHeight(130);
             cardImageView.setPreserveRatio(true);
-            cardImageView.getStyleClass().add("auction-card-image");
+            cardImageView.getStyleClass().add("product-image-container");
 
             if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
                 try {
@@ -246,51 +250,52 @@ public class HomeController {
                             new java.io.ByteArrayInputStream(item.getProductImageBytes()));
                     cardImageView.setImage(img);
                 } catch (Exception e) {
-                    logger.error("Lỗi khi vẽ ảnh preview sản phẩm từ bytes: ", e);
+                    logger.error("Lỗi khi vẽ ảnh preview từ bytes: ", e);
                 }
             } else if (item.getImageUrl() != null && !item.getImageUrl().isBlank()) {
                 try {
                     cardImageView.setImage(new javafx.scene.image.Image(item.getImageUrl(), true));
                 } catch (Exception e) {
-                    logger.error("Lỗi khi vẽ ảnh preview sản phẩm từ URL: ", e);
+                    logger.error("Lỗi khi vẽ ảnh preview từ URL: ", e);
                 }
             }
 
+            // 3. Tên sản phẩm
             Label nameLabel = new Label(item.getProductName());
-            nameLabel.getStyleClass().add("product-name");
+            nameLabel.getStyleClass().add("product-title-label"); // Ăn theo .product-title-label trong CSS
+            nameLabel.setWrapText(true);
 
-            Label descriptionLabel = new Label(item.getDescription());
-            descriptionLabel.setWrapText(true);
-            descriptionLabel.getStyleClass().add("product-description");
-
+            // 4. Cụm hiển thị Giá (Gộp chung mượt mà)
             Label priceTitle = new Label("Giá hiện tại");
-            priceTitle.getStyleClass().add("price-title");
+            priceTitle.setStyle("-fx-font-family: 'Segoe UI'; -fx-text-fill: #64748b; -fx-font-size: 12px;");
 
-            Label currentPriceLabel = new Label(
-                    String.format("%,.0f đ", item.getCurrentPrice()));
-            currentPriceLabel.getStyleClass().add("current-price");
+            Label currentPriceLabel = new Label(String.format("%,.0f đ", item.getCurrentPrice()));
+            currentPriceLabel.getStyleClass().add("product-price-label"); // Ăn theo .product-price-label trong CSS
 
             VBox priceBox = new VBox(2, priceTitle, currentPriceLabel);
 
-            Label endTimeLabel = new Label(
-                    "Kết thúc: " + item.getEndTime());
-            endTimeLabel.getStyleClass().add("end-time");
+            // 5. Thời gian kết thúc phiên
+            Label endTimeLabel = new Label("Kết thúc: " + item.getEndTime());
+            endTimeLabel.setStyle("-fx-font-family: 'Segoe UI'; -fx-text-fill: #94a3b8; -fx-font-size: 11px;");
 
-            Button bidButton = new Button("Đấu giá ngay");
-            bidButton.getStyleClass().add("bid-button");
-
+            // 6. Nút Đấu giá ngay phong cách phẳng bo tròn
+            Button bidButton = new Button("🔨 Đấu giá ngay");
+            bidButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;");
             bidButton.setMaxWidth(Double.MAX_VALUE);
+            bidButton.setPadding(new Insets(8, 0, 8, 0));
 
             bidButton.setOnAction(e -> openAuctionDetail(item));
 
+            // 7. Gom tất cả cấu trúc phân cấp vào thẻ Card chính
             card.getChildren().addAll(
                     cardImageView,
                     nameLabel,
-                    descriptionLabel,
                     priceBox,
                     endTimeLabel,
-                    bidButton);
+                    bidButton
+            );
 
+            // Đẩy toàn bộ khối card vào lưới hiển thị FlowPane
             productContainer.getChildren().add(card);
         }
     }

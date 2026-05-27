@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -8,6 +9,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -19,141 +21,132 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="897.0" prefWidth="1115.0" style="-fx-background: linear-gradient(to bottom, #323639, #202324);" stylesheets="@../style/informationUpload_view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.InformationUploadController">
+<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1115.0" styleClass="root-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.InformationUploadController">
+
+   <stylesheets>
+      <URL value="@../style/upload_style.css" />
+   </stylesheets>
+
    <content>
-      <VBox alignment="TOP_CENTER" prefHeight="897.0" prefWidth="1099.0" spacing="30.0">
+      <VBox alignment="TOP_CENTER" spacing="25.0" style="-fx-background-color: transparent;">
          <padding>
-            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
          </padding>
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="59.0" prefWidth="551.0">
+
+            <VBox alignment="TOP_CENTER" spacing="4.0">
                <children>
-                  <Label alignment="BOTTOM_CENTER" prefHeight="30.0" prefWidth="295.0" text="ĐĂNG KÝ SẢN PHẨM ĐẤU GIÁ" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="BOTTOM_CENTER" text="Vui lòng nhập đầy đủ thông tin" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
+                  <Label styleClass="page-title" text="📝 ĐĂNG KÝ SẢN PHẨM ĐẤU GIÁ" />
+                  <Label styleClass="page-subtitle" text="Vui lòng nhập đầy đủ các thông tin chi tiết dưới đây để kích hoạt phiên" />
                </children>
             </VBox>
-            <HBox alignment="TOP_CENTER" prefHeight="621.0" prefWidth="1033.0" spacing="25.0">
+
+            <HBox alignment="TOP_CENTER" spacing="25.0">
                <children>
-                  <VBox prefHeight="529.0" prefWidth="415.0" spacing="20.0" style="-fx-background-color: #282b2d; -fx-background-radius: 12; -fx-border-color: #3e4347; -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 25;">
+
+                  <VBox prefHeight="620.0" prefWidth="440.0" spacing="18.0" styleClass="upload-card">
                      <children>
-                        <Label text="Thông tin sản phẩm" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                        <VBox prefHeight="68.0" prefWidth="221.0" spacing="8.0">
+                        <Label styleClass="card-section-title" text="Thông tin mô tả sản phẩm" />
+
+                        <VBox spacing="6.0">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="81.0" text="Tên sản phẩm" textFill="WHITE" />
-                              <TextField fx:id="productNameField" style="-fx-padding: 8; -fx-background-color: #3a3f42; -fx-text-fill: white; -fx-background-radius: 8;" />
+                              <Label styleClass="form-label" text="Tên sản phẩm *" />
+                              <TextField fx:id="productNameField" promptText="Nhập tên sản phẩm đấu giá..." styleClass="form-textfield" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="133.0" prefWidth="363.0" spacing="8.0">
+
+                        <VBox spacing="6.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label text="Mô tả chi tiết" textFill="WHITE" />
-                              <TextArea fx:id="productDescriptionField" prefHeight="109.0" prefWidth="363.0" style="-fx-control-inner-background: #3a3f42; -fx-text-fill: white;" wrapText="true" />
+                              <Label styleClass="form-label" text="Mô tả chi tiết nội dung *" />
+                              <TextArea fx:id="productDescriptionField" prefHeight="160.0" promptText="Cung cấp thông tin chi tiết về tình trạng, thông số sản phẩm..." styleClass="form-textarea" wrapText="true" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="40.0" prefWidth="377.0" spacing="8.0">
+
+                        <VBox spacing="6.0">
                            <children>
-                              <Label text="Danh mục" textFill="WHITE" />
-                              <ComboBox fx:id="ProductType" prefWidth="150.0" style="-fx-background-color: #3a3f42;" />
+                              <Label styleClass="form-label" text="Danh mục sản phẩm" />
+                              <ComboBox fx:id="ProductType" maxWidth="1.7976931348623157E308" styleClass="form-combobox" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="88.0" prefWidth="363.0" spacing="8.0">
+
+                        <VBox spacing="6.0">
                            <children>
-                              <Label text="Thương hiệu" textFill="WHITE" />
-                              <TextField fx:id="brandField" style="-fx-padding: 8; -fx-background-color: #3a3f42; -fx-text-fill: white; -fx-background-radius: 8;" />
+                              <Label styleClass="form-label" text="Thương hiệu / Nhà sản xuất" />
+                              <TextField fx:id="brandField" promptText="Ví dụ: Apple, Sony, ASUS..." styleClass="form-textfield" />
                            </children>
                         </VBox>
                      </children>
                   </VBox>
 
-                  <VBox prefHeight="695.0" prefWidth="510.0" spacing="12.0" style="-fx-background-color: #282b2d; -fx-background-radius: 12; -fx-border-color: #3e4347; -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 25;">
+                  <VBox prefHeight="620.0" prefWidth="540.0" spacing="16.0" styleClass="upload-card" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="Hình ảnh sản phẩm (Duy nhất 1 ảnh)" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
+                        <Label styleClass="card-section-title" text="Hình ảnh thực tế (Duy nhất 1 ảnh JPG/PNG)" />
 
-                        <StackPane fx:id="dropImageZone" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" onMouseClicked="#handleSelectFile" prefHeight="170.0" prefWidth="460.0" style="-fx-background-color: #323639; -fx-background-radius: 8; -fx-border-color: #2b667a; -fx-border-style: dashed; -fx-border-radius: 8; -fx-border-width: 2; -fx-cursor: hand;">
+                        <StackPane fx:id="dropImageZone" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" onMouseClicked="#handleSelectFile" prefHeight="150.0" styleClass="drop-zone">
                            <children>
                               <VBox fx:id="uploadPromptBox" alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../photo/upload_icon.png" />
                                        </image>
                                     </ImageView>
-                                    <Label text="Kéo thả hoặc click để chọn 1 ảnh" textFill="WHITE" />
+                                    <Label styleClass="drop-zone-text" text="Kéo thả file ảnh hoặc click vào đây để duyệt file" />
                                  </children>
                               </VBox>
-                              <ImageView fx:id="productImageView" fitHeight="160.0" fitWidth="440.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="productImageView" fitHeight="140.0" fitWidth="480.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                         </StackPane>
 
-                        <ProgressBar fx:id="uploadProgressBar" prefHeight="15.0" prefWidth="460.0" progress="0.0" visible="false" />
+                        <ProgressBar fx:id="uploadProgressBar" maxWidth="1.7976931348623157E308" prefHeight="12.0" progress="0.0" visible="false" />
 
-                        <Label text="Chi tiết đấu giá" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                        <GridPane hgap="10.0" prefHeight="228.0" prefWidth="351.0">
+                        <Label styleClass="card-section-title" text="Thiết lập phiên đấu giá" />
+
+                        <GridPane hgap="12.0" vgap="10.0">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.66661834716797" minWidth="10.0" prefWidth="108.33335367838542" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.00000000000001" minWidth="10.0" prefWidth="60.99997965494792" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="87.66668701171875" minWidth="10.0" prefWidth="81.33333333333331" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.66668701171875" minWidth="10.0" prefWidth="22.000040690104186" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.66668701171875" minWidth="0.0" prefWidth="85.33329264322919" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.66668701171875" minWidth="10.0" prefWidth="36.333333333333314" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="125.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="145.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="75.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="10.0" prefWidth="30.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="75.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="10.0" prefWidth="30.0" />
                            </columnConstraints>
                            <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="30.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="30.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="30.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="30.0" prefHeight="40.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Label text="Giá khởi điểm" textFill="WHITE" />
-                              <Label text="Thời gian bắt đầu" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                              <TextField fx:id="startPriceField" style="-fx-background-color: #3a3f42; -fx-text-fill: white; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8;" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                              <Label text="Thời gian kết thúc" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                              <DatePicker fx:id="startDatePicker" prefHeight="25.0" prefWidth="176.0" style="-fx-background-color: #3a3f42; -fx-text-fill: white; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8;" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                              <DatePicker fx:id="endDatePicker" style="-fx-background-color: #3a3f42; -fx-text-fill: white; -fx-background-radius: 8; -fx-border-color: #555b60; -fx-border-radius: 8;" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-                              <Spinner fx:id="hourStartSpinner" editable="true" style="-fx-background-color: #3a3f42;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <Spinner fx:id="minuteStartSpinner" editable="true" style="-fx-background-color: #3a3f42;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                              <Spinner fx:id="hourEndSpinner" editable="true" style="-fx-background-color: #3a3f42;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <Spinner fx:id="minuteEndSpinner" editable="true" style="-fx-background-color: #3a3f42;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                              <Label text="giờ" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                              <Label text="Giờ" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                              <Label text="phút" textFill="WHITE" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-                              <Label text="phút" textFill="WHITE" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                              <Label styleClass="form-label" text="Giá khởi điểm (VNĐ) *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <TextField fx:id="startPriceField" promptText="Ví dụ: 2,000,000" styleClass="form-textfield" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+                              <Label styleClass="form-label" text="Thời gian bắt đầu *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                              <DatePicker fx:id="startDatePicker" maxWidth="1.7976931348623157E308" styleClass="form-datepicker" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                              <Spinner fx:id="hourStartSpinner" editable="true" maxWidth="1.7976931348623157E308" styleClass="spinner" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <Label styleClass="unit-label" text="Giờ" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <Spinner fx:id="minuteStartSpinner" editable="true" maxWidth="1.7976931348623157E308" styleClass="spinner" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                              <Label styleClass="unit-label" text="Phút" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+
+                              <Label styleClass="form-label" text="Thời gian kết thúc *" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                              <DatePicker fx:id="endDatePicker" maxWidth="1.7976931348623157E308" styleClass="form-datepicker" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                              <Spinner fx:id="hourEndSpinner" editable="true" maxWidth="1.7976931348623157E308" styleClass="spinner" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                              <Label styleClass="unit-label" text="Giờ" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                              <Spinner fx:id="minuteEndSpinner" editable="true" maxWidth="1.7976931348623157E308" styleClass="spinner" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                              <Label styleClass="unit-label" text="Phút" GridPane.columnIndex="5" GridPane.rowIndex="5" />
                            </children>
                         </GridPane>
-                        <VBox prefHeight="49.0" prefWidth="349.0">
+
+                        <Separator opacity="0.3" />
+
+                        <VBox spacing="8.0">
                            <children>
-                              <Label text="Phí &amp; Điều khoản" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="16.0" />
-                                 </font>
-                              </Label>
-                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                              <Label styleClass="card-section-title" text="Phí niêm yết &amp; Điều khoản sàn" />
+                              <HBox prefHeight="30.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <CheckBox alignment="BOTTOM_LEFT" mnemonicParsing="false" text="Phí đăng đấu giá" textFill="WHITE" />
-                                    <CheckBox alignment="BOTTOM_LEFT" mnemonicParsing="false" text="Phí hoa hồng sàn" textFill="WHITE" />
+                                    <CheckBox mnemonicParsing="false" selected="true" styleClass="custom-checkbox" text="Đồng ý phí đăng ký (10,000đ)" />
+                                    <CheckBox mnemonicParsing="false" selected="true" styleClass="custom-checkbox" text="Trích % hoa hồng khi đấu giá thành công" />
                                  </children>
                               </HBox>
                            </children>
@@ -162,10 +155,11 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="1033.0" spacing="50.0" style="-fx-background-color: transparent; -fx-padding: 20 0 0 0;">
+
+            <HBox alignment="CENTER_RIGHT" spacing="20.0" style="-fx-background-color: transparent; -fx-padding: 10 0 0 0;">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="43.0" prefWidth="143.0" style="-fx-background-color: #5a5f63; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 20; -fx-cursor: hand;" text="Hủy" />
-                  <Button mnemonicParsing="false" onAction="#handleConfirmUpload" prefHeight="45.0" prefWidth="137.0" style="-fx-background-color: #2b667a; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20; -fx-cursor: hand;" text="Xác nhận" />
+                  <Button mnemonicParsing="false" onAction="#handleCancel" prefHeight="40.0" prefWidth="120.0" styleClass="btn-cancel" text="❌ Hủy bỏ" />
+                  <Button mnemonicParsing="false" onAction="#handleConfirmUpload" prefHeight="40.0" prefWidth="140.0" styleClass="btn-confirm" text="💾 Đăng đấu giá" />
                </children>
             </HBox>
          </children>
