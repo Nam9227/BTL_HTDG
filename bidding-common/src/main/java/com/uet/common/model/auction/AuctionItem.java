@@ -24,6 +24,7 @@ public class AuctionItem implements Serializable {
     private LocalDateTime endTime;
 
     private String status;
+    private byte[] productImageBytes;
 
     public AuctionItem() {
     }
@@ -138,5 +139,13 @@ public class AuctionItem implements Serializable {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public byte[] getProductImageBytes() {
+        return productImageBytes;
+    }
+
+    public void setProductImageBytes(byte[] productImageBytes) {
+        this.productImageBytes = productImageBytes;
     }
 }

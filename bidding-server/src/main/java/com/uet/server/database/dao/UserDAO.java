@@ -8,6 +8,8 @@ import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
 import com.uet.server.database.DBConnection;
 import com.uet.server.service.FileStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -15,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class UserDAO {
+    private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
     private final FileStorageService fileStorageService = new FileStorageService();
 
@@ -72,39 +75,12 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
 
-                // Đọc dữ liệu ảnh avatar dưới dạng bytes nếu Admin cần hiển thị hoặc xử lý sau này
-                String avatarPath = rs.getString("avatar_path");
-                if (avatarPath != null && !avatarPath.isBlank()) {
-                    try {
-                        byte[] bytes = null;
-                        if (avatarPath.startsWith("file://")) {
-                            String p = avatarPath.replaceFirst("^file:///*", "/");
-                            java.nio.file.Path filePath = java.nio.file.Paths.get(p);
-                            if (java.nio.file.Files.exists(filePath)) {
-                                bytes = java.nio.file.Files.readAllBytes(filePath);
-                            }
-                        } else {
-                            java.nio.file.Path filePath = java.nio.file.Paths.get(avatarPath);
-                            if (java.nio.file.Files.exists(filePath)) {
-                                bytes = java.nio.file.Files.readAllBytes(filePath);
-                            }
-                        }
-                        if (bytes != null && bytes.length > 0) {
-                            user.setAvatarBytes(bytes);
-                        }
-                    } catch (Exception e) {
-                        // Bỏ qua lỗi đọc file lẻ của từng user để không làm gián đoạn việc tải danh sách
-                        System.out.println("⚠️ Không thể đọc file ảnh của user ID: " + user.getId());
-                    }
-                }
-
                 userList.add(user);
             }
-            System.out.println("📊 [UserDAO] Đã tải thành công " + userList.size() + " người dùng cho Admin.");
+            logger.info("📊 [UserDAO] Đã tải thành công {} người dùng cho Admin.", userList.size());
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB:");
-            e.printStackTrace();
+            logger.error("❌ Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: ", e);
         }
 
         return userList;
@@ -126,7 +102,7 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi cập nhật quyền cho User ID: " + userId, e);
         }
     }
     public void deleteUser(String userId) {
@@ -140,12 +116,11 @@ public class UserDAO {
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                System.out.println("🗑️ [UserDAO] Đã xóa thành công user ID: " + userId + " khỏi Database.");
+                logger.info("🗑️ [UserDAO] Đã xóa thành công user ID: {} khỏi Database.", userId);
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi xóa user trong UserDAO:");
-            e.printStackTrace();
+            logger.error("❌ Lỗi khi xóa user trong UserDAO: ", e);
         }
     }
 
@@ -160,7 +135,7 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi cập nhật trạng thái hoạt động cho User ID: " + userId, e);
         }
     }
 
@@ -183,7 +158,7 @@ public class UserDAO {
                         "avatars",
                         request.getUserId()
                 );
-                System.out.println("🔄 Server đã lưu file mới tại path: " + avatarPath);
+                logger.info("🔄 Server đã lưu file mới tại path: {}", avatarPath);
 
                 // 4. TIẾN HÀNH XÓA FILE CŨ TRÊN ĐĨA CỦA VPS ĐỂ TRÁNH RÁC BỘ NHỚ
                 if (oldAvatarPath != null && !oldAvatarPath.isBlank()) {
@@ -194,15 +169,14 @@ public class UserDAO {
                     if (oldFile.exists()) {
                         boolean deleted = oldFile.delete();
                         if (deleted) {
-                            System.out.println("🗑️ [Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: " + cleanOldPath);
+                            logger.info("🗑️ [Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: {}", cleanOldPath);
                         } else {
-                            System.out.println("⚠️ Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): " + cleanOldPath);
+                            logger.warn("⚠️ Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): {}", cleanOldPath);
                         }
                     }
                 }
             } catch (Exception e) {
-                System.out.println("❌ Lỗi khi xử lý lưu file mới hoặc xóa file cũ: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("❌ Lỗi khi xử lý lưu file mới hoặc xóa file cũ: ", e);
             }
         }
 
@@ -242,7 +216,7 @@ public class UserDAO {
             return Response.fail("Không tìm thấy hồ sơ người dùng để cập nhật!");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi server khi cập nhật thông tin tài khoản cho User ID: " + request.getUserId(), e);
             return Response.fail("Lỗi server khi cập nhật thông tin tài khoản!");
         }
     }
@@ -262,7 +236,7 @@ public class UserDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi lấy avatar path cho User ID: " + userId, e);
         }
 
         return null;
@@ -323,14 +297,13 @@ public class UserDAO {
                             if (java.nio.file.Files.exists(filePath)) {
                                 bytes = java.nio.file.Files.readAllBytes(filePath);
                             } else {
-                                System.out.println("UserDAO: file not found: " + filePath);
+                                logger.warn("UserDAO: file not found: {}", filePath);
                             }
                         } else if (avatarPath.startsWith("http://") || avatarPath.startsWith("https://")) {
                             try (java.io.InputStream in = new java.net.URL(avatarPath).openStream()) {
                                 bytes = in.readAllBytes();
                             } catch (Exception e) {
-                                System.out.println("UserDAO: cannot download avatar from url: " + avatarPath);
-                                e.printStackTrace();
+                                logger.error("UserDAO: cannot download avatar from url: {}", avatarPath, e);
                             }
                         } else {
                             // assume plain filesystem path
@@ -342,18 +315,17 @@ public class UserDAO {
 
                         if (bytes != null && bytes.length > 0) {
                             user.setAvatarBytes(bytes);
-                            System.out.println("UserDAO: loaded avatar bytes len=" + bytes.length + " for user " + user.getId());
+                            logger.info("UserDAO: loaded avatar bytes len={} for user {}", bytes.length, user.getId());
                         }
                     } catch (Exception e) {
-                        System.out.println("UserDAO: error loading avatar: " + e.getMessage());
-                        e.printStackTrace();
+                        logger.error("UserDAO: error loading avatar for user " + user.getId(), e);
                     }
                 }
                 return user;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi tìm user bằng username/password: ", e);
         }
 
         return null;
@@ -423,13 +395,13 @@ public class UserDAO {
                             user.setAvatarBytes(bytes);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Lỗi khi đọc file avatar cho User ID: " + userId, e);
                     }
                 }
                 return user;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi tìm user bằng User ID: " + userId, e);
         }
         return null;
     }

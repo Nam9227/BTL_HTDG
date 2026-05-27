@@ -1,5 +1,8 @@
 package com.uet.server.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBConnection {
-
+    private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
     private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
@@ -24,7 +27,7 @@ public class DBConnection {
                 String password = properties.getProperty("db.password");
 
                 connection = DriverManager.getConnection(url, username, password);
-                System.out.println("Connected to database!");
+                logger.info("Connected to database!");
             }
             return connection;
         } catch (IOException e) {

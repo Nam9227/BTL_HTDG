@@ -8,10 +8,13 @@ import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.RegisterDAO;
 import com.uet.server.database.dao.UserDAO;
 import com.uet.server.network.ClientHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class ClientRequestDispatcher {
+    private static final Logger logger = LoggerFactory.getLogger(ClientRequestDispatcher.class);
 
     private final UserDAO userDAO = new UserDAO();
     private final RegisterDAO registerDAO = new RegisterDAO();
@@ -31,9 +34,9 @@ public class ClientRequestDispatcher {
             try {
                 userDAO.updateActive(request.getUserId(), request.isActive());
                 client.send(Response.success("Cập nhật trạng thái tài khoản thành công!", null));
-                System.out.println("🎯 [Server] Đã cập nhật trạng thái active = " + request.isActive() + " cho user ID: " + request.getUserId());
+                logger.info("🎯 [Server] Đã cập nhật trạng thái active = {} cho user ID: {}", request.isActive(), request.getUserId());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Lỗi khi cập nhật trạng thái hoạt động của User ID: " + request.getUserId(), e);
                 client.send(Response.fail("Lỗi Server: Không thể cập nhật trạng thái người dùng."));
             }
             return true;
@@ -47,9 +50,9 @@ public class ClientRequestDispatcher {
 
                 // Trả gói tin thông báo thành công về cho Client
                 client.send(Response.success("Xóa tài khoản người dùng thành công!", null));
-                System.out.println("🗑️ [Server] Đã xử lý xóa thành công user ID: " + request.getUserId());
+                logger.info("🗑️ [Server] Đã xử lý xóa thành công user ID: {}", request.getUserId());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Lỗi khi xử lý xóa User ID: " + request.getUserId(), e);
                 client.send(Response.fail("Lỗi Server: Không thể xóa tài khoản người dùng."));
             }
             return true;
@@ -140,13 +143,13 @@ public class ClientRequestDispatcher {
             List<User> users = userDAO.getAllUsers();
             client.send(new GetAllUsersResponse(users));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi tải danh sách người dùng: ", e);
             client.send(Response.fail("Lỗi hệ thống khi tải danh sách người dùng."));
         }
     }
 
     private void handleLogin(LoginRequest request, ClientHandler client) {
-        System.out.println("Login attempt: " + request.getUsername());
+        logger.info("Đang đăng nhập: {}", request.getUsername());
         client.send(userDAO.handleLogin(request));
     }
 

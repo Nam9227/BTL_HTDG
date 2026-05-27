@@ -18,6 +18,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 // ... existing code ...
 
 import javafx.scene.image.ImageView;
@@ -25,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.List;;
 
 public class HomeController{
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
         @FXML private VBox sideContent; // Sidebar màu xanh
         @FXML private Button openBtn;   // Nút 3 gạch (nằm ngoài sidebar)
@@ -53,7 +56,7 @@ public class HomeController{
                 );
                 userAvatar.setImage(img);
             } catch (Exception e) {
-                System.out.println("Lỗi hiển thị avatar tại Sidebar Home: " + e.getMessage());
+                logger.error("Lỗi hiển thị avatar tại Sidebar Home: ", e);
             }
         }
 
@@ -116,14 +119,14 @@ public class HomeController{
                 ClientSocket.getInstance().send(request);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Không lưu được vai trò: ", e);
                 showError("Lỗi", "Không lưu được vai trò!");
             }
         }
 
         private void applyRoleUI() {
             if (currentUser.getRole() == Role.BIDDER) {
-                System.out.println("Người đấu giá");
+                logger.info("Chọn giao diện vai trò: Người đấu giá");
                 productContainer.setVisible(true);
                 productContainer.setManaged(true);
 
@@ -132,7 +135,7 @@ public class HomeController{
                 addProductBtn.setManaged(false);
 
             } else if (currentUser.getRole() == Role.SELLER) {
-                System.out.println("Người bán hàng");
+                logger.info("Chọn giao diện vai trò: Người bán hàng");
 
                 // Nếu là Người bán (Seller): Hiện nút Thêm sản phẩm lên ngay!
                 addProductBtn.setVisible(true);
@@ -169,7 +172,7 @@ public class HomeController{
                         if (response instanceof GetActiveAuctionsResponse auctionResponse) {
                             List<AuctionItem> auctions = auctionResponse.getAuctions();
 
-                            System.out.println("Home nhận danh sách đấu giá: " + auctions.size());
+                            logger.info("Home nhận danh sách đấu giá: {}", auctions.size());
 
                             Platform.runLater(() -> renderAuctions(auctions));
 
@@ -179,10 +182,16 @@ public class HomeController{
                 };
 
                 socket.addMessageListener(homeListener);
-                socket.send(new GetActiveAuctionsRequest());
+                new Thread(() -> {
+                    try {
+                        socket.send(new GetActiveAuctionsRequest());
+                    } catch (Exception e) {
+                        logger.error("Lỗi khi gửi yêu cầu danh sách đấu giá từ Home: ", e);
+                    }
+                }).start();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Không lấy được danh sách sản phẩm đấu giá: ", e);
 
                 Platform.runLater(() ->
                         showError("Lỗi", "Không lấy được danh sách sản phẩm đấu giá!")
@@ -204,6 +213,29 @@ public class HomeController{
 
                 VBox card = new VBox(12);
                 card.getStyleClass().add("auction-card");
+
+                ImageView cardImageView = new ImageView();
+                cardImageView.setFitWidth(220);
+                cardImageView.setFitHeight(130);
+                cardImageView.setPreserveRatio(true);
+                cardImageView.getStyleClass().add("auction-card-image");
+
+                if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
+                    try {
+                        javafx.scene.image.Image img = new javafx.scene.image.Image(
+                                new java.io.ByteArrayInputStream(item.getProductImageBytes())
+                        );
+                        cardImageView.setImage(img);
+                    } catch (Exception e) {
+                        logger.error("Lỗi khi vẽ ảnh preview sản phẩm từ bytes: ", e);
+                    }
+                } else if (item.getImageUrl() != null && !item.getImageUrl().isBlank()) {
+                    try {
+                        cardImageView.setImage(new javafx.scene.image.Image(item.getImageUrl(), true));
+                    } catch (Exception e) {
+                        logger.error("Lỗi khi vẽ ảnh preview sản phẩm từ URL: ", e);
+                    }
+                }
 
                 Label nameLabel = new Label(item.getProductName());
                 nameLabel.getStyleClass().add("product-name");
@@ -235,6 +267,7 @@ public class HomeController{
                 bidButton.setOnAction(e -> openAuctionDetail(item));
 
                 card.getChildren().addAll(
+                        cardImageView,
                         nameLabel,
                         descriptionLabel,
                         priceBox,
@@ -256,6 +289,9 @@ public class HomeController{
                 AuctionDetailController controller = loader.getController();
                 controller.setData(currentUser, item);
 
+                // Áp dụng hiệu ứng chuyển cảnh mượt mà
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
                 Stage stage = (Stage) productContainer.getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.setResizable(true);
@@ -267,7 +303,7 @@ public class HomeController{
                 });
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Không mở được trang chi tiết đấu giá: ", e);
                     showError("Lỗi", "Không mở được trang chi tiết đấu giá!");
                 }
 
@@ -325,12 +361,15 @@ public class HomeController{
 
             Stage stage = (Stage) userNameLabel.getScene().getWindow(); // Lấy stage từ label bất kỳ
 
+            // Áp dụng hiệu ứng chuyển cảnh mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
             // Đổi scene mượt mà, giữ nguyên trạng thái maximized, tuyệt đối không co giãn màn hình
             stage.getScene().setRoot(root);
             stage.setTitle("Thông tin tài khoản");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không thể mở trang thông tin tài khoản: ", e);
             showError("Lỗi", "Không thể mở trang thông tin tài khoản!");
         }
     }
@@ -346,6 +385,9 @@ public class HomeController{
                 informationUploadController controller = loader.getController();
                 controller.setUser(currentUser); // Ép truyền dữ liệu ở đây!
 
+                // Áp dụng hiệu ứng chuyển cảnh mượt mà
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
                 Stage stage = (Stage) productContainer.getScene().getWindow();
                 stage.setScene(new Scene(root));
                 stage.setResizable(true);
@@ -358,7 +400,7 @@ public class HomeController{
                 });
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Không mở được giao diện thêm sản phẩm: ", e);
                 showError("Lỗi", "Không mở được giao diện thêm sản phẩm!");
             }
         }
@@ -376,6 +418,10 @@ public class HomeController{
             // 3. Chuyển Scene về Login mượt mà như cũ...
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
             Parent root = loader.load();
+            
+            // Hiệu ứng mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            
             Stage stage = (Stage) userNameLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
             stage.setTitle("Đăng nhập hệ thống");
@@ -386,7 +432,7 @@ public class HomeController{
             stage.centerOnScreen();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi xảy ra khi đăng xuất: ", e);
         }
     }
 }

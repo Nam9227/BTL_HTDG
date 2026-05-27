@@ -17,16 +17,21 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DecimalFormat;
 import java.util.List;
 
 public class AdminAuctionsController {
+    private static final Logger logger = LoggerFactory.getLogger(AdminAuctionsController.class);
 
     @FXML private TableView<AuctionItem> approvalTable;
     @FXML private TableColumn<AuctionItem, String> idColumn;
     @FXML private TableColumn<AuctionItem, String> nameColumn;
     @FXML private TableColumn<AuctionItem, String> sellerColumn;
     @FXML private TableColumn<AuctionItem, String> priceColumn;
+    @FXML private TableColumn<AuctionItem, String> statusColumn;
     @FXML private TableColumn<AuctionItem, String> descriptionColumn;
     @FXML private TableColumn<AuctionItem, Void> actionColumn;
 
@@ -45,6 +50,39 @@ public class AdminAuctionsController {
         priceColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(moneyFormat.format(cellData.getValue().getStartPrice()))
         );
+
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    String display = item;
+                    String color = "#111827"; // dark
+                    if ("PENDING".equalsIgnoreCase(item)) {
+                        display = "Chờ duyệt";
+                        color = "#F59E0B"; // orange
+                    } else if ("ACTIVE".equalsIgnoreCase(item)) {
+                        display = "Chờ chạy";
+                        color = "#2563EB"; // blue
+                    } else if ("RUNNING".equalsIgnoreCase(item)) {
+                        display = "Đang chạy";
+                        color = "#16A34A"; // green
+                    } else if ("FINISHED".equalsIgnoreCase(item)) {
+                        display = "Đã đóng";
+                        color = "#6B7280"; // gray
+                    } else if ("REJECTED".equalsIgnoreCase(item)) {
+                        display = "Từ chối";
+                        color = "#DC2626"; // red
+                    }
+                    setText(display);
+                    setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+                }
+            }
+        });
 
         // Sinh cặp nút bấm Duyệt / Từ chối động trên từng dòng
         setupActionColumn();
@@ -73,10 +111,18 @@ public class AdminAuctionsController {
             };
 
             ClientSocket.getInstance().addMessageListener(listener);
-            ClientSocket.getInstance().send(request);
+            
+            new Thread(() -> {
+                try {
+                    ClientSocket.getInstance().send(request);
+                } catch (Exception e) {
+                    logger.error("Lỗi khi gửi yêu cầu danh sách đấu giá lên Server: ", e);
+                    Platform.runLater(() -> showStatus("Không thể gửi yêu cầu lấy danh sách sản phẩm.", false));
+                }
+            }).start();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi chuẩn bị tải danh sách đấu giá: ", e);
             showStatus("Không thể kết nối lấy danh sách sản phẩm từ Server.", false);
         }
     }
@@ -170,7 +216,7 @@ public class AdminAuctionsController {
             ClientSocket.getInstance().send(request);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi gửi lệnh duyệt lên Server: ", e);
             showStatus("Lỗi gửi lệnh duyệt lên Server.", false);
         }
     }
@@ -201,7 +247,7 @@ public class AdminAuctionsController {
             Stage stage = (Stage) approvalTable.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi chuyển trang: " + fxmlPath, e);
         }
     }
 
@@ -234,7 +280,7 @@ public class AdminAuctionsController {
             ClientSocket.getInstance().send(request);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi ép kết thúc phiên đấu giá sớm: ", e);
         }
     }
 }

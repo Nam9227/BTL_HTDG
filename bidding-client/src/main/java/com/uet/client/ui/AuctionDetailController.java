@@ -25,6 +25,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -32,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AuctionDetailController {
+    private static final Logger logger = LoggerFactory.getLogger(AuctionDetailController.class);
 
     @FXML private Label userNameLabel;
     @FXML private Label balanceLabel;
@@ -125,11 +128,20 @@ public class AuctionDetailController {
 
         updateLeaderLabel(item);
 
-        if (item.getImageUrl() != null && !item.getImageUrl().isBlank()) {
+        if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
             try {
-                productImage.setImage(new Image(item.getImageUrl()));
+                javafx.scene.image.Image img = new javafx.scene.image.Image(
+                        new java.io.ByteArrayInputStream(item.getProductImageBytes())
+                );
+                productImage.setImage(img);
             } catch (Exception e) {
-                System.out.println("Không load được ảnh: " + item.getImageUrl());
+                logger.error("Lỗi khi hiển thị ảnh sản phẩm từ bytes: ", e);
+            }
+        } else if (item.getImageUrl() != null && !item.getImageUrl().isBlank()) {
+            try {
+                productImage.setImage(new Image(item.getImageUrl(), true));
+            } catch (Exception e) {
+                logger.error("Không load được ảnh sản phẩm đấu giá từ URL: {}", item.getImageUrl(), e);
             }
         }
 
@@ -179,7 +191,7 @@ public class AuctionDetailController {
             showMessage("Đã tham gia phiên đấu giá.", true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không thể tham gia phiên đấu giá: ", e);
             showMessage("Không thể tham gia phiên đấu giá.", false);
         }
     }
@@ -207,10 +219,16 @@ public class AuctionDetailController {
             };
 
             ClientSocket.getInstance().addMessageListener(historyListener);
-            ClientSocket.getInstance().send(historyReq);
+            new Thread(() -> {
+                try {
+                    ClientSocket.getInstance().send(historyReq);
+                } catch (Exception e) {
+                    logger.error("Lỗi khi gửi yêu cầu lấy lịch sử đặt giá từ Client: ", e);
+                }
+            }).start();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi gửi yêu cầu lấy lịch sử đặt giá lên Server: ", e);
         }
     }
 
@@ -302,7 +320,7 @@ public class AuctionDetailController {
             showMessage("Đã gửi yêu cầu đặt giá.", true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không gửi được giá đặt lên server: ", e);
             showMessage("Không gửi được giá đặt lên server.", false);
         }
     }
@@ -360,13 +378,16 @@ public class AuctionDetailController {
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
+            // Áp dụng hiệu ứng mượt mà khi quay lại
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
             Stage stage = (Stage) productNameLabel.getScene().getWindow();
 
             stage.getScene().setRoot(root);
             stage.setTitle("Trang chủ Đấu giá");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không quay lại được trang chủ: ", e);
             showMessage("Không quay lại được trang chủ.", false);
         }
     }

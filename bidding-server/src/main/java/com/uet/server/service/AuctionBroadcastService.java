@@ -22,7 +22,7 @@ public class AuctionBroadcastService {
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (String auctionId : ClientManager.getActiveAuctionIds()) {
-                    AuctionItem auctionItem = auctionDAO.getAuctionById(auctionId);
+                    AuctionItem auctionItem = auctionDAO.getAuctionById(auctionId, false);
 
                     if (auctionItem != null) {
                         ClientManager.broadcastAuction(
