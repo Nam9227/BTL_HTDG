@@ -1,8 +1,8 @@
 package com.uet.server.database.dao;
 
+import com.uet.common.model.transaction.Transaction;
 import com.uet.common.model.user.Role;
 import com.uet.common.model.user.User;
-import com.uet.common.network.ImageData;
 import com.uet.common.network.LoginRequest;
 import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
@@ -15,6 +15,8 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
@@ -404,5 +406,238 @@ public class UserDAO {
             logger.error("Lỗi khi tìm user bằng User ID: " + userId, e);
         }
         return null;
+    }
+    public void createTransaction(String userId,
+                                  double amount,
+                                  String type){
+
+        try{
+
+            Connection conn = DBConnection.getConnection();
+
+            String sql =
+                    "INSERT INTO transactions " +
+                            "(user_id, amount, type, status) " +
+                            "VALUES (?, ?, ?, ?)";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setString(1, userId);
+
+            ps.setDouble(2, amount);
+
+            ps.setString(3, type);
+
+            ps.setString(4, "PENDING");
+
+            ps.executeUpdate();
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public List<Transaction> getPendingTransaction(){
+
+        List<Transaction> list =
+                new ArrayList<>();
+
+        try{
+
+            Connection conn =
+                    DBConnection.getConnection();
+
+            String sql =
+                    "SELECT * FROM transactions " +
+                            "WHERE status = 'PENDING'";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Transaction t =
+                        new Transaction(rs.getLong("id"),
+                                rs.getString("user_id"),
+                                rs.getDouble("amount"),
+                                rs.getString("type"),
+                                rs.getString("status"),
+                                rs.getTimestamp("created_at").toLocalDateTime().toString()
+                        );
+
+                t.setId(rs.getLong("id"));
+
+                t.setUserId(
+                        rs.getString("user_id")
+                );
+
+                t.setAmount(
+                        rs.getDouble("amount")
+                );
+
+                t.setType(
+                        rs.getString("type")
+                );
+
+                t.setStatus(
+                        rs.getString("status")
+                );
+
+                list.add(t);
+            }
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
+    public User deposit(String userId, double amount){
+        try{
+            Connection conn = DBConnection.getConnection();
+
+            String sql =
+                    "UPDATE wallet " +
+                            "SET balance = balance + ? " +
+                            "WHERE user_id = ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setDouble(1, amount);
+            ps.setString(2, userId);
+            int rows = ps.executeUpdate();
+            System.out.println("rows updated: " + rows);
+            // Không tìm thấy user
+            if (rows == 0) {
+                return null;
+            }
+
+            // Trả user mới sau khi update
+            return findUserByUserId(userId);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public User withdraw(String userId, double amount){
+        try{
+            Connection conn = DBConnection.getConnection();
+
+            String sql =
+                    "UPDATE wallet " +
+                            "SET balance = balance - ? " +
+                            "WHERE user_id = ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setDouble(1, amount);
+            ps.setString(2, userId);
+
+            int rows = ps.executeUpdate();
+
+            // Không tìm thấy user
+            if (rows == 0) {
+                return null;
+            }
+
+            // Trả user mới sau khi update
+            return findUserByUserId(userId);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public void approveTransaction(long transactionId){
+
+        try{
+
+            Connection conn =
+                    DBConnection.getConnection();
+            System.out.println("URL = " + conn.getMetaData().getURL());
+            System.out.println("autoCommit = " + conn.getAutoCommit());
+
+            String sql =
+                    "SELECT * FROM transactions " +
+                            "WHERE id = ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setLong(1, transactionId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+            System.out.println(
+                    "TRANSACTION ID = " + transactionId
+            );
+
+            boolean found = rs.next();
+
+            System.out.println(
+                    "FOUND = " + found
+            );
+
+
+            if(found){
+
+                String userId =
+                        rs.getString("user_id");
+
+                double amount =
+                        rs.getDouble("amount");
+
+                String type =
+                        rs.getString("type");
+
+                // ===== CỘNG/TRỪ TIỀN THẬT =====
+
+                if("DEPOSIT".equals(type)) {
+
+                    deposit(userId, amount);
+                }
+                else if("WITHDRAW".equals(type)){
+
+                    withdraw(userId, amount);
+                }
+
+                // ===== UPDATE STATUS =====
+                System.out.println("SẮP UPDATE STATUS");
+                String updateSql =
+                        "UPDATE transactions " +
+                                "SET status = 'APPROVED' " +
+                                "WHERE id = ?";
+
+                PreparedStatement updatePs =
+                        conn.prepareStatement(updateSql);
+
+                updatePs.setLong(1, transactionId);
+                int rows =
+                        updatePs.executeUpdate();
+                conn.commit();
+
+                System.out.println("ROWS UPDATED = " + rows);
+
+            }
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
     }
 }
