@@ -53,6 +53,23 @@ public class NotificationController {
         if (userNameLabel != null) userNameLabel.setText(user.getFullName() != null ? user.getFullName() : user.getUsername());
         if (balanceLabel != null) balanceLabel.setText(String.format("💰 %,.0fđ", user.getBalance() != null ? user.getBalance().doubleValue() : 0));
 
+        if (userAvatar != null && user.getAvatarBytes() != null && user.getAvatarBytes().length > 0) {
+            try {
+                userAvatar.setImage(null);
+                javafx.scene.image.Image img = new javafx.scene.image.Image(
+                        new java.io.ByteArrayInputStream(user.getAvatarBytes()));
+                userAvatar.setImage(img);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                javafx.application.Platform.runLater(() -> setUser(updatedUser));
+            }
+        };
+
         // Phân quyền hiển thị nút thêm sản phẩm
         if (addProductBtn != null) {
             if (user.getRole() == com.uet.common.model.user.Role.SELLER) {

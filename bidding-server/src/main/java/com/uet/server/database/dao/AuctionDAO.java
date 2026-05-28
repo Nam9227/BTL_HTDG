@@ -452,13 +452,46 @@ public class AuctionDAO {
     }
 
     public int startEligibleAuctions() {
+        // Lấy danh sách các phiên chuẩn bị được chuyển sang RUNNING để gửi thông báo
+        String selectSql = "SELECT a.id, i.name, i.seller_id " +
+                           "FROM auctions a JOIN items i ON a.product_id = i.id " +
+                           "WHERE a.status = 'ACTIVE' AND a.start_time <= NOW()";
+                           
         String sql = "UPDATE auctions SET status = 'RUNNING' " +
                 "WHERE status = 'ACTIVE' AND start_time <= NOW()";
+                
         try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+             java.sql.PreparedStatement psSelect = conn.prepareStatement(selectSql);
              java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            // 1. Đọc danh sách trước khi update
+            List<String[]> startingAuctions = new ArrayList<>();
+            try (ResultSet rs = psSelect.executeQuery()) {
+                while (rs.next()) {
+                    startingAuctions.add(new String[]{
+                        rs.getString("seller_id"),
+                        rs.getString("name")
+                    });
+                }
+            }
+
+            // 2. Cập nhật trạng thái
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 logger.info("[Scheduler] Đã kích hoạt {} phiên đấu giá sang trạng thái RUNNING!", rows);
+                
+                // 3. Gửi thông báo
+                com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+                for (String[] auctionInfo : startingAuctions) {
+                    String sellerId = auctionInfo[0];
+                    String productName = auctionInfo[1];
+                    
+                    // Xóa thông báo đã duyệt
+                    userDAO.deleteNotificationByKeyword(sellerId, "Sản phẩm '" + productName + "' đã được phê duyệt");
+                    
+                    // Thêm thông báo đang đấu giá
+                    userDAO.createNotification(sellerId, "Đang đấu giá", "Sản phẩm '" + productName + "' đã bắt đầu phiên đấu giá.");
+                }
             }
             return rows;
         } catch (Exception e) {
@@ -471,7 +504,7 @@ public class AuctionDAO {
     public int finishExpiredAuctions() {
         // 1. Dùng INNER JOIN để bốc luôn mã người bán (i.sender_id hoặc i.seller_id) từ bảng items lên
         // 💡 Chú ý: Ở ảnh HeidiSQL trước Nam chụp, cột người bán trong bảng items tên là 'seller_id' nhé!
-        String selectSql = "SELECT a.id AS auction_id, a.winner_id, a.current_price, i.seller_id " +
+        String selectSql = "SELECT a.id AS auction_id, a.winner_id, a.current_price, i.seller_id, i.name " +
                 "FROM auctions a " +
                 "INNER JOIN items i ON a.product_id = i.id " +
                 "WHERE a.status = 'RUNNING' AND a.end_time <= NOW()";
@@ -480,6 +513,7 @@ public class AuctionDAO {
 
         // Khởi tạo WalletDAO để xử lý luồng tiền
         com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
+        com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
         int finishedCount = 0;
 
         try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
@@ -490,6 +524,7 @@ public class AuctionDAO {
                 String auctionId = rs.getString("auction_id");
                 String winnerId = rs.getString("winner_id");
                 String sellerId = rs.getString("seller_id"); // Mã của chủ sản phẩm (Người bán)
+                String productName = rs.getString("name");
                 double finalPrice = rs.getDouble("current_price");
 
                 // Cập nhật trạng thái phiên này thành FINISHED
@@ -499,6 +534,12 @@ public class AuctionDAO {
                 }
 
                 finishedCount++;
+                
+                // Xóa thông báo "đang đấu giá" của người bán
+                userDAO.deleteNotificationByKeyword(sellerId, "Sản phẩm '" + productName + "' đã bắt đầu phiên đấu giá");
+
+                // Gửi thông báo kết thúc cho người bán
+                userDAO.createNotification(sellerId, "Đấu giá kết thúc", "Sản phẩm '" + productName + "' đã kết thúc đấu giá. Đang chờ xử lý giao dịch.");
 
                 // Có người thắng cuộc -> Tiến hành luân chuyển dòng tiền
                 if (winnerId != null && !winnerId.trim().isEmpty()) {
@@ -512,6 +553,20 @@ public class AuctionDAO {
                     if (isDeducted && isCredited) {
                         logger.info("[Scheduler] Giao dịch thành công phiên {}:\n   -> Đã trừ {}đ từ người mua ({})\n   -> Đã cộng {}đ vào người bán ({})",
                                 auctionId, finalPrice, winnerId, finalPrice, sellerId);
+                                
+                        // Gửi thông báo thành công
+                        userDAO.createNotification(winnerId, "Trúng đấu giá", "Chúc mừng! Bạn đã trúng đấu giá sản phẩm '" + productName + "' với mức giá " + String.format("%,.0f", finalPrice) + "đ.");
+                        userDAO.createNotification(sellerId, "Giao dịch thành công", "Sản phẩm '" + productName + "' đã được bán với giá " + String.format("%,.0f", finalPrice) + "đ.");
+                        
+                        // Cập nhật lại số dư trên UI cho Client
+                        com.uet.common.model.user.User updatedWinner = userDAO.findUserByUserId(winnerId);
+                        if (updatedWinner != null) {
+                            com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedWinner));
+                        }
+                        com.uet.common.model.user.User updatedSeller = userDAO.findUserByUserId(sellerId);
+                        if (updatedSeller != null) {
+                            com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedSeller));
+                        }
                     } else {
                         logger.error("[Scheduler] LỖI: Giao dịch dòng tiền thất bại tại phiên {}", auctionId);
                     }
@@ -526,17 +581,19 @@ public class AuctionDAO {
     }
 
     public boolean forceEndAuctionAndProcessTransaction(String auctionId) {
-        String selectSql = "SELECT a.winner_id, a.current_price, i.seller_id, a.status " +
+        String selectSql = "SELECT a.winner_id, a.current_price, i.seller_id, i.name, a.status " +
                 "FROM auctions a " +
                 "INNER JOIN items i ON a.product_id = i.id " +
                 "WHERE a.id = ?";
         
         String updateSql = "UPDATE auctions SET status = 'FINISHED' WHERE id = ?";
         com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
+        com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
         
         try (Connection conn = DBConnection.getConnection()) {
             String winnerId = null;
             String sellerId = null;
+            String productName = null;
             double finalPrice = 0;
             String status = null;
             
@@ -546,6 +603,7 @@ public class AuctionDAO {
                     if (rs.next()) {
                         winnerId = rs.getString("winner_id");
                         sellerId = rs.getString("seller_id");
+                        productName = rs.getString("name");
                         finalPrice = rs.getDouble("current_price");
                         status = rs.getString("status");
                     }
@@ -566,6 +624,12 @@ public class AuctionDAO {
                 }
             }
             
+            // Xóa thông báo "đang đấu giá" của người bán
+            userDAO.deleteNotificationByKeyword(sellerId, "Sản phẩm '" + productName + "' đã bắt đầu phiên đấu giá");
+
+            // Gửi thông báo kết thúc cho người bán
+            userDAO.createNotification(sellerId, "Đấu giá bị buộc kết thúc", "Phiên đấu giá sản phẩm '" + productName + "' đã bị Admin buộc kết thúc.");
+            
             // 2. Thực hiện luân chuyển dòng tiền
             if (winnerId != null && !winnerId.trim().isEmpty()) {
                 boolean isDeducted = walletDAO.updateBalance(winnerId, -finalPrice);
@@ -574,6 +638,20 @@ public class AuctionDAO {
                 if (isDeducted && isCredited) {
                     logger.info("[Admin Force End] Giao dịch thành công phiên {}:\n   -> Đã trừ {}đ từ người mua ({})\n   -> Đã cộng {}đ vào người bán ({})",
                             auctionId, finalPrice, winnerId, finalPrice, sellerId);
+                            
+                    // Gửi thông báo thành công
+                    userDAO.createNotification(winnerId, "Trúng đấu giá (Admin đóng)", "Phiên đấu giá bị đóng. Bạn đã trúng đấu giá sản phẩm '" + productName + "' với mức giá " + String.format("%,.0f", finalPrice) + "đ.");
+                    userDAO.createNotification(sellerId, "Giao dịch thành công", "Sản phẩm '" + productName + "' đã được bán với giá " + String.format("%,.0f", finalPrice) + "đ.");
+                    
+                    // Cập nhật lại số dư trên UI cho Client
+                    com.uet.common.model.user.User updatedWinner = userDAO.findUserByUserId(winnerId);
+                    if (updatedWinner != null) {
+                        com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedWinner));
+                    }
+                    com.uet.common.model.user.User updatedSeller = userDAO.findUserByUserId(sellerId);
+                    if (updatedSeller != null) {
+                        com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedSeller));
+                    }
                 } else {
                     logger.error("[Admin Force End] LỖI: Giao dịch dòng tiền thất bại tại phiên {}", auctionId);
                 }

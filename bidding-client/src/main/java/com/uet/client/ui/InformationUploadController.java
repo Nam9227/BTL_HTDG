@@ -58,6 +58,12 @@ public class InformationUploadController {
 
     public void setUser(User user) {
         this.currentUser = user;
+        
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                this.currentUser = updatedUser;
+            }
+        };
     }
 
     @FXML

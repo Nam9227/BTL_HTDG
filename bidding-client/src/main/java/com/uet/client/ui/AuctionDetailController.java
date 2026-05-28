@@ -107,6 +107,12 @@ public class AuctionDetailController {
             balanceLabel.setText("Số dư: " + formatMoney(user.getBalance().doubleValue()));
         }
 
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                javafx.application.Platform.runLater(() -> setData(updatedUser, this.auctionItem));
+            }
+        };
+
         productNameLabel.setText(item.getProductName());
 
         if (item.getSellerName() == null || item.getSellerName().isBlank()) {

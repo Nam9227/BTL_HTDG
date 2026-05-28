@@ -102,6 +102,12 @@ public class RegisterDAO {
                 psWallet.setString(1, userId);
                 psWallet.executeUpdate();
             }
+            
+            String notifSql = "INSERT INTO notifications (user_id, title, content, is_read, created_at) VALUES (?, 'Chào mừng', 'Chào mừng bạn đến với sàn đấu giá! Chúc bạn có những phiên giao dịch thành công.', 0, NOW())";
+            try (PreparedStatement psNotif = conn.prepareStatement(notifSql)) {
+                psNotif.setString(1, userId);
+                psNotif.executeUpdate();
+            }
 
             conn.commit();
             return "REGISTER_SUCCESS";

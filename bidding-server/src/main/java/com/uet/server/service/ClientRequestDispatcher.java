@@ -98,6 +98,11 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof GetNotificationsRequest request) {
+            handleGetNotifications(request, client);
+            return true;
+        }
+
         if ("LOGOUT".equals(obj)) {
             client.send(Response.success("Đăng xuất thành công", null));
             return false;
@@ -168,11 +173,13 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        // 🌟 ĐÃ GỘP: Phê duyệt giao dịch nạp/rút từ Admin
         if (obj instanceof ApproveTransactionRequest request) {
             try {
-                userDAO.approveTransaction(request.getTransactionId());
+                User updatedUser = userDAO.approveTransaction(request.getTransactionId());
                 client.send(Response.success("Duyệt giao dịch thành công", null));
+                if (updatedUser != null) {
+                    com.uet.server.network.ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedUser));
+                }
             } catch (Exception e) {
                 logger.error("Lỗi khi phê duyệt giao dịch ID: " + request.getTransactionId(), e);
                 client.send(Response.fail("Phê duyệt giao dịch thất bại"));
@@ -266,6 +273,25 @@ public class ClientRequestDispatcher {
         } catch (Exception e) {
             logger.error("Lỗi khi xử lý chỉnh sửa sản phẩm: ", e);
             client.send(Response.fail("Hệ thống gặp lỗi ngoài ý muốn khi chỉnh sửa sản phẩm!"));
+        }
+    }
+    
+    private void handleGetNotifications(GetNotificationsRequest request, ClientHandler client) {
+        String userId = request.getUserId();
+        logger.info("[Server] Đang xử lý lấy thông báo cho User ID: {}", userId);
+
+        try {
+            // 1. Gọi DAO cào dữ liệu từ MySQL
+            List<com.uet.common.model.notification.Notification> list = userDAO.getNotificationsByUserId(userId);
+            logger.info("[Server] Đã tìm thấy {} thông báo trong DB của User: {}", list.size(), userId);
+
+            // 2. Phản hồi kết quả về cho Client qua đường Socket
+            client.send(Response.success("Tải danh sách thông báo thành công", list));
+            logger.info("[Server] Đã bắn gói tin phản hồi thành công về Client.");
+
+        } catch (Exception e) {
+            logger.error("[Server LỖI] Sự cố tại handleGetNotifications của User: " + userId, e);
+            client.send(Response.fail("Lỗi Server: Không thể lấy danh sách thông báo hiện tại."));
         }
     }
 }

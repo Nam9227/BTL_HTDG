@@ -103,7 +103,16 @@ public class ClientSocket {
         listenerThread.start();
     }
 
+    public static Consumer<com.uet.common.model.user.User> onUserUpdated;
+
     private void notifyListeners(Object message) {
+        if (message instanceof com.uet.common.network.Response res && "BALANCE_UPDATED".equals(res.getMessage())) {
+            if (res.getData() instanceof com.uet.common.model.user.User updatedUser) {
+                if (onUserUpdated != null) {
+                    onUserUpdated.accept(updatedUser);
+                }
+            }
+        }
         for (Consumer<Object> listener : listeners) {
             try {
                 listener.accept(message);
