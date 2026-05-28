@@ -2472,6 +2472,7 @@ java.net.SocketException: An established connection was aborted by the software 
 2026-05-28 13:33:55 [Thread-6] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
 2026-05-28 13:35:16 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
 2026-05-28 13:35:16 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+<<<<<<< HEAD
 2026-05-28 14:01:32 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
 2026-05-28 14:01:32 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
 2026-05-28 15:21:07 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
@@ -2550,3 +2551,16 @@ java.net.ConnectException: Connection refused: connect
 	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
 	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
 	at java.base/java.lang.Thread.run(Thread.java:1474)
+=======
+2026-05-28 14:41:28 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 14:41:28 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 14:41:28 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 14:41:28 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 14:41:33 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 14:41:41 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 14:41:41 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 14:41:43 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 14:41:43 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 14:41:47 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 14:41:47 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+>>>>>>> a40471b1d2bf2f66733b7948bb64abb8c64cf15d
