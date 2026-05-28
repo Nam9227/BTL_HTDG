@@ -2496,3 +2496,61 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-05-28 16:04:09 [Thread-9] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-05-28 16:04:09 [Thread-9] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
 >>>>>>> Stashed changes
+2026-05-28 16:29:32 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 16:29:32 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 16:29:33 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 16:29:33 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 16:29:49 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 16:29:49 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 16:29:49 [Thread-0] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-28 16:29:49 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-05-28 16:29:49 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:29:51 [Thread-0] INFO  c.uet.server.network.ClientManager - Client joined auction: 2332381913
+2026-05-28 16:29:51 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:29:52 [pool-1-thread-1] INFO  c.uet.server.network.ClientManager - Gửi cập nhật ngay cho 1 client đang xem auction: 2332381913
+2026-05-28 16:29:53 [Thread-0] INFO  c.uet.server.network.ClientManager - Client left auction: 2332381913
+2026-05-28 16:29:53 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:30:03 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_94883993-ff92-4d1b-9052-4bebea1eb69e.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_94883993-ff92-4d1b-9052-4bebea1eb69e.png
+2026-05-28 16:30:03 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png
+2026-05-28 16:30:03 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png
+2026-05-28 16:30:03 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_13fbebc8-3ff3-4177-950d-58131da1231a.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_13fbebc8-3ff3-4177-950d-58131da1231a.png
+2026-05-28 16:30:07 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:30:11 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 16:30:11 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 16:30:17 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 16:30:17 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 16:30:17 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-28 16:30:18 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 16:30:47 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 16:30:47 [Thread-1] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-28 16:30:47 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-05-28 16:30:47 [Thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:30:50 [Thread-1] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 16:30:50 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 16:30:50 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 16:30:56 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 16:30:56 [Thread-2] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 16:30:56 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-28 16:30:57 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 16:44:04 [Thread-2] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 16:44:04 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 16:44:04 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 16:58:02 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 16:58:02 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 16:58:02 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 16:58:02 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 16:59:06 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 16:59:06 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 16:59:06 [Thread-0] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-28 16:59:06 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-05-28 16:59:06 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:59:21 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6804710579_d40c4231-727c-4b25-bb7a-f0d7393a0e04.png
+2026-05-28 16:59:23 [Thread-0] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 16:59:23 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 16:59:23 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 16:59:28 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 16:59:28 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 16:59:28 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-28 16:59:44 [Thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 16:59:44 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 16:59:44 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.

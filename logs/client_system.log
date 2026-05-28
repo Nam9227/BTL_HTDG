@@ -4626,3 +4626,45 @@ java.lang.IllegalStateException: Location is not set.
 2026-05-28 16:04:05 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
 2026-05-28 16:04:07 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
 >>>>>>> Stashed changes
+2026-05-28 16:29:49 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 16:29:49 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 16:29:49 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 16:29:49 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:29:53 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 16:29:53 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:30:03 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-05-28 16:30:03 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 4
+2026-05-28 16:30:03 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 4 items
+2026-05-28 16:30:04 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-28 16:30:07 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 16:30:07 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:30:07 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:30:11 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 16:30:11 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 16:30:17 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 16:30:17 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 16:30:47 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 16:30:47 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 16:30:47 [Thread-15] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:30:47 [Thread-15] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:30:50 [Thread-15] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 16:30:50 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 16:30:56 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 16:30:56 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 16:59:06 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 16:59:06 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 16:59:06 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 16:59:06 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:59:12 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-28 16:59:21 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 16:59:21 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 16:59:23 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 16:59:23 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 16:59:28 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 16:59:28 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 16:59:38 [Thread-8] ERROR com.uet.client.network.ClientSocket - Lỗi xảy ra khi truyền tin tới listener: 
+java.lang.NullPointerException: Cannot invoke "java.util.List.size()" because "list" is null
+	at com.uet.client.ui.admin.AdminWalletController.lambda$0(AdminWalletController.java:105)
+	at com.uet.client.network.ClientSocket.notifyListeners(ClientSocket.java:109)
+	at com.uet.client.network.ClientSocket.lambda$0(ClientSocket.java:80)
+	at java.base/java.lang.Thread.run(Thread.java:1474)

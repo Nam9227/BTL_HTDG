@@ -68,24 +68,34 @@ public class NotificationController {
     }
 
     private void loadNotifications() {
-        if (currentUser == null) return;
+        if (currentUser == null) {
+            System.out.println("[LỖI] currentUser bị null, không thể lấy thông báo!");
+            return;
+        }
+
+        // 1. Tạo gói tin yêu cầu cầm theo ID của Nam lên Server
         GetNotificationsRequest req = new GetNotificationsRequest(currentUser.getId());
 
-        Consumer<Object> listener = new Consumer<>() {
+        // 2. Tạo vị quan sát (Listener) để hứng phản hồi từ Server về
+        Consumer<Object> responseListener = new Consumer<>() {
             @Override
             public void accept(Object response) {
+                // Kiểm tra xem có đúng là gói tin Response thành công chứa danh sách không
                 if (response instanceof Response res && res.isSuccess()) {
                     if (res.getData() instanceof List<?> list) {
+
+                        // 🌟 BẮT BUỘC: Chạy trong Platform.runLater để vẽ giao diện JavaFX không bị treo luồng
                         Platform.runLater(() -> {
-                            notificationContainer.getChildren().clear();
+                            notificationContainer.getChildren().clear(); // Dọn sạch các thẻ cũ hoặc chữ "Đang tải..."
 
                             if (list.isEmpty()) {
-                                Label emptyLabel = new Label("Chưa có thông báo nào trong hộp thư.");
-                                emptyLabel.setStyle("-fx-text-fill: #6c757d; -fx-font-size: 14px;");
+                                Label emptyLabel = new Label("📭 Hộp thư của bạn đang trống trơn.");
+                                emptyLabel.setStyle("-fx-text-fill: #6c757d; -fx-font-size: 14px; -fx-padding: 20;");
                                 notificationContainer.getChildren().add(emptyLabel);
                                 return;
                             }
 
+                            // Vòng lặp đúc các thẻ dọc từ danh sách Server trả về
                             for (Object item : list) {
                                 if (item instanceof Notification noti) {
                                     VBox card = createNotificationCard(noti);
@@ -94,13 +104,28 @@ public class NotificationController {
                             }
                         });
                     }
+
+                    // Đọc xong dữ liệu thì hủy bỏ Listener này để giải phóng bộ nhớ, tránh trùng lặp tin nhắn
                     ClientSocket.getInstance().removeMessageListener(this);
                 }
             }
         };
 
-        ClientSocket.getInstance().addMessageListener(listener);
-        try { ClientSocket.getInstance().send(req); } catch (Exception e) { e.printStackTrace(); }
+        try {
+            // 3. ĐĂNG KÝ VỚI HỆ THỐNG: Báo cho Socket biết để chuẩn bị hứng tai nghe gói tin trả về
+            ClientSocket.getInstance().addMessageListener(responseListener);
+
+            // 4. BẮN TIN LÊN SERVER: Ra lệnh cho Socket gửi gói tin đi ngay lập tức
+            ClientSocket.getInstance().send(req);
+
+            System.out.println("[Client] Đã bắn GetNotificationsRequest lên Server cho User ID: " + currentUser.getId());
+
+        } catch (Exception e) {
+            System.out.println("[LỖI] Không thể gửi yêu cầu lấy thông báo lên Server!");
+            e.printStackTrace();
+            // Nếu gửi lỗi thì dọn dẹp luôn tai nghe cho đỡ rác hệ thống
+            ClientSocket.getInstance().removeMessageListener(responseListener);
+        }
     }
 
     private VBox createNotificationCard(Notification noti) {
