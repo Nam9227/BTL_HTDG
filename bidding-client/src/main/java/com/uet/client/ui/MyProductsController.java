@@ -548,6 +548,30 @@ public class MyProductsController {
     }
 
     @FXML
+    void handleOpenNotifications(ActionEvent event) {
+        if (event == null)
+            return;
+        try {
+            cleanupListener();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/notifications.fxml"));
+            Parent root = loader.load();
+
+            NotificationController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            Stage stage = (Stage) productContainer.getScene().getWindow();
+            if (com.uet.client.util.TransitionUtils.class != null) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            }
+            stage.getScene().setRoot(root);
+            stage.setTitle("Hộp Thư Thông Báo - Sàn Đấu Giá UET");
+        } catch (Exception e) {
+            logger.error("Không mở được giao diện thông báo: ", e);
+            showError("Lỗi", "Không mở được giao diện thông báo!");
+        }
+    }
+
+    @FXML
     void handleLogout(ActionEvent event) {
         if (event == null)
             return;

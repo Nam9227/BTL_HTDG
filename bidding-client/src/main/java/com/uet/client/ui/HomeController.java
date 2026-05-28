@@ -505,10 +505,10 @@ public class HomeController {
         renderAuctions(filtered);
     }
     @FXML
-    private void handleOpenNotification() {
+    private void handleOpenNotifications() {
         try {
             // 1. Nạp file FXML thông báo mà anh em mình vừa tạo
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/notification_view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/notifications.fxml"));
             Parent root = loader.load();
 
             // 2. Lấy controller của trang thông báo và truyền thông tin user hiện tại sang để cào dữ liệu

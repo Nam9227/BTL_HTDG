@@ -27,6 +27,15 @@
          <children>
             <VBox fx:id="sideContent" prefWidth="240.0" spacing="18.0" styleClass="sidebar-card">
                <children>
+                  <HBox alignment="TOP_LEFT" prefWidth="210.0">
+                     <children>
+                        <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#handleCloseSidebar" styleClass="close-button" text="✕" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="-10.0" left="-5.0" />
+                     </VBox.margin>
+                  </HBox>
+
                   <VBox alignment="CENTER" spacing="8.0">
                      <children>
                         <ImageView fx:id="userAvatar" fitHeight="85.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" styleClass="user-avatar-view">
@@ -44,16 +53,16 @@
                   <VBox spacing="8.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleBack" styleClass="menu-button" text="🏠   Trang Chủ Đấu Giá" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button" text="👤   Thông tin tài khoản" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button" text="➕   Thêm Sản Phẩm" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button" text="📦   Sản Phẩm Của Tôi" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenProfile" styleClass="menu-button" text="👤   Thông tin tài khoản" />
+                        <Button fx:id="addProductBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenAddProduct" styleClass="menu-button" text="➕   Thêm Sản Phẩm" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenMyProducts" styleClass="menu-button" text="📦   Sản Phẩm Của Tôi" />
                         <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button-active" text="🔔   Thông Báo Hệ Thống" />
                      </children>
                   </VBox>
 
                   <Region VBox.vgrow="ALWAYS" />
 
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="logout-button" text="🚪 Đăng Xuất" textFill="WHITE">
+                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleLogout" styleClass="logout-button" text="🚪 Đăng Xuất" textFill="WHITE">
                      <padding>
                         <Insets bottom="10.0" top="10.0" />
                      </padding>
@@ -70,9 +79,19 @@
    <center>
       <VBox spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" styleClass="header-box">
+            <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="header-box">
                <children>
                   <Label styleClass="header-title" text="🔔 Hộp thư thông báo của bạn" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id="openBtn" mnemonicParsing="false" onAction="#handleOpenSidebar" styleClass="hamburger-button">
+                      <graphic>
+                          <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                  <Image url="@../photo/menu.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                  </Button>
                </children>
             </HBox>
 
