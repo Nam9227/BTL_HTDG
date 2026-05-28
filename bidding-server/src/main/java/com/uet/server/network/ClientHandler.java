@@ -1,22 +1,21 @@
 package com.uet.server.network;
 
-import com.uet.common.network.LoginRequest;
-import com.uet.common.network.RegisterRequest;
-import com.uet.server.database.dao.RegisterDAO;
-import com.uet.server.database.dao.UserDAO;
+import com.uet.server.service.ClientRequestDispatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 
     private final Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
-    private final UserDAO userDAO = new UserDAO();
-    private final RegisterDAO registerDAO = new RegisterDAO();
+    private final ClientRequestDispatcher dispatcher = new ClientRequestDispatcher();
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -26,7 +25,11 @@ public class ClientHandler implements Runnable {
         try {
             out.writeObject(message);
             out.flush();
+            out.reset();
+        } catch (java.net.SocketException e) {
+            logger.warn("Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).");
         } catch (Exception e) {
+            logger.error("Lỗi xảy ra khi gửi dữ liệu cho Client: ", e);
             ClientManager.removeClient(this);
         }
     }
@@ -34,50 +37,62 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.flush();
-            in = new ObjectInputStream(socket.getInputStream());
-
+            initStreams();
             ClientManager.addClient(this);
 
-            while (true) {
-                Object obj = in.readObject();
-
-                if (obj instanceof LoginRequest request) {
-                    System.out.println("Login attempt: " + request.getUsername());
-
-                    boolean ok = userDAO.checkLogin(
-                            request.getUsername(),
-                            request.getPassword()
-                    );
-
-                    send(ok ? "LOGIN_SUCCESS" : "LOGIN_FAIL");
-
-                } else if (obj instanceof RegisterRequest request) {
-                    String result = registerDAO.register(request);
-                    send(result);
-
-                } else if ("LOGOUT".equals(obj)) {
-                    send("LOGOUT_SUCCESS");
-                    break;
-
-                } else {
-                    send("UNKNOWN_REQUEST");
-                }
-            }
+            listenClientMessages();
 
         } catch (Exception e) {
-            System.out.println("Client disconnected because:");
-            e.printStackTrace();
+            logger.info("Client ngắt kết nối hoặc có lỗi xảy ra: {}", e.getMessage());
         } finally {
-            ClientManager.removeClient(this);
+            cleanup();
+        }
+    }
 
-            try {
-                if (socket != null && !socket.isClosed()) {
-                    socket.close();
-                }
-            } catch (Exception ignored) {
+    private void initStreams() throws Exception {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        out.flush();
+        in = new ObjectInputStream(socket.getInputStream());
+    }
+
+    private void listenClientMessages() throws Exception {
+        while (true) {
+            Object message = in.readObject();
+
+            boolean keepRunning = dispatcher.dispatch(message, this);
+
+            if (!keepRunning) {
+                break;
             }
+        }
+    }
+
+    private void cleanup() {
+        try {
+            // 1. Chủ động đóng luồng ghi dữ liệu trước
+            if (out != null) {
+                try { out.close(); } catch (Exception ignored) {}
+            }
+
+            // 2. Chủ động đóng luồng đọc (Ép in.readObject() văng Exception để thoát vòng lặp)
+            if (in != null) {
+                try { in.close(); } catch (Exception ignored) {}
+            }
+
+            // 3. Đóng Socket vật lý
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+
+            logger.info("[SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.");
+
+        } catch (Exception ignored) {
+            // Đúng bài Clean Code, những lỗi đóng tài nguyên này có thể bỏ qua
+        } finally {
+            // 🌟 BẮT BUỘC ĐỂ Ở ĐÂY: Dù đống đóng Socket ở trên có lỗi hay không,
+            // thì Client này VẪN PHẢI được xóa khỏi danh sách quản lý để tránh rò rỉ RAM!
+            ClientManager.removeClient(this);
+            logger.info("[SERVER] Đã Xóa Client khỏi ClientManager thành công.");
         }
     }
 }

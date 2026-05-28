@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -9,100 +10,105 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.FlowPane?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" styleClass="root-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.HomeController">
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.HomeController">
+    <stylesheets>
+        <URL value="@../style/home.css" />
+    </stylesheets>
 
     <right>
-        <HBox fx:id="sidebarContainer">
+        <HBox fx:id="sidebarContainer" style="-fx-padding: 15 15 15 0;">
             <children>
-                <VBox>
+                <VBox fx:id="sideContent" prefWidth="240.0" spacing="18.0" styleClass="sidebar-card">
                     <children>
-                        <Button fx:id="openBtn" mnemonicParsing="false" onAction="#handleOpenSidebar" prefHeight="43.0" prefWidth="46.0" style="-fx-text-fill: white; -fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="41.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../photo/menu.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <padding>
-                        <Insets top="15.0" />
-                     </padding></Button>
-                    </children>
-                </VBox>
-
-                <VBox fx:id="sideContent" prefWidth="200.0" spacing="20.0" style="-fx-background-color: #1a3c5a;">
-                    <children>
-                  <HBox prefHeight="12.0" prefWidth="169.0">
-                     <children>
-                        <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#handleCloseSidebar" prefHeight="35.0" prefWidth="37.0" style="-fx-background-color: #1a3c5a;" text="X" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets top="-10.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                     <padding>
-                        <Insets left="-15.0" top="-17.0" />
-                     </padding>
-                  </HBox>
-                        <VBox alignment="CENTER" spacing="10.0">
+                        <HBox alignment="TOP_LEFT" prefWidth="210.0">
                             <children>
-                                <ImageView fx:id="userAvatar" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../photo/avatar.png" />
-                           </image></ImageView>
-                                <Label fx:id="userNameLabel" style="-fx-font-weight: bold;" text="Nam UET" textFill="WHITE" />
-                                <Label fx:id="balanceLabel" text="Số dư: 5,000,000đ" textFill="#f1c40f" />
+                                <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#handleCloseSidebar" styleClass="close-button" text="✕" />
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="-10.0" left="-5.0" />
+                            </VBox.margin>
+                        </HBox>
+
+                        <VBox alignment="CENTER" spacing="8.0">
+                            <children>
+                                <ImageView fx:id="userAvatar" fitHeight="85.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true" styleClass="user-avatar-view">
+                                    <image>
+                                        <Image url="@../photo/avatar.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="userNameLabel" styleClass="user-name-text" text="Nam UET" textFill="WHITE" />
+                                <Label fx:id="balanceLabel" styleClass="balance-badge" text="💰 5,000,000đ" textFill="#f1c40f" />
                             </children>
                         </VBox>
-                        <Separator opacity="0.3" prefWidth="200.0" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Thông tin tài khoản" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Sản Phẩm Của Tôi" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" text="Lịch Sử Giao Dịch" />
+
+                        <Separator opacity="0.1" prefWidth="200.0" />
+
+                        <VBox spacing="8.0" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button-active" text="🏠   Trang Chủ Đấu Giá" />
+                                <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenProfile" styleClass="menu-button" text="👤   Thông tin tài khoản" />
+                                <Button fx:id="addProductBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenAddProduct" styleClass="menu-button" text="➕   Thêm Sản Phẩm" />
+                                <Button fx:id="myProductsBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenMyProducts" styleClass="menu-button" text="📦   Sản Phẩm Của Tôi" />
+                                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button" text="📜   Lịch Sử Giao Dịch" />
+                            </children>
+                        </VBox>
+
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Đăng Xuất" textFill="WHITE" />
+
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleLogout" styleClass="logout-button" text="🚪 Đăng Xuất" textFill="WHITE">
+                            <padding>
+                                <Insets bottom="10.0" top="10.0" />
+                            </padding>
+                        </Button>
                     </children>
                     <padding>
-                        <Insets bottom="20.0" left="15.0" right="15.0" top="30.0" />
+                        <Insets bottom="20.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
                 </VBox>
             </children>
         </HBox>
     </right>
+
     <center>
-        <VBox spacing="15.0" BorderPane.alignment="CENTER">
+        <VBox spacing="20.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox alignment="CENTER_LEFT" spacing="15.0">
+                <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="header-box">
                     <children>
-                        <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Sản phẩm đang đấu giá" />
+                        <Label styleClass="header-title" text="🏛️ Sản phẩm đang đấu giá" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <TextField fx:id="searchField" prefWidth="250.0" promptText="Tìm kiếm sản phẩm..." HBox.hgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" text="Tìm" />
+
+                        <HBox alignment="CENTER" styleClass="search-container">
+                            <children>
+                                <TextField fx:id="searchField" prefWidth="220.0" promptText="Tìm kiếm sản phẩm nhanh..." styleClass="search-field" />
+                                <Button mnemonicParsing="false" onAction="#handleSearch" styleClass="search-button" text="Tìm" />
+                            </children>
+                        </HBox>
+
+                        <Region prefWidth="15.0" />
+
+                        <Button fx:id="openBtn" mnemonicParsing="false" onAction="#handleOpenSidebar" styleClass="hamburger-button">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../photo/menu.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
                     </children>
                 </HBox>
 
-                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background-visible: false; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
                     <content>
-                        <FlowPane fx:id="productContainer" hgap="20.0" prefHeight="510.0" prefWidth="658.0" prefWrapLength="650.0" vgap="20.0">
+                        <FlowPane fx:id="productContainer" hgap="22.0" style="-fx-background-color: transparent;" vgap="22.0">
                             <padding>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                <Insets bottom="10.0" left="5.0" right="5.0" top="5.0" />
                             </padding>
-                            <VBox prefHeight="220.0" prefWidth="180.0" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 10; -fx-background-radius: 10;">
-                                <children>
-                                    <ImageView fitHeight="100.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label style="-fx-font-weight: bold;" text="iPhone 15 Pro Max" />
-                                    <Label text="Giá hiện tại: 25,000,000đ" textFill="#27ae60" />
-                                    <Label text="Còn lại: 00:45:12" textFill="#e67e22" />
-                                    <Button maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: #f1c40f;" text="Đặt Giá" />
-                                </children>
-                                <padding>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                </padding>
-                            </VBox>
                         </FlowPane>
                     </content>
                 </ScrollPane>

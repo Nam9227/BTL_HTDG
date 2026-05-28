@@ -1,0 +1,41 @@
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #f1f5f9;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+}
+
+.dialog-pane .content.label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .button {
+    -fx-background-radius: 6;
+    -fx-padding: 7 14;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button:hover {
+    -fx-opacity: 0.85;
+}
+
+.bidder-button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.seller-button {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+}

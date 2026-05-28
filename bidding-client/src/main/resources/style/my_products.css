@@ -1,0 +1,196 @@
+/* Tổng thể nền ứng dụng */
+.root-container {
+    -fx-background-color: #f4f6f9;
+}
+
+/* SIDEBAR BÊN PHẢI */
+.sidebar-card {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 4);
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.user-avatar-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
+}
+
+.user-name-text {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.balance-badge {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-color: rgba(241, 196, 15, 0.15);
+    -fx-background-radius: 20;
+    -fx-padding: 4 12 4 12;
+}
+
+/* Nút menu dạng phẳng trên Sidebar */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cbd5e1;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 15 10 15;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+}
+.menu-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 8;
+}
+
+.menu-button-active {
+    -fx-background-color: rgba(52, 152, 219, 0.2);
+    -fx-text-fill: #3498db;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 15 10 15;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+.logout-button {
+    -fx-background-color: #e74c3c;
+    -fx-background-radius: 8;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.logout-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* KHU VỰC TRUNG TÂM & HEADER */
+.header-box {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 15 20 15 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 8, 0, 0, 2);
+}
+
+.header-title {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e293b;
+}
+
+.hamburger-button {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-padding: 6 8 6 8;
+}
+.hamburger-button:hover {
+    -fx-background-color: #e2e8f0;
+}
+
+/* THANH CHUYỂN TAB TỰ CHẾ */
+.tab-navbar {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 10 15 10 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 6, 0, 0, 2);
+}
+
+.custom-tab-button-active {
+    -fx-background-color: #3498db;
+    -fx-background-radius: 6;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+
+.custom-tab-button-normal {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-text-fill: #64748b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+.custom-tab-button-normal:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+/* THẺ CARD SẢN PHẨM */
+.product-card-node {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.06), 8, 0, 0, 2);
+}
+
+.product-image-container {
+    -fx-background-radius: 8;
+}
+
+.product-title-label {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1e293b;
+}
+
+.product-price-label {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: #e74c3c;
+}
+
+.action-button-edit {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+.action-button-edit:hover {
+    -fx-background-color: #2980b9;
+}
+
+.action-button-delete {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+.action-button-delete:hover {
+    -fx-background-color: #c0392b;
+}
+
+.action-button-view {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+.action-button-view:hover {
+    -fx-background-color: #27ae60;
+}

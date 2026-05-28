@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Separator?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1180.0" styleClass="root-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.AuctionDetailController">
+
+    <stylesheets>
+        <URL value="@../style/auction_detail_style.css" />
+    </stylesheets>
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="18" styleClass="top-navbar">
+            <children>
+                <Button onAction="#handleBack" styleClass="back-button" text="← Quay lại" />
+                <Label styleClass="page-title" text="Chi tiết đấu giá" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="userNameLabel" style="-fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 15px;" text="Nam UET" />
+                <Label fx:id="balanceLabel" style="-fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 15px; -fx-text-fill: #10b981;" text="Số dư: 5,000,000đ" />
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="24" style="-fx-padding: 24 35 24 35;" BorderPane.alignment="CENTER">
+            <children>
+
+                <VBox prefWidth="320.0" spacing="16" styleClass="detail-card">
+                    <children>
+                        <StackPane prefHeight="210" styleClass="image-viewport">
+                            <children>
+                                <ImageView fx:id="productImage" fitHeight="190" fitWidth="280" preserveRatio="true" />
+                            </children>
+                        </StackPane>
+                        <Label fx:id="productNameLabel" styleClass="product-title" text="iPhone 15 Pro Max" wrapText="true" />
+                        <Label fx:id="sellerLabel" styleClass="sub-info-text" text="Người bán: admin1" />
+
+                        <Separator opacity="0.5" />
+
+                        <Label styleClass="card-section-title" text="Mô tả sản phẩm" />
+                        <TextArea fx:id="descriptionArea" editable="false" styleClass="custom-textarea" wrapText="true" VBox.vgrow="ALWAYS" />
+                    </children>
+                </VBox>
+
+                <VBox prefWidth="290.0" spacing="16">
+                    <children>
+                        <VBox spacing="10" styleClass="detail-card">
+                            <children>
+                                <Label styleClass="card-section-title" text="Thông tin phiên đấu giá" />
+                                <Separator opacity="0.3" />
+
+                                <Label styleClass="price-label-title" text="Giá khởi điểm" />
+                                <Label fx:id="startPriceLabel" styleClass="start-price-value" text="15,000,000đ" />
+
+                                <Label styleClass="price-label-title" text="Giá hiện tại" />
+                                <Label fx:id="currentPriceLabel" styleClass="current-price-value" text="25,000,000đ" />
+
+                                <Label styleClass="price-label-title" text="Người dẫn đầu" />
+                                <Label fx:id="leaderLabel" style="-fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="Nam UET" />
+
+                                <Label styleClass="price-label-title" text="Kết thúc sau" />
+                                <Label fx:id="countdownLabel" styleClass="countdown-value" text="00:45:12" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="12" styleClass="detail-card">
+                            <children>
+                                <Label styleClass="card-section-title" text="Đặt giá mới" />
+                                <Separator opacity="0.3" />
+
+                                <TextField fx:id="bidAmountField" promptText="Nhập giá muốn đặt..." styleClass="custom-textfield" />
+                                <Button maxWidth="Infinity" onAction="#handlePlaceBid" styleClass="bid-submit-button" text="🔨 Đặt giá" />
+                                <Label fx:id="messageLabel" style="-fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-text-fill: #ef4444;" text="" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <VBox spacing="16" HBox.hgrow="ALWAYS">
+                    <children>
+                        <VBox spacing="12" styleClass="detail-card">
+                            <children>
+                                <Label styleClass="card-section-title" text="📈 Biểu đồ giá theo thời gian" />
+                                <LineChart fx:id="priceChart" animated="false" createSymbols="true" legendVisible="false" prefHeight="250">
+                                    <xAxis>
+                                        <CategoryAxis label="Thời gian" tickLabelRotation="0" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis autoRanging="true" forceZeroInRange="false" label="Giá" />
+                                    </yAxis>
+                                </LineChart>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="12" styleClass="detail-card" VBox.vgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="card-section-title" text="📜 Lịch sử đặt giá gần đây" />
+                                <TableView fx:id="bidHistoryTable" prefHeight="210" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="bidderColumn" prefWidth="180" text="Người đặt" />
+                                        <TableColumn fx:id="amountColumn" prefWidth="170" text="Giá đặt" />
+                                        <TableColumn fx:id="timeColumn" prefWidth="260" text="Thời gian" />
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+            </children>
+        </HBox>
+    </center>
+</BorderPane>

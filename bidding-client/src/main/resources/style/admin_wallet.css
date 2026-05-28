@@ -1,0 +1,35 @@
+.root{
+    -fx-background-color:  #2f3336;
+}
+#searchButton{
+    -fx-background-color:  #4f9db2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+#approveButton{
+    -fx-background-color:  #2e7d32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+#declineButton{
+    -fx-background-color:  #b23b3b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+#adminPanel{
+    -fx-background-color: #24282b;
+    -fx-padding: 25;
+}
+#adminLabel{
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+#logOutButton{
+    -fx-background-color:  #b23b3b;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.white-text{
+    -fx-text-fill: white;
+}

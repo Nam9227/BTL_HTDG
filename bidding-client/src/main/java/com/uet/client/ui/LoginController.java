@@ -1,7 +1,11 @@
 package com.uet.client.ui;
 
+import com.uet.common.model.user.User;
 import com.uet.common.network.LoginRequest;
 import com.uet.client.network.ClientSocket;
+import com.uet.common.network.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -15,10 +19,12 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Node;
+import java.util.concurrent.CompletableFuture;
 
 
 
 public class LoginController {
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @FXML
     private TextField userField;
@@ -32,8 +38,8 @@ public class LoginController {
     @FXML
     private ImageView eyeIcon; // Cần @FXML để JavaFX kết nối với ImageView trong Button
 
-    private final Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openeye.png"));
-    private final Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeeye.png"));
+    private final Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
+    private final Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
     private boolean isPasswordShown = false;
 
     @FXML
@@ -57,39 +63,57 @@ public class LoginController {
 
             // 3. Gửi qua Socket (Dùng Singleton của Nam)
             ClientSocket network = ClientSocket.getInstance();
-            network.connect(); // Nhớ check port 27915 trong file này nhé
+            network.connect();
+
+            CompletableFuture<Object> loginFuture = new CompletableFuture<>();
+
+            java.util.function.Consumer<Object> loginListener = message -> {
+                if (message instanceof Response) {
+                    loginFuture.complete(message);
+                }
+            };
+
+            network.addMessageListener(loginListener);
             network.send(request);
+            Object responseObj = loginFuture.get();
+            network.removeMessageListener(loginListener);
 
-            // 4. Đợi phản hồi từ Server
-            Object response = network.receive();
+            if (responseObj instanceof Response response && response.isSuccess()) {
+                User loginUser = (User) response.getData();
 
-            if ("LOGIN_SUCCESS".equals(response)) {
-                System.out.println("Đăng nhập OK!");
-                switchScene("/view/home_view.fxml", "Trang chủ");
+                logger.info("Đăng nhập OK! User: {}", loginUser.getUsername());
+                if (loginUser.getRole() != null && "ADMIN".equalsIgnoreCase(loginUser.getRole().name())) {
+                    switchScene("/view/admin/admin_dashboard.fxml", "Trang Admin", loginUser);
+                } else {
+                    switchScene("/view/home_view.fxml", "Trang chủ", loginUser);
+                }
+            } else if (responseObj instanceof Response response) {
+                showError("Lỗi", response.getMessage());
             } else {
-                showError("Lỗi","Sai tài khoản hoặc mật khẩu!");
+                showError("Lỗi", "Phản hồi từ server không hợp lệ!");
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Lỗi kết nối Server: ");
+            logger.error("Lỗi khi đăng nhập: ", e);
+            showError("Lỗi kết nối", "Không thể kết nối Server!");
         }
     }
 
     @FXML
-    private void handleTogglePassword(ActionEvent event) {
-        if (!isPasswordShown) {
-            // Hiện mật khẩu: Copy từ Password sang TextField
+    void handleTogglePassword(ActionEvent event) {
+        if (passField.isVisible()) {
+            // Hiện mật khẩu dạng thường
             passTextField.setText(passField.getText());
-            passTextField.setVisible(true);
             passField.setVisible(false);
+            passTextField.setVisible(true);
+            // Đổi ảnh con mắt mở ra (Nam nhớ kiểm tra đường dẫn ảnh của mình nha)
             eyeIcon.setImage(imageOpen);
             isPasswordShown = true;
         } else {
-            // Ẩn mật khẩu: Copy từ TextField về PasswordField
+            // Ẩn mật khẩu vào dấu chấm
             passField.setText(passTextField.getText());
-            passField.setVisible(true);
             passTextField.setVisible(false);
+            passField.setVisible(true);
             eyeIcon.setImage(imageClose);
             isPasswordShown = false;
         }
@@ -108,17 +132,51 @@ public class LoginController {
     private void nextregiset(ActionEvent event) {
         switchScene("/view/register_view.fxml", "Trang Đăng Ký");
     }
+    private void switchScene(String fxmlPath, String title, User user) {
+        try {
+            Stage stage = (Stage) userField.getScene().getWindow();
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
+            Object controller = loader.getController();
+            if (controller instanceof HomeController homeController) {
+                homeController.setUser(user);
+            }
+
+            // Tạo scene mới và đập thẳng vào Stage
+            Scene scene = new Scene(root);
+            stage.setTitle(title);
+            stage.setScene(scene);
+
+            // BẬT MAXIMIZED LUÔN, KHÔNG DÙNG MẸO CO GIÃN GÂY KHỰNG
+            stage.setMaximized(true);
+            stage.setResizable(true);
+            stage.show();
+
+        } catch (Exception e) {
+            logger.error("Không tải được giao diện: " + fxmlPath, e);
+            showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
+        }
+    }
     private void switchScene(String fxmlPath, String title) {
         try {
             Stage stage = (Stage) userField.getScene().getWindow();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource(fxmlPath)));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            
+            Scene scene = new Scene(root);
             stage.setTitle(title);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không tải được giao diện: " + fxmlPath, e);
             showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
         }
     }

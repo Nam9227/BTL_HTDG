@@ -1,0 +1,47 @@
+.root{
+    -fx-background-color:  linear-gradient(to bottom right, #232526, #414345);
+}
+#pageName {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-padding: 10;
+}
+#searchField{
+    -fx-background-color: #3a4048;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #9ca3af;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #4b5563;
+}
+.combo-box{
+    -fx-background-color: #1f2937;
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-border-radius: 8;
+    -fx-font-size: 12;
+}
+.combo-box .list-cell {
+    -fx-text-fill: #e5e7eb !important; /* Màu xám trắng rất sáng, dễ nhìn */
+}
+
+/* Đảm bảo Prompt Text khi chưa chọn gì cũng sáng lên */
+.combo-box:empty .list-cell,
+.combo-box .text-input {
+    -fx-text-fill: #9ca3af !important; /* Màu xám khói nhẹ nhàng cho prompt */
+}
+.scroll-pane{
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+.product-card{
+    -fx-background-color: #252a31;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #3f4650;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 15,0,0,4);
+}
