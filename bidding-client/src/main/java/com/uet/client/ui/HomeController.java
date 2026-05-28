@@ -504,7 +504,31 @@ public class HomeController {
         }
         renderAuctions(filtered);
     }
+    @FXML
+    private void handleOpenNotification() {
+        try {
+            // 1. Nạp file FXML thông báo mà anh em mình vừa tạo
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/notification_view.fxml"));
+            Parent root = loader.load();
 
+            // 2. Lấy controller của trang thông báo và truyền thông tin user hiện tại sang để cào dữ liệu
+            NotificationController controller = loader.getController();
+            controller.setUser(currentUser); // currentUser là biến lưu Session người dùng ở HomeController của Nam
+
+            // 3. Áp dụng hiệu ứng FadeIn mượt mà (nếu có class util hỗ trợ)
+            if (com.uet.client.util.TransitionUtils.class != null) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            }
+
+            // 4. Thay ruột màn hình chính sang trang thông báo không chớp nháy
+            Stage stage = (Stage) productContainer.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Hộp Thư Thông Báo - Sàn Đấu Giá UET");
+
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(HomeController.class).error("Lỗi khi mở trang thông báo: ", e);
+        }
+    }
     @FXML
     public void handleSearch() {
         filterAuctions(searchField != null ? searchField.getText() : "");
