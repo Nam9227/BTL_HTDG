@@ -2,6 +2,7 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
+import com.uet.common.network.TransactionRequest;
 import com.uet.common.network.ImageData;
 import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
@@ -10,18 +11,28 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.Optional;
+import java.util.function.Consumer;
 
+<<<<<<< Updated upstream
 public class ProfileController {
+    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
+=======
+public class ProfileController implements Serializable {
+>>>>>>> Stashed changes
 
     @FXML private Label fullNameLabel, usernameLabel, statusLabel, balanceLabel;
     @FXML private TextField fullNameField, usernameField, emailField, phoneField, addressField;
@@ -47,20 +58,23 @@ public class ProfileController {
 
         if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0) {
             try {
-                javafx.scene.image.Image img = new javafx.scene.image.Image(
-                        new java.io.ByteArrayInputStream(user.getAvatarBytes())
-                );
+                Image img = new Image(new ByteArrayInputStream(user.getAvatarBytes()));
+
                 avatarImage.setImage(img);
-                System.out.println("ProfileController: displayed avatar from bytes, len=" + user.getAvatarBytes().length);
+
+                // ⚡ BA DÒNG QUYẾT ĐỊNH: Ép ảnh tự động co giãn đều, không bị bóp méo
+                avatarImage.setPreserveRatio(false); // Ép vừa khít khung vuông 80x80
+                avatarImage.setSmooth(true);         // Khử răng cưa giúp viền ảnh mượt
+
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Lỗi hiển thị avatar: ", e);
             }
         } else if (user.getAvatarPath() != null && !user.getAvatarPath().isBlank()) {
             try {
                 avatarImage.setImage(new javafx.scene.image.Image(user.getAvatarPath()));
-                System.out.println("ProfileController: displayed avatar from path: " + user.getAvatarPath());
+                logger.info("ProfileController: displayed avatar from path: {}", user.getAvatarPath());
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Lỗi khi hiển thị avatar từ path: ", e);
             }
         }
     }
@@ -112,7 +126,7 @@ public class ProfileController {
 
                                 if (res.getData() instanceof com.uet.common.model.user.User updatedUser) {
                                     ProfileController.this.currentUser = updatedUser;
-                                    System.out.println(" Đã cập nhật updatedUser từ Server vào Session Client thành công!");
+                                    logger.info("Đã cập nhật updatedUser từ Server vào Session Client thành công!");
                                 }
 
                                 if (ProfileController.this.currentUser.getAvatarBytes() != null && ProfileController.this.currentUser.getAvatarBytes().length > 0) {
@@ -120,7 +134,7 @@ public class ProfileController {
                                     java.io.ByteArrayInputStream bis = new java.io.ByteArrayInputStream(ProfileController.this.currentUser.getAvatarBytes());
                                     javafx.scene.image.Image img = new javafx.scene.image.Image(bis);
                                     avatarImage.setImage(img);
-                                    System.out.println(" Đã ép JavaFX vẽ lại Avatar mới hoàn toàn!");
+                                    logger.info("Đã ép JavaFX vẽ lại Avatar mới hoàn toàn!");
                                 }
 
                                 fullNameLabel.setText(ProfileController.this.currentUser.getFullName());
@@ -139,7 +153,7 @@ public class ProfileController {
             ClientSocket.getInstance().send(req);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi kết nối tới Server để lưu thay đổi: ", e);
             showAlert("Lỗi", "Không thể kết nối tới Server để lưu thay đổi!", Alert.AlertType.ERROR);
         }
     }
@@ -195,9 +209,64 @@ public class ProfileController {
                     return;
                 }
 
-                // Gửi lệnh xử lý tiền mặt lên Server cập nhật DB
-                // TransactionRequest req = new TransactionRequest(currentUser.getId(), amount, type);
-                // ClientSocket.getInstance().send(req);
+                try {
+                    TransactionRequest Req = new TransactionRequest(currentUser.getId(), amount, type);
+                    Consumer<Object> listener = new Consumer<>() {
+                        @Override
+                        public void accept(Object response) {
+
+                            if (response instanceof Response res) {
+
+                                Platform.runLater(() -> {
+
+                                    if (res.isSuccess()) {
+
+                                        // Server trả user mới
+                                        if (res.getData() instanceof User updatedUser) {
+
+                                            currentUser = updatedUser;
+
+                                            balanceLabel.setText(
+                                                    String.format(
+                                                            "%,.0f đ",
+                                                            currentUser.getBalance().doubleValue()
+                                                    )
+                                            );
+                                        }
+
+                                        showAlert(
+                                                "Thành công",
+                                                res.getMessage(),
+                                                Alert.AlertType.INFORMATION
+                                        );
+
+                                    } else {
+
+                                        showAlert(
+                                                "Lỗi",
+                                                res.getMessage(),
+                                                Alert.AlertType.ERROR
+                                        );
+                                    }
+                                });
+
+                                ClientSocket.getInstance()
+                                        .removeMessageListener(this);
+                            }
+                        }
+                    };
+                    ClientSocket.getInstance().addMessageListener(listener);
+
+                    ClientSocket.getInstance().send(Req);
+                }catch(IOException e){
+                    e.printStackTrace();
+
+                    showAlert(
+                            "Lỗi",
+                            "Không thể gửi yêu cầu tới server!",
+                            Alert.AlertType.ERROR
+                    );
+                }
 
                 showAlert("Thông báo", "Yêu cầu giao dịch đã được gửi xử lý!", Alert.AlertType.INFORMATION);
 
@@ -238,7 +307,7 @@ public class ProfileController {
                 avatarImage.setImage(new Image(selectedFile.toURI().toString()));
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Không thể đọc ảnh avatar: ", e);
                 showAlert("Lỗi", "Không thể đọc ảnh avatar!", Alert.AlertType.ERROR);
             }
         }
@@ -256,6 +325,9 @@ public class ProfileController {
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
             Stage stage = (Stage) fullNameLabel.getScene().getWindow();
 
             // Thay ruột scene cực mượt, không chớp màn hình
@@ -263,7 +335,7 @@ public class ProfileController {
             stage.setTitle("Trang chủ Đấu giá");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi quay lại Trang chủ: ", e);
         }
     }
 

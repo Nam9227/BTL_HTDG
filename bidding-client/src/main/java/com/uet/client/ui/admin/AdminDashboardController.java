@@ -78,33 +78,23 @@ public class AdminDashboardController {
     }
 
     @FXML
-    private void showDashboard(ActionEvent event) {
+    private void goDashboard(ActionEvent event) {
         refreshData();
     }
 
     @FXML
-    private void showUsers(ActionEvent event) {
+    private void goUsers(ActionEvent event) {
         switchScene(event, "/view/admin/admin_users.fxml", "Quản lý người dùng");
     }
 
     @FXML
-    private void showProducts(ActionEvent event) {
+    private void goProducts(ActionEvent event) {
         switchScene(event, "/view/admin/admin_wallet.fxml", "Quản lý sản phẩm");
     }
 
     @FXML
-    private void showAuctions(ActionEvent event) {
-        switchScene(event, "/view/admin/admin_auctions.fxml", "Quản lý phiên đấu giá");
-    }
-
-    @FXML
-    private void showPendingProducts(ActionEvent event) {
-        switchScene(event, "/view/admin/admin_pending.fxml", "Duyệt sản phẩm");
-    }
-
-    @FXML
-    private void showReports(ActionEvent event) {
-        switchScene(event, "/view/admin/admin_reports.fxml", "Thống kê báo cáo");
+    private void goApprove(ActionEvent event) {
+        switchScene(event, "/view/admin/admin_approve.fxml", "Quản lý phiên đấu giá");
     }
 
     @FXML

@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import com.uet.common.network.Response;
-import com.uet.common.network.DeleteUserRequest;
 
 public class AdminUsersController {
 
@@ -89,35 +88,40 @@ public class AdminUsersController {
     }
 
     /**
-     * Lắng nghe gói tin Realtime được dội từ Server về
+     * Lắng nghe gói tin GetAllUsersResponse được trả về từ Server Dispatcher
      */
     private void setupSocketListener() {
         serverMessageListener = message -> {
-            System.out.println("📩 [Client Realtime] Nhận gói tin từ Server: " + message.getClass().getSimpleName());
+            System.out.println("[Client] Nhận gói tin từ Server: " + message.getClass().getSimpleName());
 
-            // 🎯 Trường hợp duy nhất cần xử lý khi cập nhật thành công: Đổ thẳng data dội từ Server lên bảng
+            // Trường hợp 1: Nhận danh sách người dùng đổ lên TableView
             if (message instanceof GetAllUsersResponse response) {
                 List<User> userList = response.getUsers();
                 Platform.runLater(() -> {
                     masterData.clear();
                     masterData.addAll(userList);
-                    handleSearch(); // Giữ nguyên bộ lọc hoặc thanh tìm kiếm Admin đang gõ dở
-                    System.out.println("⚡ [Client] Bảng dữ liệu đã tự động cập nhật lập tức!");
+                    handleSearch();
                 });
             }
 
-            // Dự phòng lỗi hệ thống
+            // Trường hợp 2: Nhận phản hồi báo Khóa/Mở khóa/Xóa thành công từ Server
             else if (message instanceof Response response) {
-                if (!response.isSuccess()) {
-                    Platform.runLater(() -> showWarning(response.getMessage()));
-                }
+                Platform.runLater(() -> {
+                    if (response.isSuccess()) {
+                        System.out.println("[Client] Server báo lệnh thực thi thành công!");
+                        // Ép Client chủ động kéo lại dữ liệu mới nhất từ DB lên giao diện
+                        fetchUsersFromServer();
+                    } else {
+                        showWarning(response.getMessage());
+                    }
+                });
             }
         };
         ClientSocket.getInstance().addMessageListener(serverMessageListener);
     }
 
     /**
-     * Gửi yêu cầu lấy dữ liệu gốc ban đầu lên Server qua Socket
+     * Gửi yêu cầu lấy dữ liệu lên Server qua Socket
      */
     private void fetchUsersFromServer() {
         new Thread(() -> {
@@ -164,7 +168,7 @@ public class AdminUsersController {
             new Thread(() -> {
                 try {
                     ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false));
-                    System.out.println("🚀 [Client] Đã gửi lệnh KHÓA user ID: " + selected.getId());
+                    System.out.println("[Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                     Platform.runLater(() -> showWarning("Không thể kết nối đến server để khóa tài khoản!"));
@@ -186,7 +190,7 @@ public class AdminUsersController {
             new Thread(() -> {
                 try {
                     ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), true));
-                    System.out.println("🚀 [Client] Đã gửi lệnh MỞ KHÓA user ID: " + selected.getId());
+                    System.out.println("[Client] Đã gửi yêu cầu MỞ KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
                     Platform.runLater(() -> showWarning("Không thể kết nối đến server để mở khóa tài khoản!"));
@@ -209,8 +213,9 @@ public class AdminUsersController {
             if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
                 new Thread(() -> {
                     try {
-                        ClientSocket.getInstance().send(new DeleteUserRequest(selected.getId()));
-                        System.out.println("🚀 [Client] Đã gửi lệnh XÓA user ID: " + selected.getId());
+                        ClientSocket.getInstance().send(new com.uet.common.network.DeleteUserRequest(selected.getId()));
+                        System.out.println("[Client] Đã gửi yêu cầu XÓA user ID: " + selected.getId());
+                        fetchUsersFromServer();
                     } catch (IOException e) {
                         e.printStackTrace();
                         Platform.runLater(() -> showWarning("Không thể kết nối đến server để xóa tài khoản!"));
@@ -227,7 +232,7 @@ public class AdminUsersController {
         searchField.clear();
         roleFilter.getSelectionModel().selectFirst();
         statusFilter.getSelectionModel().selectFirst();
-        fetchUsersFromServer();
+        fetchUsersFromServer(); // Kéo lại dữ liệu mới nhất sạch từ DB
     }
 
     @FXML
@@ -272,6 +277,7 @@ public class AdminUsersController {
 
     private void switchScene(ActionEvent event, String fxmlPath, String title) {
         try {
+            // Giải phóng bộ lắng nghe socket của trang cũ trước khi hủy view
             if (serverMessageListener != null) {
                 ClientSocket.getInstance().removeMessageListener(serverMessageListener);
             }
@@ -290,7 +296,7 @@ public class AdminUsersController {
 
     @FXML private void goDashboard(ActionEvent event) { switchScene(event, "/view/admin/admin_dashboard.fxml", "Dashboard"); }
     @FXML private void goProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_wallet.fxml", "Quản lý sản phẩm"); }
-    @FXML private void goPendingProducts(ActionEvent event) { switchScene(event, "/view/admin/admin_pending.fxml", "Duyệt sản phẩm"); }
+    @FXML private void goApprove(ActionEvent event) { switchScene(event, "/view/admin/admin_approve.fxml", "Duyệt sản phẩm"); }
     @FXML private void goReports(ActionEvent event) { switchScene(event, "/view/admin/admin_reports.fxml", "Thống kê báo cáo"); }
 
     @FXML

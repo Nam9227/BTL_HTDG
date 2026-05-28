@@ -1,12 +1,15 @@
 package com.uet.server.network;
 
 import com.uet.server.service.ClientRequestDispatcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 
     private final Socket socket;
     private ObjectOutputStream out;
@@ -23,10 +26,10 @@ public class ClientHandler implements Runnable {
             out.writeObject(message);
             out.flush();
             out.reset();
-        }catch (java.net.SocketException e) {
-            System.out.println(" Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).");
+        } catch (java.net.SocketException e) {
+            logger.warn("Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi xảy ra khi gửi dữ liệu cho Client: ", e);
             ClientManager.removeClient(this);
         }
     }
@@ -40,8 +43,7 @@ public class ClientHandler implements Runnable {
             listenClientMessages();
 
         } catch (Exception e) {
-            System.out.println("Client disconnected because:");
-            e.printStackTrace();
+            logger.info("Client ngắt kết nối hoặc có lỗi xảy ra: {}", e.getMessage());
         } finally {
             cleanup();
         }
@@ -82,7 +84,7 @@ public class ClientHandler implements Runnable {
                 socket.close();
             }
 
-            System.out.println("🔌 [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.");
+            logger.info("[SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.");
 
         } catch (Exception ignored) {
             // Đúng bài Clean Code, những lỗi đóng tài nguyên này có thể bỏ qua
@@ -90,7 +92,7 @@ public class ClientHandler implements Runnable {
             // 🌟 BẮT BUỘC ĐỂ Ở ĐÂY: Dù đống đóng Socket ở trên có lỗi hay không,
             // thì Client này VẪN PHẢI được xóa khỏi danh sách quản lý để tránh rò rỉ RAM!
             ClientManager.removeClient(this);
-            System.out.println("🗑️ [SERVER] Đã Xóa Client khỏi ClientManager thành công.");
+            logger.info("[SERVER] Đã Xóa Client khỏi ClientManager thành công.");
         }
     }
 }

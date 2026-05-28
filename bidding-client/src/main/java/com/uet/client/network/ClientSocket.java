@@ -1,6 +1,8 @@
 package com.uet.client.network;
 
 import com.uet.client.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public class ClientSocket {
+    private static final Logger logger = LoggerFactory.getLogger(ClientSocket.class);
     private static ClientSocket instance;
 
     private Socket socket;
@@ -45,7 +48,7 @@ public class ClientSocket {
 
             this.listening = true;
             startListening();
-            System.out.println("🔌 ClientSocket: Kết nối Server thành công!");
+            logger.info("ClientSocket: Kết nối Server thành công!");
         }
     }
 
@@ -80,15 +83,15 @@ public class ClientSocket {
                     // 🌟 MẸO KHỬ LỖI ĐỎ: Nếu ta chủ động gọi close(), biến listening sẽ bằng false.
                     // Khi đó, việc dính EOFException là hoàn toàn bình thường, ta cho luồng chết êm ái, không in lỗi ra.
                     if (!listening) {
-                        System.out.println("🔌 ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.");
+                        logger.info("ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.");
                     } else {
-                        System.out.println("⚠️ Đột ngột mất kết nối vật lý tới Server!");
+                        logger.warn("Đột ngột mất kết nối vật lý tới Server!");
                         stopListening();
                     }
                     break; // Thoát hẳn vòng lặp while để hủy Thread ngầm
                 } catch (Exception e) {
                     if (listening) {
-                        e.printStackTrace();
+                        logger.error("Lỗi xảy ra trong luồng nghe ClientSocket: ", e);
                     }
                     stopListening();
                     break;
@@ -105,7 +108,7 @@ public class ClientSocket {
             try {
                 listener.accept(message);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Lỗi xảy ra khi truyền tin tới listener: ", e);
             }
         }
     }
@@ -139,7 +142,7 @@ public class ClientSocket {
             }
 
         } catch (Exception e) {
-            System.out.println("⚠️ Lỗi xảy ra khi đang đóng tài nguyên Socket: " + e.getMessage());
+            logger.error("Lỗi xảy ra khi đang đóng tài nguyên Socket: ", e);
         } finally {
             // 🌟 QUAN TRỌNG NHẤT: Xóa trắng toàn bộ Object cũ về null
             // Để lần sau khi quay lại màn Login bấm nút Đăng nhập, hàm connect() check (socket == null) sẽ tự tạo luồng mới tinh.
@@ -147,7 +150,7 @@ public class ClientSocket {
             this.in = null;
             this.out = null;
             this.listenerThread = null;
-            System.out.println("🗑️ ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!");
+            logger.info("ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!");
         }
     }
 }

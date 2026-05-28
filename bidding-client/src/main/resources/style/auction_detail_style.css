@@ -1,0 +1,175 @@
+/* Tổng thể nền ứng dụng */
+.root-container {
+    -fx-background-color: #f4f6f9;
+}
+
+/* THANH TOP BAR */
+.top-navbar {
+    -fx-background-color: white;
+    -fx-padding: 15 25;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.back-button {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #1e293b;
+    -fx-background-radius: 10;
+    -fx-padding: 8 18;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.back-button:hover {
+    -fx-background-color: #e2e8f0;
+}
+
+.page-title {
+    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* KHỐI NỘI DUNG (CARD CHUNG) */
+.detail-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16;
+    -fx-padding: 18;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 10, 0, 0, 4);
+}
+
+.card-section-title {
+    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+/* KHỐI BÊN TRÁI: THÔNG TIN SẢN PHẨM */
+.image-viewport {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+}
+
+.product-title {
+    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.sub-info-text {
+    -fx-text-fill: #64748b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 13px;
+}
+
+.custom-textarea {
+    -fx-control-inner-background: #f8fafc;
+    -fx-background-color: transparent;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-font-family: 'Segoe UI';
+    -fx-text-fill: #334155;
+}
+
+/* KHỐI GIỮA: THÔNG TIN PHIÊN & ĐẶT GIÁ */
+.price-label-title {
+    -fx-text-fill: #64748b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 12px;
+}
+
+.start-price-value {
+    -fx-text-fill: #1e293b;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.current-price-value {
+    -fx-text-fill: #10b981; /* Xanh lá Emerald neon rực rỡ */
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.countdown-value {
+    -fx-text-fill: #f59e0b; /* Màu cam hổ phách cảnh báo */
+    -fx-font-family: 'Segoe UI';
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.custom-textfield {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-padding: 10 14;
+    -fx-font-family: 'Segoe UI';
+}
+.custom-textfield:focused {
+    -fx-border-color: #4f46e5;
+}
+
+.bid-submit-button {
+    -fx-background-color: #4f46e5; /* Màu Indigo đậm chất công nghệ */
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 10 0;
+    -fx-cursor: hand;
+}
+.bid-submit-button:hover {
+    -fx-background-color: #4338ca;
+}
+
+/* KHỐI PHẢI: BIỂU ĐỒ & TABLEVIEW LỊCH SỬ */
+/* Tùy chỉnh LineChart phẳng, sạch sẽ */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+.chart-alternative-row-binary-alternative {
+    -fx-background-color: transparent;
+}
+.chart-vertical-grid-lines, .chart-horizontal-grid-lines {
+    -fx-stroke: #f1f5f9;
+}
+.axis {
+    -fx-font-family: 'Segoe UI';
+    -fx-tick-label-fill: #64748b;
+}
+
+/* Tùy chỉnh TableView phẳng, bo góc */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+.table-view .column-header-background {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 8 8 0 0;
+}
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-text-fill: #475569;
+}
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-family: 'Segoe UI';
+}
+.table-view .table-row-cell:filled:hover {
+    -fx-background-color: #f8fafc;
+}

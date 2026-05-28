@@ -1,9 +1,14 @@
 package com.uet.server.network;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientManager {
+    private static final Logger logger = LoggerFactory.getLogger(ClientManager.class);
+
     private static final Set<ClientHandler> clients = ConcurrentHashMap.newKeySet();
 
     private static final ConcurrentHashMap<String, Set<ClientHandler>> auctionViewers =
@@ -33,7 +38,7 @@ public class ClientManager {
                 .computeIfAbsent(auctionId, key -> ConcurrentHashMap.newKeySet())
                 .add(client);
 
-        System.out.println("Client joined auction: " + auctionId);
+        logger.info("Client joined auction: {}", auctionId);
     }
 
     public static void leaveAuction(String auctionId, ClientHandler client) {
@@ -47,19 +52,18 @@ public class ClientManager {
             }
         }
 
-        System.out.println("Client left auction: " + auctionId);
+        logger.info("Client left auction: {}", auctionId);
     }
 
     public static void broadcastAuction(String auctionId, Object message) {
         Set<ClientHandler> viewers = auctionViewers.get(auctionId);
 
         if (viewers == null || viewers.isEmpty()) {
-            System.out.println("Không có client nào đang xem auction: " + auctionId);
+            logger.info("Không có client nào đang xem auction: {}", auctionId);
             return;
         }
 
-        System.out.println("Gửi cập nhật ngay cho " + viewers.size()
-                + " client đang xem auction: " + auctionId);
+        logger.info("Gửi cập nhật ngay cho {} client đang xem auction: {}", viewers.size(), auctionId);
 
         for (ClientHandler client : viewers) {
             client.send(message);

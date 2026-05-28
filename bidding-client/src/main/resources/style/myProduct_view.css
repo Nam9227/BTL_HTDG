@@ -37,10 +37,11 @@
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
-.vbox{
+.product-card{
     -fx-background-color: #252a31;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-border-color: #3f4650;
+    -fx-padding: 10;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 15,0,0,4);
 }

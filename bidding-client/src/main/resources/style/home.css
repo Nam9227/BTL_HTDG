@@ -1,60 +1,158 @@
+/* Tổng thể nền ứng dụng */
 .root-container {
-    -fx-background-color: #f3f4f6;
-    -fx-padding: 20;
+    -fx-background-color: #f4f6f9;
 }
 
-.auction-card {
+/* SIDEBAR BÊN PHẢI (Modern Hộp Card) */
+.sidebar-card {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 4);
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.user-avatar-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 3);
+}
+
+.user-name-text {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.balance-badge {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-color: rgba(241, 196, 15, 0.15);
+    -fx-background-radius: 20;
+    -fx-padding: 4 12 4 12;
+}
+
+/* Các nút menu chức năng trên Sidebar */
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cbd5e1;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 15 10 15;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+}
+.menu-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 8;
+}
+
+/* Nút Active (Trang chủ đang được chọn) */
+.menu-button-active {
+    -fx-background-color: rgba(52, 152, 219, 0.2);
+    -fx-text-fill: #3498db;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 15 10 15;
+    -fx-cursor: hand;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+.logout-button {
+    -fx-background-color: #e74c3c;
+    -fx-background-radius: 8;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.logout-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* KHU VỰC TRUNG TÂM & HEADER TOP NAV */
+.header-box {
     -fx-background-color: white;
-    -fx-padding: 18;
-    -fx-background-radius: 18;
-    -fx-border-radius: 18;
-    -fx-border-color: #e5e7eb;
-    -fx-pref-width: 260;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12,0,0,4);
+    -fx-background-radius: 12;
+    -fx-padding: 12 20 12 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 8, 0, 0, 2);
 }
 
-.auction-card:hover {
-    -fx-border-color: #2563eb;
-    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.25), 18,0,0,6);
-}
-
-.product-name {
+.header-title {
+    -fx-font-family: 'Segoe UI';
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #111827;
+    -fx-text-fill: #1e293b;
 }
 
-.product-description {
-    -fx-font-size: 13px;
-    -fx-text-fill: #6b7280;
+/* Cụm kén tìm kiếm Bo tròn tinh tế */
+.search-container {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 20;
+    -fx-padding: 2 5 2 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 20;
 }
 
-.price-title {
-    -fx-font-size: 12px;
-    -fx-text-fill: #9ca3af;
+.search-field {
+    -fx-background-color: transparent;
+    -fx-prompt-text-fill: #94a3b8;
+    -fx-font-family: 'Segoe UI';
 }
 
-.current-price {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2563eb;
-}
-
-.end-time {
-    -fx-font-size: 12px;
-    -fx-text-fill: #ef4444;
-}
-
-.bid-button {
-    -fx-background-color: #2563eb;
+.search-button {
+    -fx-background-color: #3498db;
+    -fx-background-radius: 20;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-font-family: 'Segoe UI';
     -fx-font-weight: bold;
-    -fx-background-radius: 12;
     -fx-cursor: hand;
-    -fx-padding: 10 18;
+    -fx-padding: 6 16 6 16;
+}
+.search-button:hover {
+    -fx-background-color: #2980b9;
 }
 
-.bid-button:hover {
-    -fx-background-color: #1d4ed8;
+.hamburger-button {
+    -fx-background-color: #f1f5f9;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-padding: 6 8 6 8;
+}
+.hamburger-button:hover {
+    -fx-background-color: #e2e8f0;
+}
+
+/* Màu nền tổng thể cho khu vực chứa các sản phẩm */
+.root-container {
+    -fx-background-color: #f4f6f9;
+}
+
+/* THẺ CARD CHỨA SẢN PHẨM: Đóng khung trắng, bo tròn 12px và đổ bóng mờ */
+.product-card-node {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.06), 8, 0, 0, 2);
+}
+
+/* Định dạng font chữ và màu sắc cho Tên Sản Phẩm */
+.product-title-label {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-text-fill: #1e293b;
+}
+
+/* Định dạng cấu trúc hiển thị Giá Tiền màu đỏ nổi bật */
+.product-price-label {
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #e74c3c;
 }

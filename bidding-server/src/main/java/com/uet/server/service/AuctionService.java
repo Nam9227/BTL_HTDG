@@ -4,8 +4,11 @@ import com.uet.common.network.AddProductRequest;
 import com.uet.common.network.Response;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.network.ClientHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuctionService {
+    private static final Logger logger = LoggerFactory.getLogger(AuctionService.class);
 
     private final FileStorageService fileStorageService = new FileStorageService();
     private final AuctionDAO auctionDAO;
@@ -33,7 +36,7 @@ public class AuctionService {
                         "products",
                         req.getSellerId()
                 );
-                System.out.println("🔄 [SERVER] Đã lưu ảnh sản phẩm chờ duyệt tại path: " + imageUrl);
+                logger.info("[SERVER] Đã lưu ảnh sản phẩm chờ duyệt tại path: {}", imageUrl);
             } else {
                 imageUrl = "/images/default_product.png"; // Ảnh mặc định nếu lỗi
             }
@@ -56,14 +59,13 @@ public class AuctionService {
             // 4. Trả phản hồi về cho Client
             if (isInserted) {
                 client.send(Response.success("Đăng bán sản phẩm đấu giá thành công! Vui lòng chờ Admin phê duyệt.", null));
-                System.out.println("✅ [SERVER] Sản phẩm của User " + req.getSellerId() + " đang ở trạng thái PENDING.");
+                logger.info("[SERVER] Sản phẩm của User {} đang ở trạng thái PENDING.", req.getSellerId());
             } else {
                 client.send(Response.fail("Lỗi: Không thể ghi dữ liệu sản phẩm vào MySQL Database."));
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi xử lý lưu ảnh sản phẩm hoặc ghi DB:");
-            e.printStackTrace();
+            logger.error("Lỗi khi xử lý lưu ảnh sản phẩm hoặc ghi DB: ", e);
             try {
                 client.send(Response.fail("Hệ thống Server gặp sự cố xử lý dữ liệu!"));
             } catch (Exception ignored) {}

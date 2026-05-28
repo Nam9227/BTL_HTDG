@@ -4,6 +4,8 @@ import com.uet.common.model.user.User;
 import com.uet.common.network.LoginRequest;
 import com.uet.client.network.ClientSocket;
 import com.uet.common.network.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -22,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class LoginController {
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @FXML
     private TextField userField;
@@ -78,7 +81,7 @@ public class LoginController {
             if (responseObj instanceof Response response && response.isSuccess()) {
                 User loginUser = (User) response.getData();
 
-                System.out.println("Đăng nhập OK!");
+                logger.info("Đăng nhập OK! User: {}", loginUser.getUsername());
                 if (loginUser.getRole() != null && "ADMIN".equalsIgnoreCase(loginUser.getRole().name())) {
                     switchScene("/view/admin/admin_dashboard.fxml", "Trang Admin", loginUser);
                 } else {
@@ -91,25 +94,26 @@ public class LoginController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi đăng nhập: ", e);
             showError("Lỗi kết nối", "Không thể kết nối Server!");
         }
     }
 
     @FXML
-    private void handleTogglePassword(ActionEvent event) {
-        if (!isPasswordShown) {
-            // Hiện mật khẩu: Copy từ Password sang TextField
+    void handleTogglePassword(ActionEvent event) {
+        if (passField.isVisible()) {
+            // Hiện mật khẩu dạng thường
             passTextField.setText(passField.getText());
-            passTextField.setVisible(true);
             passField.setVisible(false);
+            passTextField.setVisible(true);
+            // Đổi ảnh con mắt mở ra (Nam nhớ kiểm tra đường dẫn ảnh của mình nha)
             eyeIcon.setImage(imageOpen);
             isPasswordShown = true;
         } else {
-            // Ẩn mật khẩu: Copy từ TextField về PasswordField
+            // Ẩn mật khẩu vào dấu chấm
             passField.setText(passTextField.getText());
-            passField.setVisible(true);
             passTextField.setVisible(false);
+            passField.setVisible(true);
             eyeIcon.setImage(imageClose);
             isPasswordShown = false;
         }
@@ -135,6 +139,9 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
             Object controller = loader.getController();
             if (controller instanceof HomeController homeController) {
                 homeController.setUser(user);
@@ -151,20 +158,25 @@ public class LoginController {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không tải được giao diện: " + fxmlPath, e);
             showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
         }
     }
     private void switchScene(String fxmlPath, String title) {
         try {
             Stage stage = (Stage) userField.getScene().getWindow();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource(fxmlPath)));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            
+            // Hiệu ứng chuyển trang mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            
+            Scene scene = new Scene(root);
             stage.setTitle(title);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Không tải được giao diện: " + fxmlPath, e);
             showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
         }
     }

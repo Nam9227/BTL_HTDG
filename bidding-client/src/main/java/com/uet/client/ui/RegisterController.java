@@ -3,6 +3,9 @@ package com.uet.client.ui;
 import com.uet.client.network.ClientSocket;
 import com.uet.common.network.RegisterRequest;
 import com.uet.common.network.Response;
+import javafx.scene.Parent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 
 public class RegisterController {
+    private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
+
     @FXML private TextField fullNameField;
     @FXML private TextField emailField;
     @FXML private TextField usernameField;
@@ -73,12 +78,12 @@ public class RegisterController {
 
     @FXML
     public void handleRegister() {
-        System.out.println("Nút Đăng ký đã được bấm!");
+        logger.info("Nút Đăng ký đã được bấm!");
 
         try {
             // Kiểm tra xem các ô nhập liệu có bị null không (do quên đặt fx:id)
             if (fullNameField == null) {
-                System.out.println("Lỗi: fullNameField bị null. Kiểm tra lại fx:id trong FXML!");
+                logger.error("Lỗi: fullNameField bị null. Kiểm tra lại fx:id trong FXML!");
                 return;
             }
 
@@ -159,7 +164,7 @@ public class RegisterController {
 
 
         } catch (Exception a) {
-            a.printStackTrace();
+            logger.error("Lỗi khi đăng ký tài khoản: ", a);
             showError("Lỗi kết nối", "Không thể kết nối Server!");
         }
 
@@ -192,13 +197,18 @@ public class RegisterController {
     private void switchScene(String fxmlPath, String title) {
         try {
             Stage stage = (Stage) fullNameField.getScene().getWindow();
-            Scene scene = new Scene(FXMLLoader.load(getClass().getResource(fxmlPath)));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+            
+            // Hiệu ứng mượt mà
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            
+            Scene scene = new Scene(root);
             stage.setTitle(title);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi tải giao diện: ", e);
             showError("Lỗi hệ thống", "Không tải được giao diện: " + fxmlPath);
         }
     }

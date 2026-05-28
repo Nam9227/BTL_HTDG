@@ -1,20 +1,25 @@
 package com.uet.server.database.dao;
 
+import com.uet.common.model.transaction.Transaction;
 import com.uet.common.model.user.Role;
 import com.uet.common.model.user.User;
-import com.uet.common.network.ImageData;
 import com.uet.common.network.LoginRequest;
 import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
 import com.uet.server.database.DBConnection;
 import com.uet.server.service.FileStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
+    private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
     private final FileStorageService fileStorageService = new FileStorageService();
 
@@ -72,39 +77,12 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
 
-                // Đọc dữ liệu ảnh avatar dưới dạng bytes nếu Admin cần hiển thị hoặc xử lý sau này
-                String avatarPath = rs.getString("avatar_path");
-                if (avatarPath != null && !avatarPath.isBlank()) {
-                    try {
-                        byte[] bytes = null;
-                        if (avatarPath.startsWith("file://")) {
-                            String p = avatarPath.replaceFirst("^file:///*", "/");
-                            java.nio.file.Path filePath = java.nio.file.Paths.get(p);
-                            if (java.nio.file.Files.exists(filePath)) {
-                                bytes = java.nio.file.Files.readAllBytes(filePath);
-                            }
-                        } else {
-                            java.nio.file.Path filePath = java.nio.file.Paths.get(avatarPath);
-                            if (java.nio.file.Files.exists(filePath)) {
-                                bytes = java.nio.file.Files.readAllBytes(filePath);
-                            }
-                        }
-                        if (bytes != null && bytes.length > 0) {
-                            user.setAvatarBytes(bytes);
-                        }
-                    } catch (Exception e) {
-                        // Bỏ qua lỗi đọc file lẻ của từng user để không làm gián đoạn việc tải danh sách
-                        System.out.println("⚠️ Không thể đọc file ảnh của user ID: " + user.getId());
-                    }
-                }
-
                 userList.add(user);
             }
-            System.out.println("📊 [UserDAO] Đã tải thành công " + userList.size() + " người dùng cho Admin.");
+            logger.info("[UserDAO] Đã tải thành công {} người dùng cho Admin.", userList.size());
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB:");
-            e.printStackTrace();
+            logger.error("Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: ", e);
         }
 
         return userList;
@@ -126,7 +104,7 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi cập nhật quyền cho User ID: " + userId, e);
         }
     }
     public void deleteUser(String userId) {
@@ -140,12 +118,11 @@ public class UserDAO {
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                System.out.println("🗑️ [UserDAO] Đã xóa thành công user ID: " + userId + " khỏi Database.");
+                logger.info("[UserDAO] Đã xóa thành công user ID: {} khỏi Database.", userId);
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi xóa user trong UserDAO:");
-            e.printStackTrace();
+            logger.error("Lỗi khi xóa user trong UserDAO: ", e);
         }
     }
 
@@ -160,7 +137,7 @@ public class UserDAO {
             ps.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi cập nhật trạng thái hoạt động cho User ID: " + userId, e);
         }
     }
 
@@ -183,7 +160,7 @@ public class UserDAO {
                         "avatars",
                         request.getUserId()
                 );
-                System.out.println("🔄 Server đã lưu file mới tại path: " + avatarPath);
+                logger.info("🔄 Server đã lưu file mới tại path: {}", avatarPath);
 
                 // 4. TIẾN HÀNH XÓA FILE CŨ TRÊN ĐĨA CỦA VPS ĐỂ TRÁNH RÁC BỘ NHỚ
                 if (oldAvatarPath != null && !oldAvatarPath.isBlank()) {
@@ -194,15 +171,14 @@ public class UserDAO {
                     if (oldFile.exists()) {
                         boolean deleted = oldFile.delete();
                         if (deleted) {
-                            System.out.println("🗑️ [Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: " + cleanOldPath);
+                            logger.info("[Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: {}", cleanOldPath);
                         } else {
-                            System.out.println("⚠️ Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): " + cleanOldPath);
+                            logger.warn("Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): {}", cleanOldPath);
                         }
                     }
                 }
             } catch (Exception e) {
-                System.out.println("❌ Lỗi khi xử lý lưu file mới hoặc xóa file cũ: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Lỗi khi xử lý lưu file mới hoặc xóa file cũ: ", e);
             }
         }
 
@@ -242,7 +218,7 @@ public class UserDAO {
             return Response.fail("Không tìm thấy hồ sơ người dùng để cập nhật!");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi server khi cập nhật thông tin tài khoản cho User ID: " + request.getUserId(), e);
             return Response.fail("Lỗi server khi cập nhật thông tin tài khoản!");
         }
     }
@@ -262,7 +238,7 @@ public class UserDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi lấy avatar path cho User ID: " + userId, e);
         }
 
         return null;
@@ -323,14 +299,13 @@ public class UserDAO {
                             if (java.nio.file.Files.exists(filePath)) {
                                 bytes = java.nio.file.Files.readAllBytes(filePath);
                             } else {
-                                System.out.println("UserDAO: file not found: " + filePath);
+                                logger.warn("UserDAO: file not found: {}", filePath);
                             }
                         } else if (avatarPath.startsWith("http://") || avatarPath.startsWith("https://")) {
                             try (java.io.InputStream in = new java.net.URL(avatarPath).openStream()) {
                                 bytes = in.readAllBytes();
                             } catch (Exception e) {
-                                System.out.println("UserDAO: cannot download avatar from url: " + avatarPath);
-                                e.printStackTrace();
+                                logger.error("UserDAO: cannot download avatar from url: {}", avatarPath, e);
                             }
                         } else {
                             // assume plain filesystem path
@@ -342,18 +317,17 @@ public class UserDAO {
 
                         if (bytes != null && bytes.length > 0) {
                             user.setAvatarBytes(bytes);
-                            System.out.println("UserDAO: loaded avatar bytes len=" + bytes.length + " for user " + user.getId());
+                            logger.info("UserDAO: loaded avatar bytes len={} for user {}", bytes.length, user.getId());
                         }
                     } catch (Exception e) {
-                        System.out.println("UserDAO: error loading avatar: " + e.getMessage());
-                        e.printStackTrace();
+                        logger.error("UserDAO: error loading avatar for user " + user.getId(), e);
                     }
                 }
                 return user;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi tìm user bằng username/password: ", e);
         }
 
         return null;
@@ -423,14 +397,247 @@ public class UserDAO {
                             user.setAvatarBytes(bytes);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        logger.error("Lỗi khi đọc file avatar cho User ID: " + userId, e);
                     }
                 }
                 return user;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi tìm user bằng User ID: " + userId, e);
         }
         return null;
+    }
+    public void createTransaction(String userId,
+                                  double amount,
+                                  String type){
+
+        try{
+
+            Connection conn = DBConnection.getConnection();
+
+            String sql =
+                    "INSERT INTO transactions " +
+                            "(user_id, amount, type, status) " +
+                            "VALUES (?, ?, ?, ?)";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setString(1, userId);
+
+            ps.setDouble(2, amount);
+
+            ps.setString(3, type);
+
+            ps.setString(4, "PENDING");
+
+            ps.executeUpdate();
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public List<Transaction> getPendingTransaction(){
+
+        List<Transaction> list =
+                new ArrayList<>();
+
+        try{
+
+            Connection conn =
+                    DBConnection.getConnection();
+
+            String sql =
+                    "SELECT * FROM transactions " +
+                            "WHERE status = 'PENDING'";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while(rs.next()){
+
+                Transaction t =
+                        new Transaction(rs.getLong("id"),
+                                rs.getString("user_id"),
+                                rs.getDouble("amount"),
+                                rs.getString("type"),
+                                rs.getString("status"),
+                                rs.getTimestamp("created_at").toLocalDateTime().toString()
+                        );
+
+                t.setId(rs.getLong("id"));
+
+                t.setUserId(
+                        rs.getString("user_id")
+                );
+
+                t.setAmount(
+                        rs.getDouble("amount")
+                );
+
+                t.setType(
+                        rs.getString("type")
+                );
+
+                t.setStatus(
+                        rs.getString("status")
+                );
+
+                list.add(t);
+            }
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+
+    public User deposit(String userId, double amount){
+        try{
+            Connection conn = DBConnection.getConnection();
+
+            String sql =
+                    "UPDATE wallet " +
+                            "SET balance = balance + ? " +
+                            "WHERE user_id = ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setDouble(1, amount);
+            ps.setString(2, userId);
+            int rows = ps.executeUpdate();
+            System.out.println("rows updated: " + rows);
+            // Không tìm thấy user
+            if (rows == 0) {
+                return null;
+            }
+
+            // Trả user mới sau khi update
+            return findUserByUserId(userId);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public User withdraw(String userId, double amount){
+        try{
+            Connection conn = DBConnection.getConnection();
+
+            String sql =
+                    "UPDATE wallet " +
+                            "SET balance = balance - ? " +
+                            "WHERE user_id = ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setDouble(1, amount);
+            ps.setString(2, userId);
+
+            int rows = ps.executeUpdate();
+
+            // Không tìm thấy user
+            if (rows == 0) {
+                return null;
+            }
+
+            // Trả user mới sau khi update
+            return findUserByUserId(userId);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public void approveTransaction(long transactionId){
+
+        try{
+
+            Connection conn =
+                    DBConnection.getConnection();
+            System.out.println("URL = " + conn.getMetaData().getURL());
+            System.out.println("autoCommit = " + conn.getAutoCommit());
+
+            String sql =
+                    "SELECT * FROM transactions " +
+                            "WHERE id = ?";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setLong(1, transactionId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+            System.out.println(
+                    "TRANSACTION ID = " + transactionId
+            );
+
+            boolean found = rs.next();
+
+            System.out.println(
+                    "FOUND = " + found
+            );
+
+
+            if(found){
+
+                String userId =
+                        rs.getString("user_id");
+
+                double amount =
+                        rs.getDouble("amount");
+
+                String type =
+                        rs.getString("type");
+
+                // ===== CỘNG/TRỪ TIỀN THẬT =====
+
+                if("DEPOSIT".equals(type)) {
+
+                    deposit(userId, amount);
+                }
+                else if("WITHDRAW".equals(type)){
+
+                    withdraw(userId, amount);
+                }
+
+                // ===== UPDATE STATUS =====
+                System.out.println("SẮP UPDATE STATUS");
+                String updateSql =
+                        "UPDATE transactions " +
+                                "SET status = 'APPROVED' " +
+                                "WHERE id = ?";
+
+                PreparedStatement updatePs =
+                        conn.prepareStatement(updateSql);
+
+                updatePs.setLong(1, transactionId);
+                int rows =
+                        updatePs.executeUpdate();
+                conn.commit();
+
+                System.out.println("ROWS UPDATED = " + rows);
+
+            }
+
+        } catch (Exception e){
+
+            e.printStackTrace();
+        }
     }
 }
