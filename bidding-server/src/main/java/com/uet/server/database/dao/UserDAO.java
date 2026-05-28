@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -500,7 +501,9 @@ public class UserDAO {
                                 rs.getString("user_id"),
                                 rs.getDouble("amount"),
                                 rs.getString("type"),
-                                rs.getTimestamp("created_at").toLocalDateTime().toString(),
+                                rs.getTimestamp("created_at").toLocalDateTime().format(
+                                        DateTimeFormatter.ofPattern(
+                                                "dd/MM/yyyy HH:mm")),
                                 rs.getString("status")
                         );
 
@@ -521,8 +524,6 @@ public class UserDAO {
                 t.setStatus(
                         rs.getString("status")
                 );
-
-                t.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime().toString());
 
                 list.add(t);
             }

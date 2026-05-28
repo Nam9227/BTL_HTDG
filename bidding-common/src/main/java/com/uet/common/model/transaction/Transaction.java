@@ -61,11 +61,11 @@ public class Transaction implements Serializable {
         this.type = type;
     }
 
-    public String getCreated_at(){
+    public String getCreatedAt(){
         return createdAt;
     }
 
-    public void setCreated_at(String createdAt){this.createdAt = createdAt;}
+    public void setCreatedAt(String createdAt){this.createdAt = createdAt;}
 
     public String getStatus() {
         return status;
