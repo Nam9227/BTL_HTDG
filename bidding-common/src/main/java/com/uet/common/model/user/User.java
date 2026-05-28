@@ -2,6 +2,7 @@ package com.uet.common.model.user;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime; // Đảm bảo có dòng này
 
 public class User implements Serializable {
     private String id;
@@ -16,10 +17,13 @@ public class User implements Serializable {
     private boolean active;
     private byte[] avatarBytes;
 
+    private LocalDateTime lastLoginAt;
+
     public User() {
     }
 
-    public User(String id, String username, String fullName, String email, String phone, Role role, BigDecimal balance,boolean active) {
+
+    public User(String id, String username, String fullName, String email, String phone, Role role, BigDecimal balance, boolean active) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
@@ -30,88 +34,36 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    public String getId() {
-        return id;
+    // 2. CHỈ THÊM GETTER VÀ SETTER NÀY Ở DƯỚI CÙNG
+    public LocalDateTime getLastLoginAt() {
+        return lastLoginAt;
     }
 
-    public String getUsername() {
-        return username;
+    public void setLastLoginAt(LocalDateTime lastLoginAt) {
+        this.lastLoginAt = lastLoginAt;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean getActive() {
-        return active;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAvatarPath() {
-        return avatarPath;
-    }
-
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
-    }
-
+    // --- TẤT CẢ CÁC GETTER / SETTER CŨ CỦA BẠN GIỮ NGUYÊN HOÀN TOÀN ---
+    public String getId() { return id; }
+    public String getUsername() { return username; }
+    public String getFullName() { return fullName; }
+    public String getEmail() { return email; }
+    public boolean getActive() { return active; }
+    public String getPhone() { return phone; }
+    public Role getRole() { return role; }
+    public BigDecimal getBalance() { return balance; }
+    public void setActive(boolean active) { this.active = active; }
+    public void setId(String id) { this.id = id; }
+    public void setUsername(String username) { this.username = username; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public void setRole(Role role) { this.role = role; }
+    public void setBalance(BigDecimal balance) { this.balance = balance; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public String getAvatarPath() { return avatarPath; }
+    public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
     public byte[] getAvatarBytes() { return avatarBytes; }
-
     public void setAvatarBytes(byte[] avatarBytes) { this.avatarBytes = avatarBytes; }
 }

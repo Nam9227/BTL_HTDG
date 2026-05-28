@@ -2177,3 +2177,196 @@ java.nio.file.InvalidPathException: Illegal char <:> at index 3: /D:\root\upload
 2026-05-28 13:35:26 [Thread-2] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
 2026-05-28 13:35:30 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 21 người dùng cho Admin.
 2026-05-28 13:35:33 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 21 người dùng cho Admin.
+2026-05-28 14:01:21 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 14:01:21 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 14:01:22 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 14:01:22 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 14:01:22 [pool-2-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Phiên 7438259586 đã đóng nhưng không có ai mua.
+2026-05-28 14:01:22 [pool-2-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Phiên 9557554342 đã đóng nhưng không có ai mua.
+2026-05-28 14:01:22 [pool-2-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 2). Tiến hành Broadcast...
+2026-05-28 14:01:32 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 14:01:32 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 14:01:34 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:38 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã cập nhật trạng thái active = false cho user ID: 8829354540
+2026-05-28 14:01:38 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:40 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã cập nhật trạng thái active = false cho user ID: bb4c5b28-1f8f-45ff-90e1-aa3fb973f6ec
+2026-05-28 14:01:40 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:43 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã cập nhật trạng thái active = true cho user ID: bb4c5b28-1f8f-45ff-90e1-aa3fb973f6ec
+2026-05-28 14:01:43 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:45 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã cập nhật trạng thái active = true cho user ID: 8829354540
+2026-05-28 14:01:45 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:51 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi xóa user trong UserDAO: 
+java.sql.SQLIntegrityConstraintViolationException: Cannot delete or update a parent row: a foreign key constraint fails (`auction_system`.`wallet`, CONSTRAINT `wallet_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`))
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:118)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.deleteUser(UserDAO.java:118)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:50)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 14:01:51 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã xử lý xóa thành công user ID: bb4c5b28-1f8f-45ff-90e1-aa3fb973f6ec
+2026-05-28 14:01:51 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:51 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:01:56 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:02:08 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-28 14:02:17 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 14:02:25 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 14:02:25 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 14:02:25 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 15:20:59 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 15:20:59 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 15:20:59 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 15:20:59 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 15:21:07 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 15:21:07 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 15:21:07 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi cập nhật thời gian đăng nhập: 
+java.sql.SQLSyntaxErrorException: Unknown column 'last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.handleLogin(UserDAO.java:46)
+	at com.uet.server.service.ClientRequestDispatcher.handleLogin(ClientRequestDispatcher.java:201)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:62)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:21:09 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: 
+java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.uet.server.database.dao.UserDAO.getAllUsers(UserDAO.java:82)
+	at com.uet.server.service.ClientRequestDispatcher.handleGetAllUsers(ClientRequestDispatcher.java:191)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:30)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:21:23 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-28 15:21:24 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: 
+java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.uet.server.database.dao.UserDAO.getAllUsers(UserDAO.java:82)
+	at com.uet.server.service.ClientRequestDispatcher.handleGetAllUsers(ClientRequestDispatcher.java:191)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:30)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:22:16 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 15:22:16 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi cập nhật thời gian đăng nhập: 
+java.sql.SQLSyntaxErrorException: Unknown column 'last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.handleLogin(UserDAO.java:46)
+	at com.uet.server.service.ClientRequestDispatcher.handleLogin(ClientRequestDispatcher.java:201)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:62)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:22:17 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: 
+java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.uet.server.database.dao.UserDAO.getAllUsers(UserDAO.java:82)
+	at com.uet.server.service.ClientRequestDispatcher.handleGetAllUsers(ClientRequestDispatcher.java:191)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:30)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:22:34 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: 
+java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.uet.server.database.dao.UserDAO.getAllUsers(UserDAO.java:82)
+	at com.uet.server.service.ClientRequestDispatcher.handleGetAllUsers(ClientRequestDispatcher.java:191)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:30)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:26:45 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 15:26:45 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 15:26:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 15:26:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 15:26:53 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 15:26:53 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 15:26:53 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi cập nhật thời gian đăng nhập: 
+java.sql.SQLSyntaxErrorException: Unknown column 'last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.handleLogin(UserDAO.java:46)
+	at com.uet.server.service.ClientRequestDispatcher.handleLogin(ClientRequestDispatcher.java:201)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:62)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:26:56 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: 
+java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.uet.server.database.dao.UserDAO.getAllUsers(UserDAO.java:82)
+	at com.uet.server.service.ClientRequestDispatcher.handleGetAllUsers(ClientRequestDispatcher.java:191)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:30)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:27:00 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi xảy ra khi lấy toàn bộ danh sách user từ DB: 
+java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field list'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.uet.server.database.dao.UserDAO.getAllUsers(UserDAO.java:82)
+	at com.uet.server.service.ClientRequestDispatcher.handleGetAllUsers(ClientRequestDispatcher.java:191)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:30)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:27:03 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 15:27:03 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 15:27:03 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 15:32:36 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 15:32:36 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 15:32:36 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 15:32:36 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 15:32:44 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 15:32:44 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 15:32:44 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-28 15:32:46 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 15:33:49 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 15:33:49 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 15:33:49 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 15:35:28 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 15:35:28 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 15:35:28 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-28 15:35:29 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-05-28 15:35:39 [Thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-28 15:35:39 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 15:35:39 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.

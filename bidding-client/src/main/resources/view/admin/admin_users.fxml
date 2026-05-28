@@ -24,7 +24,6 @@
             <Button maxWidth="Infinity" onAction="#goProducts" text="Quản lý nạp rút" />
             <Button maxWidth="Infinity" onAction="#goApprove" text="Duyệt phiên đấu giá" />
 
-
             <Region VBox.vgrow="ALWAYS" />
             <Button maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #b23b3b; -fx-text-fill: white; -fx-font-weight: bold;" text="Đăng xuất" />
         </VBox>
@@ -55,6 +54,7 @@
                     <TableColumn fx:id="phoneColumn" prefWidth="130" text="SĐT" />
                     <TableColumn fx:id="roleColumn" prefWidth="100" text="Vai trò" />
                     <TableColumn fx:id="statusColumn" prefWidth="120" text="Trạng thái" />
+                    <TableColumn fx:id="lastLoginColumn" prefWidth="150" text="Đăng nhập gần nhất" />
                 </columns>
             </TableView>
 

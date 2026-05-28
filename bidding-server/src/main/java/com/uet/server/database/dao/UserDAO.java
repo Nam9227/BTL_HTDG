@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public class UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
@@ -37,18 +38,34 @@ public class UserDAO {
             return Response.fail("Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.");
         }
 
+        // --- CẬP NHẬT THỜI GIAN ĐĂNG NHẬP GẦN NHẤT VÀO DATABASE ---
+        String updateSql = "UPDATE users SET last_login = NOW() WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(updateSql)) {
+            ps.setString(1, user.getId());
+            ps.executeUpdate();
+
+            // Đồng bộ luôn mốc thời gian này vào object user để trả về Client
+            user.setLastLoginAt(LocalDateTime.now());
+
+            logger.info("[UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: {}", user.getId());
+        } catch (Exception e) {
+            logger.error("Lỗi khi cập nhật thời gian đăng nhập: ", e);
+        }
+
         return Response.success("Đăng nhập thành công", user);
     }
     public java.util.List<User> getAllUsers() {
         java.util.List<User> userList = new java.util.ArrayList<>();
 
-        // Sử dụng câu lệnh câu SQL gom dữ liệu từ 3 bảng tương tự hàm findUserByUserId của bạn
+        // Đã thêm u.last_login_at vào câu SELECT
         String sql = """
             SELECT 
                 u.id,
                 u.username,
                 u.role,
                 u.active,
+                u.last_login,
                 p.full_name,
                 p.email,
                 p.phone_number,
@@ -76,6 +93,14 @@ public class UserDAO {
                 user.setRole(parseRole(rs.getString("role")));
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
+
+                // --- ĐỌC TRƯỜNG LAST_LOGIN_AT TỪ RESULTSET VÀ CHUYỂN THÀNH LOCALDATETIME ---
+                java.sql.Timestamp timestamp = rs.getTimestamp("last_login");
+                if (timestamp != null) {
+                    user.setLastLoginAt(timestamp.toLocalDateTime());
+                } else {
+                    user.setLastLoginAt(null);
+                }
 
                 userList.add(user);
             }
@@ -346,9 +371,10 @@ public class UserDAO {
     }
 
     private User findUserByUserId(String userId) {
+        // Đã thêm u.last_login_at vào câu SELECT
         String sql = """
             SELECT 
-                u.id, u.username, u.role, u.active,
+                u.id, u.username, u.role, u.active, u.last_login,
                 p.full_name, p.email, p.phone_number, p.address, p.avatar_path,
                 COALESCE(w.balance, 0) AS balance
             FROM users u
@@ -375,6 +401,14 @@ public class UserDAO {
                 user.setRole(parseRole(rs.getString("role")));
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
+
+                // --- ĐỌC TRƯỜNG LAST_LOGIN_AT ---
+                java.sql.Timestamp timestamp = rs.getTimestamp("last_login");
+                if (timestamp != null) {
+                    user.setLastLoginAt(timestamp.toLocalDateTime());
+                } else {
+                    user.setLastLoginAt(null);
+                }
 
                 // Đọc ảnh ra mảng byte y hệt hàm tìm theo Username
                 String avatarPath = rs.getString("avatar_path");

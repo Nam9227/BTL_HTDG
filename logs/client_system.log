@@ -2472,3 +2472,81 @@ java.net.SocketException: An established connection was aborted by the software 
 2026-05-28 13:33:55 [Thread-6] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
 2026-05-28 13:35:16 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
 2026-05-28 13:35:16 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 14:01:32 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 14:01:32 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 15:21:07 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 15:21:07 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 15:22:16 [Thread-3] ERROR com.uet.client.network.ClientSocket - Lỗi xảy ra khi truyền tin tới listener: 
+java.lang.ClassCastException: class com.uet.common.model.user.User cannot be cast to class java.util.List (com.uet.common.model.user.User is in unnamed module of loader 'app'; java.util.List is in module java.base of loader 'bootstrap')
+	at com.uet.client.ui.admin.AdminWalletController.lambda$loadPendingTransactions$0(AdminWalletController.java:104)
+	at com.uet.client.network.ClientSocket.notifyListeners(ClientSocket.java:109)
+	at com.uet.client.network.ClientSocket.lambda$startListening$0(ClientSocket.java:80)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-05-28 15:22:16 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 15:26:53 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 15:26:53 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 15:32:44 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 15:32:44 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 15:35:28 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 15:35:28 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 15:39:20 [JavaFX Application Thread] ERROR com.uet.client.ui.LoginController - Lỗi khi đăng nhập: 
+java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:546)
+	at java.base/sun.nio.ch.Net.connect(Net.java:535)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:585)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:659)
+	at java.base/java.net.Socket.connect(Socket.java:597)
+	at java.base/java.net.Socket.<init>(Socket.java:464)
+	at java.base/java.net.Socket.<init>(Socket.java:276)
+	at com.uet.client.network.ClientSocket.connect(ClientSocket.java:40)
+	at com.uet.client.ui.LoginController.handleLogin(LoginController.java:66)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1855)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1726)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8875)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.scene.control.skin.ButtonSkin.lambda$new$0(ButtonSkin.java:71)
+	at com.sun.javafx.scene.KeyboardShortcutsHandler.processAccelerators(KeyboardShortcutsHandler.java:383)
+	at com.sun.javafx.scene.KeyboardShortcutsHandler.dispatchBubblingEvent(KeyboardShortcutsHandler.java:163)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene.processKeyEvent(Scene.java:2194)
+	at javafx.scene.Scene$ScenePeerListener.keyEvent(Scene.java:2715)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$KeyEventNotification.run(GlassViewEventHandler.java:218)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$KeyEventNotification.run(GlassViewEventHandler.java:150)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:138)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleKeyEvent$1(GlassViewEventHandler.java:250)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleKeyEvent(GlassViewEventHandler.java:249)
+	at com.sun.glass.ui.View.handleKeyEvent(View.java:542)
+	at com.sun.glass.ui.View.notifyKey(View.java:966)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
