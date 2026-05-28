@@ -640,4 +640,30 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+
+    public List<com.uet.common.model.notification.Notification> getNotificationsByUserId(String userId) {
+        List<com.uet.common.model.notification.Notification> list = new ArrayList<>();
+        String sql = "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
+
+        try (Connection conn = com.uet.server.database.DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new com.uet.common.model.notification.Notification(
+                            rs.getInt("id"),
+                            rs.getString("user_id"),
+                            rs.getString("title"),
+                            rs.getString("content"),
+                            rs.getBoolean("is_read"),
+                            rs.getTimestamp("created_at")
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(UserDAO.class).error("Lỗi lấy danh sách thông báo: ", e);
+        }
+        return list;
+    }
 }
