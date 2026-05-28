@@ -72,7 +72,12 @@ public class InformationUploadController {
                     "Sách",
                     "Nghệ thuật",
                     "Nội thất",
-                    "Trò chơi"
+                    "Trò chơi",
+                    "Đồ cổ",
+                    "Trang sức",
+                    "Đồ gia dụng",
+                    "Thể thao",
+                    "Khác"
             );
             ProductType.getSelectionModel().selectFirst();
         }
@@ -211,6 +216,7 @@ public class InformationUploadController {
                 case "Nghệ thuật" -> "Art";
                 case "Nội thất" -> "Furniture";
                 case "Trò chơi" -> "Gaming";
+                case "Khác" -> "Other";
                 default -> "Item";
             };
 

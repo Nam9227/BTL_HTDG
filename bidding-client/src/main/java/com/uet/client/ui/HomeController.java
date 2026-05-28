@@ -39,6 +39,8 @@ public class HomeController {
     @FXML
     private Button addProductBtn;
     @FXML
+    private Button myProductsBtn;
+    @FXML
     private Label userNameLabel;
     @FXML
     private Label balanceLabel;
@@ -416,6 +418,27 @@ public class HomeController {
         } catch (Exception e) {
             logger.error("Không mở được giao diện thêm sản phẩm: ", e);
             showError("Lỗi", "Không mở được giao diện thêm sản phẩm!");
+        }
+    }
+
+    @FXML
+    public void handleOpenMyProducts() {
+        try {
+            cleanupListener();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/my_products.fxml"));
+            Parent root = loader.load();
+
+            MyProductsController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+
+            Stage stage = (Stage) userNameLabel.getScene().getWindow();
+            stage.getScene().setRoot(root);
+            stage.setTitle("Sản phẩm của tôi");
+        } catch (Exception e) {
+            logger.error("Không mở được trang sản phẩm của tôi: ", e);
+            showError("Lỗi", "Không mở được trang sản phẩm của tôi!");
         }
     }
 

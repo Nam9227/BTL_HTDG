@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class ClientRequestDispatcher {
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestDispatcher.class);
@@ -74,8 +75,8 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        if (obj instanceof GetActiveAuctionsRequest) {
-            handleGetActiveAuctions(client);
+        if (obj instanceof GetActiveAuctionsRequest request) {
+            handleGetActiveAuctions(request, client);
             return true;
         }
 
@@ -125,8 +126,18 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof DeleteProductRequest deleteReq) {
+            auctionRealtimeService.handleDeleteAuction(deleteReq, client);
+            return true;
+        }
+
         if (obj instanceof ForceEndRequest forceEndReq) {
             auctionRealtimeService.handleForceEndAuction(forceEndReq.getAuctionId(), client);
+            return true;
+        }
+
+        if (obj instanceof AuctionItem item) {
+            handleUpdateAuction(item, client);
             return true;
         }
 
@@ -162,13 +173,63 @@ public class ClientRequestDispatcher {
         client.send(Response.success("Cập nhật quyền thành công", null));
     }
 
-    private void handleGetActiveAuctions(ClientHandler client) {
-        List<AuctionItem> auctions = auctionDAO.getActiveAuctions();
-        client.send(new GetActiveAuctionsResponse(auctions));
+    private void handleGetActiveAuctions(GetActiveAuctionsRequest request, ClientHandler client) {
+        if ("USER".equalsIgnoreCase(request.getType())) {
+            List<AuctionItem> auctions = auctionDAO.getAuctionsForUser(request.getUserId());
+            client.send(new GetActiveAuctionsResponse(auctions));
+        } else if ("SINGLE".equalsIgnoreCase(request.getType())) {
+            // Lấy duy nhất thông tin chi tiết đầy đủ của một phiên đấu giá bao gồm Hãng (brand) và Danh mục (category)
+            AuctionItem item = auctionDAO.getAuctionById(request.getUserId());
+            List<AuctionItem> list = new ArrayList<>();
+            if (item != null) {
+                list.add(item);
+            }
+            client.send(new GetActiveAuctionsResponse(list));
+        } else {
+            List<AuctionItem> auctions = auctionDAO.getActiveAuctions();
+            client.send(new GetActiveAuctionsResponse(auctions));
+        }
     }
 
     private void handleUpdateProfile(UpdateProfileRequest request, ClientHandler client) {
         Response response = userDAO.updateProfile(request);
         client.send(response);
+    }
+
+    private void handleUpdateAuction(AuctionItem item, ClientHandler client) {
+        logger.info("[Server] Nhận yêu cầu chỉnh sửa sản phẩm ID: {}", item.getAuctionId());
+        try {
+            // 1. Nếu người dùng chọn tải ảnh mới, thực hiện lưu trữ vào đĩa cứng
+            if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
+                FileStorageService fileStorageService = new FileStorageService();
+                com.uet.common.network.ImageData imgData = new com.uet.common.network.ImageData("product.png", "image/png", item.getProductImageBytes());
+                String newImageUrl = fileStorageService.save(imgData, "products", item.getSellerId());
+                if (newImageUrl != null) {
+                    item.setImageUrl(newImageUrl);
+                    logger.info("[Server] Đã cập nhật ảnh sản phẩm mới thành công tại: {}", newImageUrl);
+                }
+            }
+
+            // 2. Lưu thay đổi vào Database
+            boolean isUpdated = auctionDAO.updateAuction(item);
+
+            if (isUpdated) {
+                client.send(Response.success("Cập nhật thông tin sản phẩm thành công! Vui lòng chờ phê duyệt lại.", null));
+
+                // 3. Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ để xóa/ẩn sản phẩm đang chờ duyệt
+                try {
+                    List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                    com.uet.server.network.ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                } catch (Exception e) {
+                    logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi cập nhật sản phẩm: ", e);
+                }
+            } else {
+                client.send(Response.fail("Lỗi hệ thống: Không thể ghi dữ liệu cập nhật sản phẩm vào MySQL Database."));
+            }
+
+        } catch (Exception e) {
+            logger.error("Lỗi khi xử lý chỉnh sửa sản phẩm: ", e);
+            client.send(Response.fail("Hệ thống gặp lỗi ngoài ý muốn khi chỉnh sửa sản phẩm!"));
+        }
     }
 }

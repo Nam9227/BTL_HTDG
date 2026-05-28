@@ -2,11 +2,7 @@ package com.uet.server.service;
 
 import com.uet.common.model.auction.AuctionItem;
 import com.uet.common.model.auction.BidRecord; // 🌟 Thêm import để dùng danh sách lịch sử
-import com.uet.common.network.ApproveAuctionRequest;
-import com.uet.common.network.AuctionUpdateResponse;
-import com.uet.common.network.BidRequest;
-import com.uet.common.network.Response;
-import com.uet.common.network.GetActiveAuctionsResponse;
+import com.uet.common.network.*;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.BidDAO;
 import com.uet.server.network.ClientHandler;
@@ -158,6 +154,78 @@ public class AuctionRealtimeService {
         } catch (Exception e) {
             logger.error("Lỗi hệ thống khi xử lý phê duyệt đấu giá ID: " + request.getAuctionId(), e);
             client.send(Response.fail("Lỗi hệ thống khi xử lý phê duyệt."));
+        }
+    }
+
+    public void handleDeleteAuction(DeleteProductRequest deleteReq, ClientHandler client) {
+        try {
+            String auctionId = deleteReq.getAuctionId();
+            String userId = deleteReq.getUserId();
+
+            // 1. Lấy dữ liệu phiên từ Database lên để kiểm tra điều kiện xóa
+            AuctionItem item = auctionDAO.getAuctionById(auctionId);
+
+            if (item == null) {
+                client.send( Response.fail("Sản phẩm hoặc phiên đấu giá không tồn tại!"));
+                return;
+            }
+
+            // 🛡️ Kiểm tra quyền: Chủ sở hữu (Seller) HOẶC Người thắng (Winner) đều có quyền xóa
+            boolean isSeller = item.getSellerId() != null && item.getSellerId().equals(userId);
+            boolean isWinner = item.getWinnerId() != null && item.getWinnerId().equals(userId);
+
+            if (!isSeller && !isWinner) {
+                client.send(Response.fail("Bạn không có quyền xóa sản phẩm này!"));
+                return;
+            }
+
+            // 🛡️ Kiểm tra trạng thái:
+            // 1. Chặn không cho xóa nếu phiên đấu giá đang diễn ra (RUNNING)
+            if ("RUNNING".equalsIgnoreCase(item.getStatus())) {
+                client.send(Response.fail("Không thể xóa! Phiên đấu giá đang diễn ra (RUNNING)."));
+                return;
+            }
+
+            // 2. Nếu là Seller tự xóa:
+            if (isSeller && !isWinner) {
+                // Chặn xóa nếu phiên đã kết thúc (FINISHED) và thực sự có người thắng
+                if ("FINISHED".equalsIgnoreCase(item.getStatus())) {
+                    if (item.getWinnerId() != null && !item.getWinnerId().trim().isEmpty()) {
+                        client.send(Response.fail("Không thể xóa! Phiên đấu giá đã kết thúc giao dịch thành công."));
+                        return;
+                    }
+                } else {
+                    // Nếu phiên chưa kết thúc nhưng đã có người tham gia đấu giá (có leader hiện tại) thì cũng chặn
+                    if (item.getWinnerId() != null && !item.getWinnerId().trim().isEmpty()) {
+                        client.send(Response.fail("Không thể xóa! Phiên đấu giá đã có thành viên đặt giá."));
+                        return;
+                    }
+                }
+            }
+
+            // 2. Tiến hành xóa dữ liệu trong Database sau khi vượt qua các chốt chặn an toàn
+            boolean isDeleted = auctionDAO.deleteAuction(auctionId);
+
+            if (isDeleted) {
+                // Bắn phản hồi thành công về cho duy nhất Client vừa bấm nút Xóa
+                client.send( Response.success("Đã gỡ bỏ sản phẩm và hủy phiên đấu giá thành công!", null));
+
+                // Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ để cập nhật giao diện realtime
+                try {
+                    List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                    ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                } catch (Exception e) {
+                    logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi xóa phiên: ", e);
+                }
+            } else {
+                client.send( Response.fail("Lỗi hệ thống cơ sở dữ liệu, không thể xóa lúc này!"));
+            }
+
+        } catch (Exception e) {
+            logger.error("Lỗi xảy ra khi xử lý xóa phiên đấu giá: ", e);
+            try {
+                client.send( Response.fail("Hệ thống gặp sự cố ngoài ý muốn khi xử lý lệnh xóa!"));
+            } catch (Exception ignored) {}
         }
     }
 }

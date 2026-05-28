@@ -181,3 +181,16 @@
 .action-button-delete:hover {
     -fx-background-color: #c0392b;
 }
+
+.action-button-view {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI';
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+}
+.action-button-view:hover {
+    -fx-background-color: #27ae60;
+}

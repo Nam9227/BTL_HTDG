@@ -100,19 +100,20 @@ public class LoginController {
     }
 
     @FXML
-    private void handleTogglePassword(ActionEvent event) {
-        if (!isPasswordShown) {
-            // Hiện mật khẩu: Copy từ Password sang TextField
+    void handleTogglePassword(ActionEvent event) {
+        if (passField.isVisible()) {
+            // Hiện mật khẩu dạng thường
             passTextField.setText(passField.getText());
-            passTextField.setVisible(true);
             passField.setVisible(false);
+            passTextField.setVisible(true);
+            // Đổi ảnh con mắt mở ra (Nam nhớ kiểm tra đường dẫn ảnh của mình nha)
             eyeIcon.setImage(imageOpen);
             isPasswordShown = true;
         } else {
-            // Ẩn mật khẩu: Copy từ TextField về PasswordField
+            // Ẩn mật khẩu vào dấu chấm
             passField.setText(passTextField.getText());
-            passField.setVisible(true);
             passTextField.setVisible(false);
+            passField.setVisible(true);
             eyeIcon.setImage(imageClose);
             isPasswordShown = false;
         }

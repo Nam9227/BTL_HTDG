@@ -63,6 +63,56 @@ public class AuctionDAO {
         return list;
     }
 
+    public List<AuctionItem> getAuctionsForUser(String userId) {
+        List<AuctionItem> list = new ArrayList<>();
+
+        String sql = """
+                SELECT
+                    a.id AS auction_id,
+                    i.id AS item_id,
+                    i.name,
+                    i.description,
+                    i.image_url,
+                    i.seller_id,
+                    seller.username AS seller_name,
+                    a.start_price,      
+                    a.current_price,    
+                    a.winner_id,
+                    winner.username AS winner_name,
+                    a.end_time,
+                    a.status
+                FROM auctions a
+                JOIN items i ON a.product_id = i.id
+                LEFT JOIN users seller ON i.seller_id = seller.id
+                LEFT JOIN users winner ON a.winner_id = winner.id
+                WHERE (i.seller_id = ? OR a.winner_id = ?)
+                ORDER BY a.end_time DESC
+                """;
+
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)
+        ) {
+            ps.setString(1, userId);
+            ps.setString(2, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    AuctionItem item = mapAuctionItem(rs);
+                    if (item != null) {
+                        item.setProductImageBytes(loadImageBytes(item.getImageUrl()));
+                    }
+                    list.add(item);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("Lỗi khi lấy danh sách đấu giá của User " + userId + " từ Database: ", e);
+        }
+
+        return list;
+    }
+
     public AuctionItem getAuctionById(String auctionId) {
         return getAuctionById(auctionId, true);
     }
@@ -82,7 +132,9 @@ public class AuctionDAO {
                     a.winner_id,
                     winner.username AS winner_name,
                     a.end_time,
-                    a.status
+                    a.status,
+                    i.category AS category,
+                    i.extra_1 AS brand
                 FROM auctions a
                 JOIN items i ON a.product_id = i.id
                 LEFT JOIN users seller ON i.seller_id = seller.id
@@ -142,6 +194,14 @@ public class AuctionDAO {
         }
 
         item.setStatus(rs.getString("status"));
+
+        try {
+            item.setCategory(rs.getString("category"));
+        } catch (Exception ignored) {}
+
+        try {
+            item.setBrand(rs.getString("brand"));
+        } catch (Exception ignored) {}
 
         return item;
     }
@@ -553,6 +613,149 @@ public class AuctionDAO {
         } catch (Exception e) {
             logger.warn("Không thể đọc file ảnh sản phẩm từ path: {}, lỗi: {}", imagePath, e.getMessage());
             return null;
+        }
+    }
+    public boolean deleteAuction(String auctionId) {
+        // 1. Câu lệnh lấy mã product_id trước khi xóa phiên đấu giá
+        String sqlGetProductId = "SELECT product_id FROM auctions WHERE id = ?";
+
+        // 2. Câu lệnh xóa ở bảng bids trước để gỡ ràng buộc khóa ngoại
+        String sqlDeleteBids = "DELETE FROM bids WHERE auction_id = ?";
+
+        // 3. Câu lệnh xóa ở bảng auctions sau khi bids sạch bóng
+        String sqlDeleteAuction = "DELETE FROM auctions WHERE id = ?";
+
+        // 4. Câu lệnh xóa ở bảng items sau khi auctions sạch bóng
+        String sqlDeleteItem = "DELETE FROM items WHERE id = ?";
+
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false); // 🌟 BẬT TRANSACTION: Đảm bảo xóa là phải xóa sạch cả hai, lỗi là hủy lệnh
+
+            String productId = null;
+
+            // BƯỚC 1: Tìm mã product_id liên kết
+            try (PreparedStatement psGet = conn.prepareStatement(sqlGetProductId)) {
+                psGet.setString(1, auctionId);
+                try (ResultSet rs = psGet.executeQuery()) {
+                    if (rs.next()) {
+                        productId = rs.getString("product_id");
+                    }
+                }
+            }
+
+            // Nếu không tìm thấy phiên đấu giá này trong hệ thống, dừng lại luôn
+            if (productId == null) {
+                logger.warn("[DELETE WARN] Không tìm thấy phiên đấu giá với ID: {}", auctionId);
+                return false;
+            }
+
+            // BƯỚC 2: Xóa các lượt đặt giá trong bảng bids liên kết trước
+            try (PreparedStatement psDelBids = conn.prepareStatement(sqlDeleteBids)) {
+                psDelBids.setString(1, auctionId);
+                psDelBids.executeUpdate();
+                logger.info("[DELETE] Đã xóa toàn bộ lượt bid liên quan ở bảng bids, ID: {}", auctionId);
+            }
+
+            // BƯỚC 3: Xóa dữ liệu tại bảng auctions
+            try (PreparedStatement psDelAuction = conn.prepareStatement(sqlDeleteAuction)) {
+                psDelAuction.setString(1, auctionId);
+                psDelAuction.executeUpdate();
+                logger.info("[DELETE] Đã xóa phiên đấu giá ở bảng auctions, ID: {}", auctionId);
+            }
+
+            // BƯỚC 4: Xóa dữ liệu tương ứng tại bảng items
+            try (PreparedStatement psDelItem = conn.prepareStatement(sqlDeleteItem)) {
+                psDelItem.setString(1, productId);
+                psDelItem.executeUpdate();
+                logger.info("[DELETE] Đã xóa sản phẩm ở bảng items thành công, ID: {}", productId);
+            }
+
+            // Vượt qua tất cả an toàn -> Chốt lưu thay đổi vào Database thật
+            conn.commit();
+            logger.info("[DELETE SUCCESS] Đã dọn dẹp sạch sẽ phiên {} và sản phẩm {} khỏi hệ thống!", auctionId, productId);
+            return true;
+
+        } catch (Exception e) {
+            logger.error("[DELETE ERROR] Gặp sự cố khi thực thi xóa. Tiến hành khôi phục dữ liệu (Rollback)...", e);
+            if (conn != null) {
+                try {
+                    conn.rollback(); // Hủy toàn bộ các lệnh xóa dở dang nếu có một bảng bị lỗi
+                } catch (Exception ignored) {}
+            }
+            return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true); // Trả lại trạng thái mặc định cho Connection Pool
+                    conn.close();
+                } catch (Exception ignored) {}
+            }
+        }
+    }
+
+    public boolean updateAuction(AuctionItem item) {
+        String sqlUpdateItem = """
+                UPDATE items 
+                SET name = ?, description = ?, image_url = ?, category = ?, extra_1 = ?
+                WHERE id = ?
+                """;
+
+        String sqlUpdateAuction = """
+                UPDATE auctions 
+                SET start_price = ?, current_price = ?, end_time = ?, status = 'PENDING'
+                WHERE id = ?
+                """;
+
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false); // Bật Transaction bảo mật
+
+            // BƯỚC 1: CẬP NHẬT BẢNG ITEMS
+            try (PreparedStatement psItem = conn.prepareStatement(sqlUpdateItem)) {
+                psItem.setString(1, item.getProductName());
+                psItem.setString(2, item.getDescription());
+                psItem.setString(3, item.getImageUrl());
+                psItem.setString(4, item.getCategory());
+                psItem.setString(5, item.getBrand());
+                psItem.setString(6, item.getProductId()); // items.id is product_id
+                psItem.executeUpdate();
+            }
+
+            // BƯỚC 2: CẬP NHẬT BẢNG AUCTIONS
+            try (PreparedStatement psAuction = conn.prepareStatement(sqlUpdateAuction)) {
+                psAuction.setDouble(1, item.getStartPrice());
+                psAuction.setDouble(2, item.getStartPrice()); // reset currentPrice về startPrice khi sửa
+                
+                java.util.Calendar cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+                java.sql.Timestamp endTs = java.sql.Timestamp.from(item.getEndTime().atZone(java.time.ZoneId.of("Asia/Ho_Chi_Minh")).toInstant());
+                psAuction.setTimestamp(3, endTs, cal);
+                psAuction.setString(4, item.getAuctionId());
+                
+                psAuction.executeUpdate();
+            }
+
+            conn.commit();
+            logger.info("[DATABASE SUCCESS] Cập nhật thành công Auction ID: {}", item.getAuctionId());
+            return true;
+
+        } catch (Exception e) {
+            logger.error("[DATABASE ERROR] Gặp sự cố cập nhật. Tiến hành khôi phục (Rollback)...", e);
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (Exception ignored) {}
+            }
+            return false;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (Exception ignored) {}
+            }
         }
     }
 }
