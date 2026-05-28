@@ -451,8 +451,8 @@ public class UserDAO {
 
             String sql =
                     "INSERT INTO transactions " +
-                            "(user_id, amount, type, status) " +
-                            "VALUES (?, ?, ?, ?)";
+                            "(user_id, amount, type, status, created_at) " +
+                            "VALUES (?, ?, ?, ?, NOW())";
 
             PreparedStatement ps =
                     conn.prepareStatement(sql);
@@ -500,8 +500,8 @@ public class UserDAO {
                                 rs.getString("user_id"),
                                 rs.getDouble("amount"),
                                 rs.getString("type"),
-                                rs.getString("status"),
-                                rs.getTimestamp("created_at").toLocalDateTime().toString()
+                                rs.getTimestamp("created_at").toLocalDateTime().toString(),
+                                rs.getString("status")
                         );
 
                 t.setId(rs.getLong("id"));
@@ -521,6 +521,8 @@ public class UserDAO {
                 t.setStatus(
                         rs.getString("status")
                 );
+
+                t.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime().toString());
 
                 list.add(t);
             }

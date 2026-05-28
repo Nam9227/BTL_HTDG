@@ -10,7 +10,7 @@ public class Transaction implements Serializable {
 
     private String type;
 
-    private String date;
+    private String createdAt;
 
     private String status;
 
@@ -18,14 +18,14 @@ public class Transaction implements Serializable {
                        String userId,
                        double amount,
                        String type,
-                       String date,
+                       String createdAt,
                        String status) {
 
         this.id = id;
         this.userId = userId;
         this.amount = amount;
         this.type = type;
-        this.date = date;
+        this.createdAt = createdAt;
         this.status = status;
     }
 
@@ -61,11 +61,11 @@ public class Transaction implements Serializable {
         this.type = type;
     }
 
-    public String getDate(){
-        return date;
+    public String getCreated_at(){
+        return createdAt;
     }
 
-    public void setDate(String date){this.date = date;}
+    public void setCreated_at(String createdAt){this.createdAt = createdAt;}
 
     public String getStatus() {
         return status;

@@ -55,7 +55,7 @@
                   <TableView fx:id="transactionTable" prefHeight="430" VBox.vgrow="ALWAYS">
                       <columns>
                           <TableColumn fx:id="idColumn" prefWidth="60" text="ID" />
-                          <TableColumn fx:id="userNameColumn" prefWidth="210" text="ID người dùng" />
+                          <TableColumn fx:id="userIdColumn" prefWidth="210" text="ID người dùng" />
                           <TableColumn fx:id="typeColumn" prefWidth="140" text="Loại" />
                           <TableColumn fx:id="amountColumn" prefWidth="130" text="Số tiền" />
                           <TableColumn fx:id="dateColumn" prefWidth="150" text="Ngày yêu cầu" />

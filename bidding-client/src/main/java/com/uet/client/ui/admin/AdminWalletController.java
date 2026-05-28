@@ -29,7 +29,7 @@ public class AdminWalletController {
 
     @FXML private TableView<String[]> productTable;
     @FXML private TableColumn<Transaction, Long> idColumn;
-    @FXML private TableColumn<Transaction, String> userNameColumn;
+    @FXML private TableColumn<Transaction, String> userIdColumn;
     @FXML private TableColumn<Transaction, String> typeColumn;
     @FXML private TableColumn<Transaction, Double> amountColumn;
     @FXML private TableColumn<Transaction, String> dateColumn;
@@ -46,8 +46,8 @@ public class AdminWalletController {
                 new PropertyValueFactory<>("id")
         );
 
-        userNameColumn.setCellValueFactory(
-                new PropertyValueFactory<>("userName")
+        userIdColumn.setCellValueFactory(
+                new PropertyValueFactory<>("userId")
         );
 
         typeColumn.setCellValueFactory(
@@ -59,7 +59,7 @@ public class AdminWalletController {
         );
 
         dateColumn.setCellValueFactory(
-                new PropertyValueFactory<>("created_at")
+                new PropertyValueFactory<>("createdAt")
         );
 
         statusColumn.setCellValueFactory(
