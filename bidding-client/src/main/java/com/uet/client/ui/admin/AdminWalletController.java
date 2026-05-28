@@ -1,26 +1,17 @@
 package com.uet.client.ui.admin;
 
-import com.uet.client.network.ClientSocket;
-import com.uet.common.model.transaction.Transaction;
-import com.uet.common.network.ApproveTransactionRequest;
-import com.uet.common.network.GetPendingTransactionRequest;
-import com.uet.common.network.Response;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
 
 public class AdminWalletController {
 
@@ -28,13 +19,13 @@ public class AdminWalletController {
     @FXML private ComboBox<String> statusFilter;
 
     @FXML private TableView<String[]> productTable;
-    @FXML private TableColumn<Transaction, Long> idColumn;
-    @FXML private TableColumn<Transaction, String> userNameColumn;
-    @FXML private TableColumn<Transaction, String> typeColumn;
-    @FXML private TableColumn<Transaction, Double> amountColumn;
-    @FXML private TableColumn<Transaction, String> dateColumn;
+    @FXML private TableColumn<String[], String> idColumn;
+    @FXML private TableColumn<String[], String> nameColumn;
+    @FXML private TableColumn<String[], String> ownerColumn;
+    @FXML private TableColumn<String[], String> startPriceColumn;
+    @FXML private TableColumn<String[], String> currentPriceColumn;
     @FXML private TableColumn<String[], String> createdAtColumn;
-    @FXML private TableColumn<Transaction, String> statusColumn;
+    @FXML private TableColumn<String[], String> statusColumn;
 
     @FXML
     public void initialize() {
@@ -42,30 +33,6 @@ public class AdminWalletController {
         if (statusFilter != null) {
             statusFilter.getItems().addAll("Tất cả", "Chờ duyệt", "Đang đấu giá", "Đã bán", "Bị từ chối");
         }
-        idColumn.setCellValueFactory(
-                new PropertyValueFactory<>("id")
-        );
-
-        userNameColumn.setCellValueFactory(
-                new PropertyValueFactory<>("userName")
-        );
-
-        typeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("type")
-        );
-
-        amountColumn.setCellValueFactory(
-                new PropertyValueFactory<>("amount")
-        );
-
-        dateColumn.setCellValueFactory(
-                new PropertyValueFactory<>("created_at")
-        );
-
-        statusColumn.setCellValueFactory(
-                new PropertyValueFactory<>("status")
-        );
-        loadPendingTransactions();
     }
 
     @FXML
@@ -77,7 +44,9 @@ public class AdminWalletController {
 
     @FXML
     private void handleRefresh(ActionEvent event) {
-        loadPendingTransactions();
+        System.out.println("Đang làm mới danh sách sản phẩm...");
+        searchField.clear();
+        if (statusFilter != null) statusFilter.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -86,84 +55,9 @@ public class AdminWalletController {
     }
 
     @FXML
-    private TableView<Transaction> transactionTable;
-    private void loadPendingTransactions(){
-        try {
-
-            ClientSocket.getInstance().send(
-                    new GetPendingTransactionRequest()
-            );
-
-            ClientSocket.getInstance().addMessageListener(response -> {
-
-                if (response instanceof Response res) {
-
-                    if (res.isSuccess()) {
-
-                        List<Transaction> list =
-                                (List<Transaction>) res.getData();
-                        System.out.println(list.size());
-
-
-                        Platform.runLater(() -> {
-                            System.out.println(list.get(0).getAmount());
-
-                            transactionTable
-                                    .getItems()
-                                    .setAll(list);
-                        });
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
+    private void handleApprove(ActionEvent event) {
+        System.out.println("Phê duyệt sản phẩm...");
     }
-    @FXML
-    private void handleApprove() {
-
-        Transaction transaction =
-                transactionTable
-                        .getSelectionModel()
-                        .getSelectedItem();
-
-        if (transaction == null) {
-
-            showAlert(
-                    "Lỗi",
-                    "Hãy chọn giao dịch cần duyệt!",
-                    Alert.AlertType.INFORMATION
-            );
-
-            return;
-        }
-
-        try {
-
-            ApproveTransactionRequest req =
-                    new ApproveTransactionRequest(
-                            transaction.getId()
-                    );
-
-            ClientSocket.getInstance().send(req);
-
-            showAlert(
-                    "Thông báo",
-                    "Đã duyệt thành công",
-                    Alert.AlertType.INFORMATION
-            );
-
-            loadPendingTransactions();
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-    }
-
 
     @FXML
     private void handleReject(ActionEvent event) {
@@ -210,19 +104,5 @@ public class AdminWalletController {
     @FXML
     private void handleLogout(ActionEvent event) {
         switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
-    }
-    private void showAlert(String title,
-                           String text,
-                           Alert.AlertType type) {
-
-        Alert alert = new Alert(type);
-
-        alert.setTitle(title);
-
-        alert.setHeaderText(null);
-
-        alert.setContentText(text);
-
-        alert.showAndWait();
     }
 }

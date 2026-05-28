@@ -37,7 +37,7 @@
     <center>
       <AnchorPane>
          <children>
-              <VBox layoutX="-1.0" prefHeight="650.0" prefWidth="1000.0" spacing="20" style="-fx-padding: 30;">
+              <VBox layoutX="-1.0" prefHeight="721.0" prefWidth="1155.0" spacing="20" style="-fx-padding: 30;">
                   <Label style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;" text="Quản lý nạp rút" />
       
                   <HBox spacing="12">
@@ -52,13 +52,14 @@
                       <Button onAction="#handleRefresh" text="Làm mới" />
                   </HBox>
       
-                  <TableView fx:id="transactionTable" prefHeight="430" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="productTable" prefHeight="430" VBox.vgrow="ALWAYS">
                       <columns>
                           <TableColumn fx:id="idColumn" prefWidth="60" text="ID" />
-                          <TableColumn fx:id="userNameColumn" prefWidth="210" text="ID người dùng" />
-                          <TableColumn fx:id="typeColumn" prefWidth="140" text="Loại" />
-                          <TableColumn fx:id="amountColumn" prefWidth="130" text="Số tiền" />
-                          <TableColumn fx:id="dateColumn" prefWidth="150" text="Ngày yêu cầu" />
+                          <TableColumn fx:id="nameColumn" prefWidth="210" text="Tên người dùng" />
+                          <TableColumn fx:id="ownerColumn" prefWidth="140" text="Loại" />
+                          <TableColumn fx:id="startPriceColumn" prefWidth="130" text="Số tiền" />
+                          <TableColumn fx:id="currentPriceColumn" prefWidth="130" text="Ngân hàng/ Ví" />
+                          <TableColumn fx:id="createdAtColumn" prefWidth="150" text="Ngày yêu cầu" />
                           <TableColumn fx:id="statusColumn" prefWidth="120" text="Trạng thái" />
                       </columns>
                   </TableView>

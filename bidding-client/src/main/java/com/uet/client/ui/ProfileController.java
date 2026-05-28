@@ -2,7 +2,6 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
-import com.uet.common.network.TransactionRequest;
 import com.uet.common.network.ImageData;
 import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
@@ -11,6 +10,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,18 +21,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.Optional;
-import java.util.function.Consumer;
 
-<<<<<<< Updated upstream
 public class ProfileController {
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
-=======
-public class ProfileController implements Serializable {
->>>>>>> Stashed changes
 
     @FXML private Label fullNameLabel, usernameLabel, statusLabel, balanceLabel;
     @FXML private TextField fullNameField, usernameField, emailField, phoneField, addressField;
@@ -209,64 +202,9 @@ public class ProfileController implements Serializable {
                     return;
                 }
 
-                try {
-                    TransactionRequest Req = new TransactionRequest(currentUser.getId(), amount, type);
-                    Consumer<Object> listener = new Consumer<>() {
-                        @Override
-                        public void accept(Object response) {
-
-                            if (response instanceof Response res) {
-
-                                Platform.runLater(() -> {
-
-                                    if (res.isSuccess()) {
-
-                                        // Server trả user mới
-                                        if (res.getData() instanceof User updatedUser) {
-
-                                            currentUser = updatedUser;
-
-                                            balanceLabel.setText(
-                                                    String.format(
-                                                            "%,.0f đ",
-                                                            currentUser.getBalance().doubleValue()
-                                                    )
-                                            );
-                                        }
-
-                                        showAlert(
-                                                "Thành công",
-                                                res.getMessage(),
-                                                Alert.AlertType.INFORMATION
-                                        );
-
-                                    } else {
-
-                                        showAlert(
-                                                "Lỗi",
-                                                res.getMessage(),
-                                                Alert.AlertType.ERROR
-                                        );
-                                    }
-                                });
-
-                                ClientSocket.getInstance()
-                                        .removeMessageListener(this);
-                            }
-                        }
-                    };
-                    ClientSocket.getInstance().addMessageListener(listener);
-
-                    ClientSocket.getInstance().send(Req);
-                }catch(IOException e){
-                    e.printStackTrace();
-
-                    showAlert(
-                            "Lỗi",
-                            "Không thể gửi yêu cầu tới server!",
-                            Alert.AlertType.ERROR
-                    );
-                }
+                // Gửi lệnh xử lý tiền mặt lên Server cập nhật DB
+                // TransactionRequest req = new TransactionRequest(currentUser.getId(), amount, type);
+                // ClientSocket.getInstance().send(req);
 
                 showAlert("Thông báo", "Yêu cầu giao dịch đã được gửi xử lý!", Alert.AlertType.INFORMATION);
 

@@ -2,7 +2,6 @@ package com.uet.server.service;
 
 import com.uet.common.model.auction.AuctionItem;
 import com.uet.common.model.auction.BidRecord;
-import com.uet.common.model.transaction.Transaction;
 import com.uet.common.model.user.User;
 import com.uet.common.network.*;
 import com.uet.server.database.dao.AuctionDAO;
@@ -137,66 +136,8 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-<<<<<<< Updated upstream
         if (obj instanceof AuctionItem item) {
             handleUpdateAuction(item, client);
-=======
-        if (obj instanceof TransactionRequest request) {
-
-            try {
-
-                userDAO.createTransaction(
-                        request.getUserId(),
-                        request.getAmount(),
-                        request.getType()
-                );
-
-                client.send(
-                        Response.success(
-                                "Đã gửi yêu cầu chờ admin duyệt",
-                                null
-                        )
-                );
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-                client.send(
-                        Response.fail("Không thể gửi yêu cầu")
-                );
-            }
-
-            return true;
-        }
-
-        if (obj instanceof GetPendingTransactionRequest) {
-            List<Transaction> list =
-                    userDAO.getPendingTransaction();
-
-            client.send(
-                    Response.success(
-                            "Load pending transaction thành công",
-                            list
-                    )
-            );
-
-            return true;
-        }
-
-        if (obj instanceof ApproveTransactionRequest request) {
-            userDAO.approveTransaction(
-                    request.getTransactionId()
-            );
-
-            client.send(
-                    Response.success(
-                            "Duyệt giao dịch thành công",
-                            null
-                    )
-            );
-
->>>>>>> Stashed changes
             return true;
         }
 
