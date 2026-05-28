@@ -44,13 +44,10 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        // 🌟 3. CẬP NHẬT MỚI: Xử lý yêu cầu XÓA tài khoản từ Admin gửi lên
+        // 3. Xử lý yêu cầu XÓA tài khoản từ Admin gửi lên
         if (obj instanceof DeleteUserRequest request) {
             try {
-                // Gọi hàm deleteUser đã chuẩn bị sẵn ở UserDAO
                 userDAO.deleteUser(request.getUserId());
-
-                // Trả gói tin thông báo thành công về cho Client
                 client.send(Response.success("Xóa tài khoản người dùng thành công!", null));
                 logger.info("[Server] Đã xử lý xóa thành công user ID: {}", request.getUserId());
             } catch (Exception e) {
@@ -137,66 +134,49 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-<<<<<<< Updated upstream
+        // 🌟 ĐÃ GỘP: Xử lý chỉnh sửa thông tin phiên đấu giá gửi từ Client dạng AuctionItem
         if (obj instanceof AuctionItem item) {
             handleUpdateAuction(item, client);
-=======
+            return true;
+        }
+
+        // 🌟 ĐÃ GỘP: Xử lý yêu cầu nạp/rút tiền (TransactionRequest) chờ duyệt
         if (obj instanceof TransactionRequest request) {
-
             try {
-
                 userDAO.createTransaction(
                         request.getUserId(),
                         request.getAmount(),
                         request.getType()
                 );
-
-                client.send(
-                        Response.success(
-                                "Đã gửi yêu cầu chờ admin duyệt",
-                                null
-                        )
-                );
-
+                client.send(Response.success("Đã gửi yêu cầu chờ admin duyệt", null));
             } catch (Exception e) {
-
-                e.printStackTrace();
-
-                client.send(
-                        Response.fail("Không thể gửi yêu cầu")
-                );
+                logger.error("Lỗi khi tạo yêu cầu giao dịch: ", e);
+                client.send(Response.fail("Không thể gửi yêu cầu"));
             }
-
             return true;
         }
 
+        // 🌟 ĐÃ GỘP: Tải toàn bộ danh sách giao dịch đang chờ duyệt cho màn hình Admin
         if (obj instanceof GetPendingTransactionRequest) {
-            List<Transaction> list =
-                    userDAO.getPendingTransaction();
-
-            client.send(
-                    Response.success(
-                            "Load pending transaction thành công",
-                            list
-                    )
-            );
-
+            try {
+                List<Transaction> list = userDAO.getPendingTransaction();
+                client.send(Response.success("Load pending transaction thành công", list));
+            } catch (Exception e) {
+                logger.error("Lỗi khi lấy danh sách giao dịch chờ duyệt: ", e);
+                client.send(Response.fail("Không thể lấy danh sách giao dịch"));
+            }
             return true;
         }
 
+        // 🌟 ĐÃ GỘP: Phê duyệt giao dịch nạp/rút từ Admin
         if (obj instanceof ApproveTransactionRequest request) {
-            userDAO.approveTransaction(
-                    request.getTransactionId()
-            );
-
-            client.send(
-                    Response.success(
-                            "Duyệt giao dịch thành công",
-                            null
-                    )
-            );
-
->>>>>>> Stashed changes
+            try {
+                userDAO.approveTransaction(request.getTransactionId());
+                client.send(Response.success("Duyệt giao dịch thành công", null));
+            } catch (Exception e) {
+                logger.error("Lỗi khi phê duyệt giao dịch ID: " + request.getTransactionId(), e);
+                client.send(Response.fail("Phê duyệt giao dịch thất bại"));
+            }
             return true;
         }
 
@@ -204,9 +184,7 @@ public class ClientRequestDispatcher {
         return true;
     }
 
-    // ==========================================
-    // CÁC HÀM XỬ LÝ PRIVATE (HELPER METHODS)
-    // ==========================================
+
 
     private void handleGetAllUsers(ClientHandler client) {
         try {
@@ -237,7 +215,6 @@ public class ClientRequestDispatcher {
             List<AuctionItem> auctions = auctionDAO.getAuctionsForUser(request.getUserId());
             client.send(new GetActiveAuctionsResponse(auctions));
         } else if ("SINGLE".equalsIgnoreCase(request.getType())) {
-            // Lấy duy nhất thông tin chi tiết đầy đủ của một phiên đấu giá bao gồm Hãng (brand) và Danh mục (category)
             AuctionItem item = auctionDAO.getAuctionById(request.getUserId());
             List<AuctionItem> list = new ArrayList<>();
             if (item != null) {

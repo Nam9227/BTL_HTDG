@@ -2070,3 +2070,110 @@ java.nio.file.InvalidPathException: Illegal char <:> at index 3: /D:\root\upload
 2026-05-28 09:06:40 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-05-28 09:06:40 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-05-28 09:06:40 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 13:25:15 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 13:25:15 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 13:25:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:55 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:55 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:25:55 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:25:55 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:00 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:00 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:00 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:00 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:05 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:05 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:05 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:05 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:10 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:10 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:10 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:10 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:20 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:25 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:30 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:35 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:40 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:45 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:50 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:26:57 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-28 13:26:57 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-28 13:26:57 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-28 13:26:57 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-28 13:33:31 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 13:33:31 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-28 13:33:31 [Thread-0] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_bfd9560e-cb7a-4d45-9713-94add44d6970.png
+2026-05-28 13:33:31 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 13:33:34 [Thread-0] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 13:33:34 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 13:33:34 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 13:33:38 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 13:33:38 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: 1
+2026-05-28 13:33:38 [Thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 13:33:53 [Thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/6134901206_a2b7adbe-236d-487a-9971-b81cea4acbf7.png
+2026-05-28 13:33:55 [Thread-1] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-05-28 13:33:55 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-28 13:33:55 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-28 13:35:16 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-28 13:35:16 [Thread-2] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-28 13:35:19 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 21 người dùng cho Admin.
+2026-05-28 13:35:23 [Thread-2] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-28 13:35:26 [Thread-2] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-28 13:35:30 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 21 người dùng cho Admin.
+2026-05-28 13:35:33 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 21 người dùng cho Admin.

@@ -10,63 +10,38 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-<<<<<<< Updated upstream
 public class DBConnection {
     private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
-=======
-/*public class DBConnection {
 
->>>>>>> Stashed changes
-    private static Connection connection;
-    private static boolean loggedConnection = false;
-
-    public static Connection getConnection() throws SQLException {
-        try {
-            if (connection == null || connection.isClosed()) {
-
-                Properties properties = new Properties();
-                FileInputStream fis = new FileInputStream("bidding-server/config/db.properties");
-                properties.load(fis);
-
-                String url = properties.getProperty("db.url");
-                String username = properties.getProperty("db.username");
-                String password = properties.getProperty("db.password");
-
-                connection = DriverManager.getConnection(url, username, password);
-                if (!loggedConnection) {
-                    logger.info("Connected to database!");
-                    loggedConnection = true;
-                }
-            }
-            return connection;
-        } catch (IOException e) {
-            throw new SQLException("Cannot read db.properties", e);
-        }
-    }
-}*/
-public class DBConnection {
+    // 🌟 BIẾN QUYẾT ĐỊNH: Cờ hiệu kiểm tra xem đã in log kết nối lần nào chưa
+    private static boolean isLogPrinted = false;
 
     public static Connection getConnection() throws SQLException {
         try {
             Properties properties = new Properties();
 
-            FileInputStream fis =
-                    new FileInputStream("bidding-server/config/db.properties");
-
+            // Đọc cấu hình từ file db.properties
+            FileInputStream fis = new FileInputStream("bidding-server/config/db.properties");
             properties.load(fis);
 
             String url = properties.getProperty("db.url");
             String username = properties.getProperty("db.username");
             String password = properties.getProperty("db.password");
 
+            // Khởi tạo kết nối động tới MySQL để tránh nghẽn luồng
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            System.out.println("DB URL = " + url);
-            System.out.println("Connected to database!");
+            // 🌟 CHỈ HIỆN 1 LẦN ĐẦU: Nếu cờ hiệu chưa bật thì mới in log và bật cờ lên
+            if (!isLogPrinted) {
+                logger.info("DB URL = {}", url);
+                logger.info("Connected to database successfully!");
+                isLogPrinted = true; // Khóa cờ lại, các lần gọi sau sẽ bỏ qua khối lệnh này
+            }
 
             return conn;
 
         } catch (IOException e) {
+            logger.error("Không thể đọc file db.properties: ", e);
             throw new SQLException("Cannot read db.properties", e);
         }
     }

@@ -27,12 +27,8 @@ import java.nio.file.Files;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-<<<<<<< Updated upstream
 public class ProfileController {
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
-=======
-public class ProfileController implements Serializable {
->>>>>>> Stashed changes
 
     @FXML private Label fullNameLabel, usernameLabel, statusLabel, balanceLabel;
     @FXML private TextField fullNameField, usernameField, emailField, phoneField, addressField;
