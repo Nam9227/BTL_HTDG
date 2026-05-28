@@ -1281,3 +1281,44 @@ javafx.fxml.LoadException: Error resolving onAction='#handleOpenProfile', either
 2026-05-28 09:06:12 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 1 items
 2026-05-28 09:06:27 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người bán (SELLER). Hiện đầy đủ tính năng thêm/quản lý sản phẩm.
 2026-05-28 09:06:27 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 6 items
+2026-05-28 09:56:46 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 09:56:46 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 09:56:46 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:56:47 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 09:56:51 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:56:51 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 09:56:52 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-05-28 09:56:54 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 7 items
+2026-05-28 09:56:59 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Sent DeleteProductRequest for auctionId: 7438259586
+2026-05-28 09:56:59 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 1 items
+2026-05-28 09:57:09 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:57:10 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 09:57:12 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-05-28 09:57:13 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 6 items
+2026-05-28 09:57:21 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:57:21 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 09:57:41 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:57:41 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 1
+2026-05-28 09:57:43 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 09:57:43 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 09:57:48 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 09:57:49 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-28 09:57:58 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 09:57:58 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:57:58 [Thread-12] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 09:58:01 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-05-28 09:58:02 [Thread-12] INFO  c.uet.client.ui.MyProductsController - Data received: 6 items
+2026-05-28 09:58:09 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Sent DeleteProductRequest for auctionId: 5618247614
+2026-05-28 09:58:10 [Thread-12] INFO  c.uet.client.ui.MyProductsController - Data received: 0 items
+2026-05-28 09:58:13 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-28 09:58:13 [Thread-12] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-28 09:58:17 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-28 09:58:18 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-28 09:58:18 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:58:18 [Thread-17] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 09:58:20 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-05-28 09:58:20 [Thread-17] INFO  c.uet.client.ui.MyProductsController - Data received: 5 items
+2026-05-28 09:58:27 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:58:28 [Thread-17] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-05-28 09:58:38 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-28 09:58:38 [Thread-17] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
