@@ -264,7 +264,6 @@ public class ProfileController {
                     );
                 }
 
-                showAlert("Thông báo", "Yêu cầu giao dịch đã được gửi xử lý!", Alert.AlertType.INFORMATION);
 
             } catch (NumberFormatException e) {
                 showAlert("Lỗi", "Số tiền nhập vào không hợp lệ!", Alert.AlertType.ERROR);

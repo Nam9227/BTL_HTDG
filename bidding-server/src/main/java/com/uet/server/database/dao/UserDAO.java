@@ -538,6 +538,14 @@ public class UserDAO {
 
 
     public User deposit(String userId, double amount){
+        if(amount <= 0){
+
+            System.out.println(
+                    "Số tiền nạp không hợp lệ!"
+            );
+
+            return null;
+        }
         try{
             Connection conn = DBConnection.getConnection();
 
@@ -569,8 +577,41 @@ public class UserDAO {
         return null;
     }
     public User withdraw(String userId, double amount){
+
         try{
             Connection conn = DBConnection.getConnection();
+
+            // ===== LẤY SỐ DƯ =====
+
+            String balanceSql =
+                    "SELECT balance FROM wallet " +
+                            "WHERE user_id = ?";
+
+            PreparedStatement balancePs =
+                    conn.prepareStatement(balanceSql);
+
+            balancePs.setString(1, userId);
+
+            ResultSet rs =
+                    balancePs.executeQuery();
+
+            if(rs.next()){
+
+                double balance =
+                        rs.getDouble("balance");
+
+                // ===== KIỂM TRA =====
+
+                if(amount > balance){
+
+                    System.out.println(
+                            "Số dư không đủ để rút!"
+                    );
+
+                    return null;
+                }
+            }
+
 
             String sql =
                     "UPDATE wallet " +
