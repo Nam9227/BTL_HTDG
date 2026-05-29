@@ -38,7 +38,7 @@ public class AdminDashboardController {
         targetColumn.setCellValueFactory(cellData -> cellData.getValue().targetProperty());
         statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
 
-        // 2. Load dữ liệu
+        
         refreshData();
     }
 

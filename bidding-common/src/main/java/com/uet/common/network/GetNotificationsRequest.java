@@ -8,14 +8,14 @@ import java.io.Serializable;
 public class GetNotificationsRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String userId; // ID của người dùng đang đăng nhập (kiểu VARCHAR/String)
+    private String userId; 
 
-    // Constructor (Hàm khởi tạo)
+    
     public GetNotificationsRequest(String userId) {
         this.userId = userId;
     }
 
-    // Getter để Server lấy ra ID và quét database
+    
     public String getUserId() {
         return userId;
     }

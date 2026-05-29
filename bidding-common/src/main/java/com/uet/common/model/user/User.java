@@ -2,7 +2,7 @@ package com.uet.common.model.user;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime; // Đảm bảo có dòng này
+import java.time.LocalDateTime; 
 
 public class User implements Serializable {
     private String id;
@@ -34,7 +34,7 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    // 2. CHỈ THÊM GETTER VÀ SETTER NÀY Ở DƯỚI CÙNG
+    
     public LocalDateTime getLastLoginAt() {
         return lastLoginAt;
     }
@@ -43,7 +43,7 @@ public class User implements Serializable {
         this.lastLoginAt = lastLoginAt;
     }
 
-    // --- TẤT CẢ CÁC GETTER / SETTER CŨ CỦA BẠN GIỮ NGUYÊN HOÀN TOÀN ---
+    
     public String getId() { return id; }
     public String getUsername() { return username; }
     public String getFullName() { return fullName; }

@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class AddProductRequest implements Serializable {
-    // Mã định danh phiên bản để đảm bảo Client và Server đồng bộ cấu trúc Object
+    
     private static final long serialVersionUID = 1L;
 
     private String sellerId;
     private String productName;
     private String description;
     private double startPrice;
-    private ImageData productImage; // Đối tượng chứa mảng byte ảnh đơn của Nam
-    private String itemType;        // Chuỗi tiếng Anh lưu loại sản phẩm ("Electronics", "Fashion"...)
+    private ImageData productImage; 
+    private String itemType;        
 
-    // 🌟 ĐÃ ĐƯA ĐÚNG VÀO TRONG CLASS: Khai báo thêm 3 thuộc tính mới
+    
     private String brand;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    // 🌟 ĐÃ CẬP NHẬT CONSTRUCTOR: Truyền đầy đủ tham số từ Client lên
+    
     public AddProductRequest(String sellerId, String productName, String description, double startPrice,
                              ImageData productImage, String itemType, String brand,
                              LocalDateTime startTime, LocalDateTime endTime) {
@@ -34,9 +34,9 @@ public class AddProductRequest implements Serializable {
         this.endTime = endTime;
     }
 
-    // =========================================================================
-    // ĐẦY ĐỦ CÁC HÀM GETTER VÀ SETTER
-    // =========================================================================
+    
+    
+    
 
     public String getSellerId() {
         return sellerId;

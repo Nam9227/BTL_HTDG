@@ -38,14 +38,14 @@ public class UserDAO {
             return Response.fail("Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.");
         }
 
-        // --- CẬP NHẬT THỜI GIAN ĐĂNG NHẬP GẦN NHẤT VÀO DATABASE ---
+        
         String updateSql = "UPDATE users SET last_login = NOW() WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(updateSql)) {
             ps.setString(1, user.getId());
             ps.executeUpdate();
 
-            // Đồng bộ luôn mốc thời gian này vào object user để trả về Client
+            
             user.setLastLoginAt(LocalDateTime.now());
 
             logger.info("[UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: {}", user.getId());
@@ -470,7 +470,7 @@ public class UserDAO {
         return list;
     }
 
-    // 🎯 Đã sửa: Hàm nạp tiền sử dụng Connection truyền từ ngoài vào để chạy chung Transaction
+    
     public User deposit(Connection conn, String userId, double amount) throws Exception {
         if (amount <= 0) {
             logger.warn("Số tiền nạp không hợp lệ: {}", amount);
@@ -486,7 +486,7 @@ public class UserDAO {
         }
     }
 
-    // 🎯 Đã sửa: Hàm rút tiền sử dụng Connection truyền từ ngoài vào để chạy chung Transaction
+    
     public User withdraw(Connection conn, String userId, double amount) throws Exception {
         String balanceSql = "SELECT balance FROM wallet WHERE user_id = ?";
         try (PreparedStatement balancePs = conn.prepareStatement(balanceSql)) {
@@ -496,10 +496,10 @@ public class UserDAO {
                     double balance = rs.getDouble("balance");
                     if (amount > balance) {
                         logger.warn("Số dư không đủ để rút! User: {}, Số dư: {}, Cần rút: {}", userId, balance, amount);
-                        return null; // Số dư không đủ
+                        return null; 
                     }
                 } else {
-                    return null; // Không thấy ví
+                    return null; 
                 }
             }
         }
@@ -514,7 +514,7 @@ public class UserDAO {
         }
     }
 
-    // 🎯 Đã sửa dứt điểm: Tách biệt quản lý Connection và quản lý đóng mở TRANSACTION an toàn
+    
     public User approveTransaction(long transactionId) {
         String selectSql = "SELECT * FROM transactions WHERE id = ?";
         String updateSql = "UPDATE transactions SET status = 'APPROVED' WHERE id = ?";
@@ -526,7 +526,7 @@ public class UserDAO {
 
         try {
             conn = DBConnection.getConnection();
-            // 🌟 ĐỒNG BỘ: Tắt AutoCommit để bọc toàn bộ chuỗi cập nhật số dư + đổi status vào 1 phiên an toàn
+            
             conn.setAutoCommit(false);
 
             ps = conn.prepareStatement(selectSql);
@@ -538,7 +538,7 @@ public class UserDAO {
                 double amount = rs.getDouble("amount");
                 String type = rs.getString("type");
 
-                // Gọi hàm nạp/rút dùng chung Connection đang tắt autocommit
+                
                 User updatedUser = null;
                 if ("DEPOSIT".equals(type)) {
                     updatedUser = deposit(conn, userId, amount);
@@ -546,21 +546,21 @@ public class UserDAO {
                     updatedUser = withdraw(conn, userId, amount);
                 }
 
-                // Nếu rút/nạp thất bại (ví dụ không đủ số dư) thì hủy bỏ luôn
+                
                 if (updatedUser == null) {
                     conn.rollback();
                     return null;
                 }
 
-                // Cập nhật trạng thái hóa đơn
+                
                 updatePs = conn.prepareStatement(updateSql);
                 updatePs.setLong(1, transactionId);
                 updatePs.executeUpdate();
 
-                // 🌟 LƯU THAY ĐỔI: Thành công mỹ mãn thì chốt hạ lưu vào ổ đĩa MySQL
+                
                 conn.commit();
 
-                // Logic gửi thông báo
+                
                 String actionStr = "DEPOSIT".equals(type) ? "nạp tiền" : "rút tiền";
                 String title = "Giao dịch " + actionStr + " thành công";
                 String content = "Yêu cầu " + actionStr + " số tiền " + String.format("%,.0f", amount)
@@ -581,7 +581,7 @@ public class UserDAO {
                 try { conn.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
             }
         } finally {
-            // 🌟 KHÔI PHỤC: Trả lại trạng thái mặc định của Connection Pool để không làm hỏng hàm khác
+            
             if (conn != null) {
                 try { conn.setAutoCommit(true); } catch (Exception ex) { ex.printStackTrace(); }
             }

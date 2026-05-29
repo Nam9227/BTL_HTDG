@@ -39,7 +39,7 @@ public class AdminUsersController {
     @FXML private TableColumn<User, String> roleColumn;
     @FXML private TableColumn<User, Boolean> statusColumn;
 
-    // Cột Đăng nhập gần nhất khớp với fx:id trong file FXML
+    
     @FXML private TableColumn<User, LocalDateTime> lastLoginColumn;
 
     private final ObservableList<User> masterData = FXCollections.observableArrayList();
@@ -49,7 +49,7 @@ public class AdminUsersController {
 
     @FXML
     public void initialize() {
-        // 1. Map dữ liệu vào các cột TableView
+        
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -72,7 +72,7 @@ public class AdminUsersController {
             }
         });
 
-        // 2. Cấu hình định dạng và ĐÃ ĐỔI MÀU CHỮ TỐI cho cột Đăng nhập gần nhất
+        
         lastLoginColumn.setCellValueFactory(new PropertyValueFactory<>("lastLoginAt"));
         lastLoginColumn.setCellFactory(column -> new TableCell<>() {
             private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
@@ -82,16 +82,16 @@ public class AdminUsersController {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText("Chưa từng đăng nhập");
-                    setStyle("-fx-text-fill: #888888; -fx-font-style: italic;"); // Chữ màu xám nghiêng
+                    setStyle("-fx-text-fill: #888888; -fx-font-style: italic;"); 
                 } else {
                     setText(item.format(formatter));
-                    // Đã sửa thành #1e293b để chữ hiển thị màu xanh đen đậm rõ nét trên nền trắng
+                    
                     setStyle("-fx-text-fill: #1e293b; -fx-font-weight: bold; -fx-font-style: normal;");
                 }
             }
         });
 
-        // 3. Thiết lập dữ liệu lọc cho TableView
+        
         filteredData = new FilteredList<>(masterData, p -> true);
         userTable.setItems(filteredData);
 
@@ -105,7 +105,7 @@ public class AdminUsersController {
         roleFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
         statusFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
 
-        // 4. Đăng ký nhận gói tin kết quả từ Socket và kéo dữ liệu thời gian thực
+        
         setupSocketListener();
         fetchUsersFromServer();
     }

@@ -39,7 +39,7 @@ public class ClientSocket {
         if (socket == null || socket.isClosed()) {
             socket = new Socket(AppConfig.get("server.host"), AppConfig.getInt("server.port"));
 
-            // 🌟 THÊM DÒNG NÀY: Ép mạng gửi gói tin đi ngay, không chờ đệm
+            
             socket.setTcpNoDelay(true);
 
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -59,12 +59,12 @@ public class ClientSocket {
         out.writeObject(msg);
         out.flush();
 
-        // 🌟 THÊM DÒNG NÀY: Xóa bộ đệm đối tượng cũ, tránh lag dữ liệu
+        
         out.reset();
     }
 
     private void startListening() {
-        // Nếu luồng cũ đang chạy thì không tạo luồng mới trùng lặp
+        
         if (listenerThread != null && listenerThread.isAlive()) {
             return;
         }
@@ -80,15 +80,15 @@ public class ClientSocket {
                     notifyListeners(message);
 
                 } catch (java.io.EOFException | java.net.SocketException e) {
-                    // 🌟 MẸO KHỬ LỖI ĐỎ: Nếu ta chủ động gọi close(), biến listening sẽ bằng false.
-                    // Khi đó, việc dính EOFException là hoàn toàn bình thường, ta cho luồng chết êm ái, không in lỗi ra.
+                    
+                    
                     if (!listening) {
                         logger.info("ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.");
                     } else {
                         logger.warn("Đột ngột mất kết nối vật lý tới Server!");
                         stopListening();
                     }
-                    break; // Thoát hẳn vòng lặp while để hủy Thread ngầm
+                    break; 
                 } catch (Exception e) {
                     if (listening) {
                         logger.error("Lỗi xảy ra trong luồng nghe ClientSocket: ", e);
@@ -136,10 +136,10 @@ public class ClientSocket {
 
     public void close() {
         try {
-            // Hạ cờ hiệu nghe xuống trước để vòng lặp while nhận biết hành vi chủ động đóng
+            
             stopListening();
 
-            // Đóng tuần tự từ Stream ra đến Socket vật lý
+            
             if (out != null) {
                 out.close();
             }
@@ -153,8 +153,8 @@ public class ClientSocket {
         } catch (Exception e) {
             logger.error("Lỗi xảy ra khi đang đóng tài nguyên Socket: ", e);
         } finally {
-            // 🌟 QUAN TRỌNG NHẤT: Xóa trắng toàn bộ Object cũ về null
-            // Để lần sau khi quay lại màn Login bấm nút Đăng nhập, hàm connect() check (socket == null) sẽ tự tạo luồng mới tinh.
+            
+            
             this.socket = null;
             this.in = null;
             this.out = null;

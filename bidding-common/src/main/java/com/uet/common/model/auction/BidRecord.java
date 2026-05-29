@@ -9,14 +9,14 @@ public class BidRecord implements Serializable {
     private String id;
     private String auctionId;
     private String userId;
-    private String username;    // Thêm tên người trả giá để hiển thị lên giao diện Client
+    private String username;    
     private double bidAmount;
     private LocalDateTime bidTime;
 
-    // Constructor mặc định
+    
     public BidRecord() {}
 
-    // Getter và Setter
+    
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

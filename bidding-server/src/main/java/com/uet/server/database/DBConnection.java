@@ -13,14 +13,14 @@ import java.util.Properties;
 public class DBConnection {
     private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
-    // 🌟 BIẾN QUYẾT ĐỊNH: Cờ hiệu kiểm tra xem đã in log kết nối lần nào chưa
+    
     private static boolean isLogPrinted = false;
 
     public static Connection getConnection() throws SQLException {
         try {
             Properties properties = new Properties();
 
-            // Đọc cấu hình từ file db.properties
+            
             FileInputStream fis = new FileInputStream("bidding-server/config/db.properties");
             properties.load(fis);
 
@@ -28,14 +28,14 @@ public class DBConnection {
             String username = properties.getProperty("db.username");
             String password = properties.getProperty("db.password");
 
-            // Khởi tạo kết nối động tới MySQL để tránh nghẽn luồng
+            
             Connection conn = DriverManager.getConnection(url, username, password);
 
-            // 🌟 CHỈ HIỆN 1 LẦN ĐẦU: Nếu cờ hiệu chưa bật thì mới in log và bật cờ lên
+            
             if (!isLogPrinted) {
                 logger.info("DB URL = {}", url);
                 logger.info("Connected to database successfully!");
-                isLogPrinted = true; // Khóa cờ lại, các lần gọi sau sẽ bỏ qua khối lệnh này
+                isLogPrinted = true; 
             }
 
             return conn;

@@ -8,17 +8,17 @@ public class ImageData implements Serializable {
     private String originalFileName;
     private String contentType;
     private byte[] data;
-    private String imageType;      // ✅ NEW: "AVATAR", "PRODUCT", etc.
-    private String imageId;        // ✅ NEW: userId, productId, auctionId, etc.
+    private String imageType;      
+    private String imageId;        
 
-    // Constructor 1: Cho upload (client → server)
+    
     public ImageData(String originalFileName, String contentType, byte[] data) {
         this.originalFileName = originalFileName;
         this.contentType = contentType;
         this.data = data;
     }
 
-    // Constructor 2: Đầy đủ (server → client)
+    
     public ImageData(String originalFileName, String contentType, byte[] data,
                      String imageType, String imageId) {
         this.originalFileName = originalFileName;

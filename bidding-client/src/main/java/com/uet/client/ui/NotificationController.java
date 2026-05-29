@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Region; // 🌟 ĐÃ SỬA: Import chuẩn JavaFX Node
+import javafx.scene.layout.Region; 
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -70,7 +70,7 @@ public class NotificationController {
             }
         };
 
-        // Phân quyền hiển thị nút thêm sản phẩm
+        
         if (addProductBtn != null) {
             if (user.getRole() == com.uet.common.model.user.Role.SELLER) {
                 addProductBtn.setVisible(true);
@@ -90,20 +90,20 @@ public class NotificationController {
             return;
         }
 
-        // 1. Tạo gói tin yêu cầu cầm theo ID của Nam lên Server
+        
         GetNotificationsRequest req = new GetNotificationsRequest(currentUser.getId());
 
-        // 2. Tạo vị quan sát (Listener) để hứng phản hồi từ Server về
+        
         Consumer<Object> responseListener = new Consumer<>() {
             @Override
             public void accept(Object response) {
-                // Kiểm tra xem có đúng là gói tin Response thành công chứa danh sách không
+                
                 if (response instanceof Response res && res.isSuccess()) {
                     if (res.getData() instanceof List<?> list) {
 
-                        // 🌟 BẮT BUỘC: Chạy trong Platform.runLater để vẽ giao diện JavaFX không bị treo luồng
+                        
                         Platform.runLater(() -> {
-                            notificationContainer.getChildren().clear(); // Dọn sạch các thẻ cũ hoặc chữ "Đang tải..."
+                            notificationContainer.getChildren().clear(); 
 
                             if (list.isEmpty()) {
                                 Label emptyLabel = new Label("📭 Hộp thư của bạn đang trống trơn.");
@@ -112,7 +112,7 @@ public class NotificationController {
                                 return;
                             }
 
-                            // Vòng lặp đúc các thẻ dọc từ danh sách Server trả về
+                            
                             for (Object item : list) {
                                 if (item instanceof Notification noti) {
                                     VBox card = createNotificationCard(noti);
@@ -122,17 +122,17 @@ public class NotificationController {
                         });
                     }
 
-                    // Đọc xong dữ liệu thì hủy bỏ Listener này để giải phóng bộ nhớ, tránh trùng lặp tin nhắn
+                    
                     ClientSocket.getInstance().removeMessageListener(this);
                 }
             }
         };
 
         try {
-            // 3. ĐĂNG KÝ VỚI HỆ THỐNG: Báo cho Socket biết để chuẩn bị hứng tai nghe gói tin trả về
+            
             ClientSocket.getInstance().addMessageListener(responseListener);
 
-            // 4. BẮN TIN LÊN SERVER: Ra lệnh cho Socket gửi gói tin đi ngay lập tức
+            
             ClientSocket.getInstance().send(req);
 
             System.out.println("[Client] Đã bắn GetNotificationsRequest lên Server cho User ID: " + currentUser.getId());
@@ -140,7 +140,7 @@ public class NotificationController {
         } catch (Exception e) {
             System.out.println("[LỖI] Không thể gửi yêu cầu lấy thông báo lên Server!");
             e.printStackTrace();
-            // Nếu gửi lỗi thì dọn dẹp luôn tai nghe cho đỡ rác hệ thống
+            
             ClientSocket.getInstance().removeMessageListener(responseListener);
         }
     }
@@ -158,7 +158,7 @@ public class NotificationController {
         Label timeLbl = new Label(noti.getCreatedAt() != null ? noti.getCreatedAt().toString() : "");
         timeLbl.getStyleClass().add("noti-card-time");
 
-        // 🌟 Chạy mượt mà vì spacer đã là một Region của JavaFX layout chính hiệu
+        
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 

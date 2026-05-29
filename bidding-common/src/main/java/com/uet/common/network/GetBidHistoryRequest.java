@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class GetBidHistoryRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String auctionId; // Client truyền ID phiên đấu giá muốn xem lịch sử
+    private String auctionId; 
 
     public GetBidHistoryRequest(String auctionId) {
         this.auctionId = auctionId;

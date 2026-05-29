@@ -59,7 +59,7 @@ public class EditProductController {
             }
         };
 
-        // 1. Nạp danh sách ComboBox Danh mục
+        
         if (ProductType != null) {
             ProductType.getItems().clear();
             ProductType.getItems().addAll(
@@ -81,7 +81,7 @@ public class EditProductController {
                     case "Art" -> "Nghệ thuật";
                     case "Furniture" -> "Nội thất";
                     case "Gaming" -> "Trò chơi";
-                    default -> dbCategory; // Giữ nguyên nếu là danh mục tự do
+                    default -> dbCategory; 
                 };
 
                 boolean found = false;
@@ -101,12 +101,12 @@ public class EditProductController {
             }
         }
 
-        // 2. Đổ toàn bộ dữ liệu cũ của phiên lên Form
+        
         productNameField.setText(item.getProductName());
         productDescriptionField.setText(item.getDescription());
         startPriceField.setText(String.valueOf((long) item.getStartPrice()));
 
-        // Gán dữ liệu hãng sản xuất
+        
         if (brandField != null) {
             brandField.setText(item.getBrand() != null ? item.getBrand() : "");
         }
@@ -117,7 +117,7 @@ public class EditProductController {
             minuteEndSpinner.getValueFactory().setValue(item.getEndTime().getMinute());
         }
 
-        // Đổ ảnh cũ lên khung Preview
+        
         if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
             try (ByteArrayInputStream bais = new ByteArrayInputStream(item.getProductImageBytes())) {
                 productImageView.setImage(new Image(bais));
@@ -135,7 +135,7 @@ public class EditProductController {
         hourEndSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 18));
         minuteEndSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
 
-        // Hiệu ứng Hover kéo thả mượt mà cho vùng ảnh
+        
         dropImageZone.setOnDragEntered(e -> {
             if (e.getDragboard().hasFiles()) {
                 dropImageZone.setStyle("-fx-background-color: #f0f7ff; -fx-border-color: #2980b9;");
@@ -165,7 +165,7 @@ public class EditProductController {
                 return;
             }
 
-            // Gán dữ liệu sửa đổi vào gói tin gốc AuctionItem gửi đi
+            
             targetItem.setProductName(name);
             targetItem.setDescription(desc);
             targetItem.setStartPrice(startPrice);
@@ -182,7 +182,7 @@ public class EditProductController {
                     case "Nội thất" -> "Furniture";
                     case "Trò chơi" -> "Gaming";
                     case "Khác" -> "Other";
-                    default -> selectedType; // Fallback
+                    default -> selectedType; 
                 };
                 targetItem.setCategory(dbCategory);
             }
@@ -194,7 +194,7 @@ public class EditProductController {
                 targetItem.setProductImageBytes(updatedImageBytes);
             }
 
-            // Hứng gói tin phản hồi cập nhật từ Server
+            
             myListenerInstance = response -> {
                 if (response instanceof Response res) {
                     Platform.runLater(() -> {
@@ -210,7 +210,7 @@ public class EditProductController {
             };
 
             ClientSocket.getInstance().addMessageListener(myListenerInstance);
-            ClientSocket.getInstance().send(targetItem); // Tiến hành gửi
+            ClientSocket.getInstance().send(targetItem); 
 
         } catch (NumberFormatException e) {
             showAlert("Lỗi dữ liệu", "Giá khởi điểm nhập vào bắt buộc phải là ký tự số!", Alert.AlertType.ERROR);
@@ -236,7 +236,7 @@ public class EditProductController {
         }
     }
 
-    // --- LUỒNG DUYỆT ẢNH MỚI BẰNG CHUỘT HOẶC KÉO THẢ ---
+    
     @FXML
     private void handleSelectFile() {
         FileChooser fileChooser = new FileChooser();

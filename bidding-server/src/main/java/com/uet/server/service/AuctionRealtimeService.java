@@ -1,7 +1,7 @@
 package com.uet.server.service;
 
 import com.uet.common.model.auction.AuctionItem;
-import com.uet.common.model.auction.BidRecord; // 🌟 Thêm import để dùng danh sách lịch sử
+import com.uet.common.model.auction.BidRecord; 
 import com.uet.common.network.*;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.BidDAO;
@@ -43,7 +43,7 @@ public class AuctionRealtimeService {
                 bidderId,
                 bidAmount);
 
-        // Chặn người bán tự đấu giá sản phẩm của chính mình
+        
         AuctionItem auctionItem = auctionDAO.getAuctionById(request.getAuctionId(), false);
         if (auctionItem != null && bidderId.equals(auctionItem.getSellerId())) {
             logger.warn("[Chặn Bid] Người dùng {} cố tình đấu giá sản phẩm của chính mình!", bidderId);
@@ -74,7 +74,7 @@ public class AuctionRealtimeService {
                 new AuctionUpdateResponse(updatedAuction, "Có giá mới từ người dùng!", updatedHistory)
         );
 
-        // Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ
+        
         try {
             List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
             ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
@@ -83,11 +83,11 @@ public class AuctionRealtimeService {
         }
     }
 
-    public void handleGetPendingAuctions(ClientHandler client) { // Giữ nguyên tên hàm ở Dispatcher đỡ phải sửa
+    public void handleGetPendingAuctions(ClientHandler client) { 
         logger.info("==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!");
 
         try {
-            // 🌟 Lấy HẾT tất cả các phiên thay vì mỗi pending
+            
             List<AuctionItem> allList = auctionDAO.getAllAuctionsForAdmin();
             client.send(Response.success("Tải danh sách chờ duyệt thành công", allList));
         } catch (Exception e) {
@@ -96,21 +96,21 @@ public class AuctionRealtimeService {
         }
     }
 
-    // 🌟 Viết thêm hàm ép kết thúc phiên đấu giá đang chạy
+    
     public void handleForceEndAuction(String auctionId, ClientHandler client) {
         try {
-            // Cập nhật trạng thái phiên thành FINISHED và thực hiện giao dịch chuyển tiền giữa người mua và người bán
+            
             boolean success = auctionDAO.forceEndAuctionAndProcessTransaction(auctionId);
             if (success) {
                 client.send(Response.success("Đã ép kết thúc phiên đấu giá thành công!", null));
 
-                // 💡 Realtime: Phát thông báo cho những người đang ở trong phòng biết phiên đã bị đóng
+                
                 com.uet.server.network.ClientManager.broadcastAuction(
                         auctionId,
                         new com.uet.common.network.AuctionUpdateResponse(auctionDAO.getAuctionById(auctionId, false), "Phiên đấu giá đã bị Admin kết thúc.")
                 );
 
-                // Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ để xóa phiên đấu giá đã đóng
+                
                 try {
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
                     ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
@@ -130,7 +130,7 @@ public class AuctionRealtimeService {
             String newStatus = request.isApproved() ? "ACTIVE" : "REJECTED";
             String statusText = request.isApproved() ? "Phê duyệt" : "Từ chối";
             
-            // Lấy thông tin auction để biết sellerId và productName
+            
             AuctionItem item = auctionDAO.getAuctionById(request.getAuctionId(), false);
 
             boolean success = auctionDAO.updateAuctionStatus(request.getAuctionId(), newStatus);
@@ -140,10 +140,10 @@ public class AuctionRealtimeService {
                 
                 if (item != null) {
                     com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
-                    // Xóa thông báo chờ duyệt
+                    
                     userDAO.deleteNotificationByKeyword(item.getSellerId(), "Sản phẩm '" + item.getProductName() + "' đang chờ Admin duyệt");
                     
-                    // Tạo thông báo mới
+                    
                     String title = request.isApproved() ? "Sản phẩm đã duyệt" : "Sản phẩm bị từ chối";
                     String content = request.isApproved() 
                             ? "Sản phẩm '" + item.getProductName() + "' đã được phê duyệt." 
@@ -151,7 +151,7 @@ public class AuctionRealtimeService {
                     userDAO.createNotification(item.getSellerId(), title, content);
                 }
 
-                // Nếu được phê duyệt, thử kích hoạt phiên đấu giá ngay lập tức nếu đến giờ
+                
                 if (request.isApproved()) {
                     try {
                         int started = auctionDAO.startEligibleAuctions();
@@ -178,7 +178,7 @@ public class AuctionRealtimeService {
             String auctionId = deleteReq.getAuctionId();
             String userId = deleteReq.getUserId();
 
-            // 1. Lấy dữ liệu phiên từ Database lên để kiểm tra điều kiện xóa
+            
             AuctionItem item = auctionDAO.getAuctionById(auctionId);
 
             if (item == null) {
@@ -186,7 +186,7 @@ public class AuctionRealtimeService {
                 return;
             }
 
-            // 🛡️ Kiểm tra quyền: Chủ sở hữu (Seller) HOẶC Người thắng (Winner) đều có quyền xóa
+            
             boolean isSeller = item.getSellerId() != null && item.getSellerId().equals(userId);
             boolean isWinner = item.getWinnerId() != null && item.getWinnerId().equals(userId);
 
@@ -195,23 +195,23 @@ public class AuctionRealtimeService {
                 return;
             }
 
-            // 🛡️ Kiểm tra trạng thái:
-            // 1. Chặn không cho xóa nếu phiên đấu giá đang diễn ra (RUNNING)
+            
+            
             if ("RUNNING".equalsIgnoreCase(item.getStatus())) {
                 client.send(Response.fail("Không thể xóa! Phiên đấu giá đang diễn ra (RUNNING)."));
                 return;
             }
 
-            // 2. Nếu là Seller tự xóa:
+            
             if (isSeller && !isWinner) {
-                // Chặn xóa nếu phiên đã kết thúc (FINISHED) và thực sự có người thắng
+                
                 if ("FINISHED".equalsIgnoreCase(item.getStatus())) {
                     if (item.getWinnerId() != null && !item.getWinnerId().trim().isEmpty()) {
                         client.send(Response.fail("Không thể xóa! Phiên đấu giá đã kết thúc giao dịch thành công."));
                         return;
                     }
                 } else {
-                    // Nếu phiên chưa kết thúc nhưng đã có người tham gia đấu giá (có leader hiện tại) thì cũng chặn
+                    
                     if (item.getWinnerId() != null && !item.getWinnerId().trim().isEmpty()) {
                         client.send(Response.fail("Không thể xóa! Phiên đấu giá đã có thành viên đặt giá."));
                         return;
@@ -219,14 +219,14 @@ public class AuctionRealtimeService {
                 }
             }
 
-            // 2. Tiến hành xóa dữ liệu trong Database sau khi vượt qua các chốt chặn an toàn
+            
             boolean isDeleted = auctionDAO.deleteAuction(auctionId);
 
             if (isDeleted) {
-                // Bắn phản hồi thành công về cho duy nhất Client vừa bấm nút Xóa
+                
                 client.send( Response.success("Đã gỡ bỏ sản phẩm và hủy phiên đấu giá thành công!", null));
 
-                // Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ để cập nhật giao diện realtime
+                
                 try {
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
                     ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));

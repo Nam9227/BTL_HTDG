@@ -93,7 +93,7 @@ public class MyProductsController {
             }
         }
 
-        // --- Phân quyền hiển thị các nút chức năng theo vai trò ---
+        
         if (user.getRole() == Role.BIDDER) {
             logger.info("Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.");
             if (addProductBtn != null) {
@@ -193,12 +193,12 @@ public class MyProductsController {
             } else {
                 if (item.getSellerId() != null && item.getSellerId().equals(currentUser.getId())) {
                     if ("FINISHED".equalsIgnoreCase(item.getStatus())) {
-                        // Nếu đấu giá đã kết thúc, chỉ hiển thị bên người bán khi KHÔNG CÓ người thắng (giao dịch thất bại)
+                        
                         if (item.getWinnerId() == null || item.getWinnerId().trim().isEmpty()) {
                             renderProductCard(item, false);
                         }
                     } else {
-                        // Các trạng thái khác (PENDING, RUNNING) thì luôn hiện bên người bán
+                        
                         renderProductCard(item, false);
                     }
                 }
@@ -249,25 +249,25 @@ public class MyProductsController {
         actionBox.setPrefHeight(35);
 
         if (isWonTab) {
-            // --- TRANG TRÚNG ĐẤU GIÁ: CHỈ CÓ NÚT XÓA ---
+            
             Button deleteBtn = createDeleteButton(item, card);
             actionBox.getChildren().add(deleteBtn);
         } else {
-            // --- TRANG TÔI ĐĂNG BÁN: PHÂN CHIA THEO TRẠNG THÁI ---
+            
             String status = item.getStatus() != null ? item.getStatus().trim().toUpperCase() : "PENDING";
             if ("PENDING".equals(status)) {
-                // ĐANG CHỜ DUYỆT (PENDING): CÓ NÚT SỬA VÀ NÚT XÓA
+                
                 Button editBtn = createEditButton(item);
                 Button deleteBtn = createDeleteButton(item, card);
                 actionBox.getChildren().addAll(editBtn, deleteBtn);
             } else if ("RUNNING".equals(status)) {
-                // ĐANG CHẠY (RUNNING) CHỈ HIỆN NÚT XEM PHIÊN CHI TIẾT
+                
                 Button viewBtn = new Button("👁 Xem phiên");
                 viewBtn.getStyleClass().add("action-button-view");
                 viewBtn.setOnAction(e -> openAuctionDetail(item));
                 actionBox.getChildren().add(viewBtn);
             } else if ("FINISHED".equals(status)) {
-                // ĐÃ KẾT THÚC NHƯNG KHÔNG CÓ NGƯỜI THẮNG (GIAO DỊCH THẤT BẠI): HIỆN NÚT XÓA SẢN PHẨM
+                
                 Button deleteBtn = createDeleteButton(item, card);
                 actionBox.getChildren().add(deleteBtn);
             }
@@ -338,7 +338,7 @@ public class MyProductsController {
         editBtn.getStyleClass().add("action-button-edit");
         editBtn.setOnAction(e -> {
             try {
-                // Đổi nút thành trạng thái đang tải
+                
                 editBtn.setDisable(true);
                 editBtn.setText("⏳ Đang tải...");
 
@@ -354,12 +354,12 @@ public class MyProductsController {
                                     if (res.getAuctions() != null && !res.getAuctions().isEmpty()) {
                                         AuctionItem fullItem = res.getAuctions().get(0);
 
-                                        cleanupListener(); // Hủy nghe rác mạng
+                                        cleanupListener(); 
 
                                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/edit_product_view.fxml"));
                                         Parent root = loader.load();
 
-                                        // Bắn cả Session USER và bản ghi ITEM đầy đủ từ Server sang trang sửa
+                                        
                                         EditProductController editController = loader.getController();
                                         editController.setInitData(currentUser, fullItem);
 

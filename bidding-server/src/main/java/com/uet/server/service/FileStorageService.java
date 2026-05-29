@@ -12,7 +12,7 @@ public class FileStorageService {
     private static final Path UPLOAD_ROOT = Path.of(
             System.getProperty(
                     "app.upload.dir",
-                    System.getenv().getOrDefault("APP_UPLOAD_DIR", "/root/uploads")  // ✅ Đúng path thực tế
+                    System.getenv().getOrDefault("APP_UPLOAD_DIR", "/root/uploads")  
             )
     ).toAbsolutePath().normalize();
 
@@ -20,7 +20,7 @@ public class FileStorageService {
             "app.upload.base-url",
             System.getenv().getOrDefault(
                     "APP_UPLOAD_BASE_URL",
-                    "file://" + UPLOAD_ROOT.toString()  // ✅ Sẽ trả về file:///root/uploads
+                    "file://" + UPLOAD_ROOT.toString()  
             )
     );
 

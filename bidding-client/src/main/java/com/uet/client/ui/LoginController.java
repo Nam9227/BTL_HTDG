@@ -33,10 +33,10 @@ public class LoginController {
     private PasswordField passField;
 
     @FXML
-    private TextField passTextField; // Cần thêm cái này để khớp với fx:id trong FXML
+    private TextField passTextField; 
 
     @FXML
-    private ImageView eyeIcon; // Cần @FXML để JavaFX kết nối với ImageView trong Button
+    private ImageView eyeIcon; 
 
     private final Image imageOpen = new Image(getClass().getResourceAsStream("/photo/openEye.png"));
     private final Image imageClose = new Image(getClass().getResourceAsStream("/photo/closeEye.png"));
@@ -58,10 +58,10 @@ public class LoginController {
                 return;
             }
 
-            // 2. Đóng gói vào đối tượng
+            
             LoginRequest request = new LoginRequest(user, pass);
 
-            // 3. Gửi qua Socket (Dùng Singleton của Nam)
+            
             ClientSocket network = ClientSocket.getInstance();
             network.connect();
 
@@ -102,15 +102,15 @@ public class LoginController {
     @FXML
     void handleTogglePassword(ActionEvent event) {
         if (passField.isVisible()) {
-            // Hiện mật khẩu dạng thường
+            
             passTextField.setText(passField.getText());
             passField.setVisible(false);
             passTextField.setVisible(true);
-            // Đổi ảnh con mắt mở ra (Nam nhớ kiểm tra đường dẫn ảnh của mình nha)
+            
             eyeIcon.setImage(imageOpen);
             isPasswordShown = true;
         } else {
-            // Ẩn mật khẩu vào dấu chấm
+            
             passField.setText(passTextField.getText());
             passTextField.setVisible(false);
             passField.setVisible(true);
@@ -139,7 +139,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Hiệu ứng chuyển trang mượt mà
+            
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
 
             Object controller = loader.getController();
@@ -147,12 +147,12 @@ public class LoginController {
                 homeController.setUser(user);
             }
 
-            // Tạo scene mới và đập thẳng vào Stage
+            
             Scene scene = new Scene(root);
             stage.setTitle(title);
             stage.setScene(scene);
 
-            // BẬT MAXIMIZED LUÔN, KHÔNG DÙNG MẸO CO GIÃN GÂY KHỰNG
+            
             stage.setMaximized(true);
             stage.setResizable(true);
             stage.show();
@@ -167,7 +167,7 @@ public class LoginController {
             Stage stage = (Stage) userField.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             
-            // Hiệu ứng chuyển trang mượt mà
+            
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
             
             Scene scene = new Scene(root);

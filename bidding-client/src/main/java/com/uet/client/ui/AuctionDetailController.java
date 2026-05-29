@@ -2,13 +2,13 @@ package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
 import com.uet.common.model.auction.AuctionItem;
-import com.uet.common.model.auction.BidRecord; // 🌟 Đã import đối tượng lịch sử từ Common
+import com.uet.common.model.auction.BidRecord; 
 import com.uet.common.model.user.User;
 import com.uet.common.network.AuctionUpdateResponse;
 import com.uet.common.network.BidRequest;
 import com.uet.common.network.JoinAuctionRequest;
 import com.uet.common.network.LeaveAuctionRequest;
-import com.uet.common.network.GetBidHistoryRequest; // 🌟 Import gói tin xin lịch sử
+import com.uet.common.network.GetBidHistoryRequest; 
 import com.uet.common.network.Response;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -54,7 +54,7 @@ public class AuctionDetailController {
 
     @FXML private LineChart<String, Number> priceChart;
 
-    // 🌟 ĐÃ KHAI BÁO BẢNG ĐÚNG FX:ID VÀ KIỂU DỮ LIỆU BID_RECORD
+    
     @FXML private TableView<BidRecord> bidHistoryTable;
     @FXML private TableColumn<BidRecord, String> bidderColumn;
     @FXML private TableColumn<BidRecord, String> amountColumn;
@@ -75,15 +75,15 @@ public class AuctionDetailController {
     public void initialize() {
         priceChart.getData().add(priceSeries);
 
-        // 🌟 BƯỚC CHÍ MẠNG: KẾT NỐI BIẾN CỦA BID_RECORD VÀO CỘT TRÊN GIAO DIỆN ĐỂ HIỆN CHỮ
+        
         bidderColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
 
-        // Định dạng số double thành chuỗi tiền tệ #,###đ hiển thị lên bảng
+        
         amountColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(formatMoney(cellData.getValue().getBidAmount()))
         );
 
-        // Định dạng hiển thị Giờ:Phút:Giây cho cột thời gian đặt
+        
         timeColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getBidTime() != null) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -151,12 +151,12 @@ public class AuctionDetailController {
             }
         }
 
-        // Logic vẽ biểu đồ gốc ban đầu của Nam giữ nguyên 100%
+        
         addBidHistory("Giá hiện tại", currentPrice);
 
         joinAuctionRoom();
 
-        // 🌟 LẤY LỊCH SỬ TỪ SERVER ĐỂ ĐỔ VÀO CHO BẢNG HIỂN THỊ LÊN LẦN ĐẦU
+        
         requestBidHistoryFromServer(item.getAuctionId());
 
         if (user.getId().equals(item.getSellerId())) {
@@ -177,20 +177,20 @@ public class AuctionDetailController {
                     if (updatedItem != null && auctionItem != null && auctionItem.getAuctionId().equals(updatedItem.getAuctionId())) {
 
                         Platform.runLater(() -> {
-                            // 1. Cập nhật thông tin chữ nghĩa giá cả và vẽ biểu đồ cục bộ
+                            
                             updateAuctionUI(updatedItem);
 
-                            // 2. 🌟 GỘP CHUNG REALTIME: Bốc luôn danh sách lịch sử đi kèm đổ thẳng vào bảng!
+                            
                             if (updateResponse.getBidHistory() != null) {
                                 bidHistoryTable.getItems().clear();
                                 bidHistoryTable.getItems().addAll(updateResponse.getBidHistory());
                             }
 
-                            // 3. Hiển thị dòng chữ thông báo xanh/vàng nếu có
+                            
                             if (updateResponse.getMessage() != null && !updateResponse.getMessage().isBlank()) {
                                 showMessage(updateResponse.getMessage(), true);
                             } else {
-                                messageLabel.setText(""); // Xóa sạch chữ báo lỗi cũ của lượt trước
+                                messageLabel.setText(""); 
                             }
                         });
                     }
@@ -208,7 +208,7 @@ public class AuctionDetailController {
         }
     }
 
-    // 🌟 HÀM TẢI LỊCH SỬ CHỈ TÁC ĐỘNG VÀO BẢNG LỊCH SỬ THEO ĐÚNG Ý NAM
+    
     private void requestBidHistoryFromServer(String auctionId) {
         try {
             GetBidHistoryRequest historyReq = new GetBidHistoryRequest(auctionId);
@@ -220,7 +220,7 @@ public class AuctionDetailController {
                         List<BidRecord> list = (List<BidRecord>) res.getData();
 
                         Platform.runLater(() -> {
-                            // 🌟 CHỈ THÊM VÀO ĐÚNG BẢNG LỊCH SỬ ĐẶT GIÁ THÔI, GIỮ NGUYÊN BIỂU ĐỒ CỦA NAM
+                            
                             bidHistoryTable.getItems().clear();
                             bidHistoryTable.getItems().addAll(list);
                         });
@@ -303,7 +303,7 @@ public class AuctionDetailController {
             return;
         }
 
-        // 🌟 ĐỔI CÂU NÀY: Thông báo rõ ràng cho người dùng
+        
         if (amount <= currentPrice) {
             showMessage("Giá đặt mới phải LỚN HƠN giá hiện tại (" + formatMoney(currentPrice) + ")!", false);
             return;
@@ -314,7 +314,7 @@ public class AuctionDetailController {
             return;
         }
 
-        // 🌟 ĐỔI CÂU NÀY: Thông báo khi tài khoản hết tiền
+        
         if (amount > currentUser.getBalance().doubleValue()) {
             showMessage("Số dư tài khoản không đủ để thực hiện lượt đặt giá này!", false);
             return;
@@ -396,7 +396,7 @@ public class AuctionDetailController {
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
-            // Áp dụng hiệu ứng mượt mà khi quay lại
+            
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) productNameLabel.getScene().getWindow();

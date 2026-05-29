@@ -3065,3 +3065,7 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-05-29 17:25:02 [Thread-8] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-05-29 17:25:02 [Thread-8] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-05-29 17:25:02 [Thread-8] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 18:00:03 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã xóa 1 thông báo cũ chứa từ khóa 'Sản phẩm '1' đã bắt đầu phiên đấu giá' của User 1683432468
+2026-05-29 18:00:03 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 1683432468: Đấu giá kết thúc
+2026-05-29 18:00:03 [pool-2-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Phiên 9177054523 đã đóng nhưng không có ai mua.
+2026-05-29 18:00:03 [pool-2-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 1). Tiến hành Broadcast...

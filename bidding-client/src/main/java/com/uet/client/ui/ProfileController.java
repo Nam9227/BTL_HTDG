@@ -6,7 +6,7 @@ import com.uet.common.network.TransactionRequest;
 import com.uet.common.network.ImageData;
 import com.uet.common.network.Response;
 import com.uet.common.network.UpdateProfileRequest;
-//import com.uet.common.network.TransactionRequest;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,9 +64,9 @@ public class ProfileController {
 
                 avatarImage.setImage(img);
 
-                // ⚡ BA DÒNG QUYẾT ĐỊNH: Ép ảnh tự động co giãn đều, không bị bóp méo
-                avatarImage.setPreserveRatio(false); // Ép vừa khít khung vuông 80x80
-                avatarImage.setSmooth(true);         // Khử răng cưa giúp viền ảnh mượt
+                
+                avatarImage.setPreserveRatio(false); 
+                avatarImage.setSmooth(true);         
 
             } catch (Exception e) {
                 logger.error("Lỗi hiển thị avatar: ", e);
@@ -90,7 +90,7 @@ public class ProfileController {
         phoneField.setEditable(true);
         addressField.setEditable(true);
 
-        // Đổi màu nền sáng hơn cho TẤT CẢ các ô được phép gõ
+        
         String activeStyle = "-fx-background-color: #4a5056; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;";
         fullNameField.setStyle(activeStyle);
         emailField.setStyle(activeStyle);
@@ -132,7 +132,7 @@ public class ProfileController {
                                 }
 
                                 if (ProfileController.this.currentUser.getAvatarBytes() != null && ProfileController.this.currentUser.getAvatarBytes().length > 0) {
-                                    avatarImage.setImage(null); // Xóa bộ nhớ đệm
+                                    avatarImage.setImage(null); 
                                     java.io.ByteArrayInputStream bis = new java.io.ByteArrayInputStream(ProfileController.this.currentUser.getAvatarBytes());
                                     javafx.scene.image.Image img = new javafx.scene.image.Image(bis);
                                     avatarImage.setImage(img);
@@ -160,7 +160,7 @@ public class ProfileController {
         }
     }
 
-    // Hàm khóa lại Form (trả lại màu sẫm)
+    
     private void lockForm() {
         editing = false;
         selectedAvatar = null;
@@ -170,7 +170,7 @@ public class ProfileController {
         phoneField.setEditable(false);
         addressField.setEditable(false);
 
-        // Khóa đồng bộ màu sẫm cho TẤT CẢ các ô
+        
         String lockedStyle = "-fx-background-color: #2a2e31; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10;";
         fullNameField.setStyle(lockedStyle);
         emailField.setStyle(lockedStyle);
@@ -181,19 +181,19 @@ public class ProfileController {
         editButton.setDisable(false);
     }
 
-    // 💵 NẠP TIỀN
+    
     @FXML
     private void handleDeposit() {
         handleMoneyTransaction("NẠP TIỀN VÀO VÍ", "DEPOSIT");
     }
 
-    // 💸 RÚT TIỀN
+    
     @FXML
     private void handleWithdraw() {
         handleMoneyTransaction("RÚT TIỀN MẶT", "WITHDRAW");
     }
 
-    // Hàm gom chung xử lý tiền tệ
+    
     private void handleMoneyTransaction(String title, String type) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(title);
@@ -223,7 +223,7 @@ public class ProfileController {
 
                                     if (res.isSuccess()) {
 
-                                        // Server trả user mới
+                                        
                                         if (res.getData() instanceof User updatedUser) {
 
                                             currentUser = updatedUser;
@@ -315,23 +315,23 @@ public class ProfileController {
     }
     @FXML private void handleChangePassword() { /* Logic đổi mật khẩu */ }
 
-    // Nút quay lại Trang chủ full màn hình
+    
     @FXML
     private void handleBack() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home_view.fxml"));
             Parent root = loader.load();
 
-            // Truyền ngược lại user đã cập nhật về cho trang chủ để đồng bộ UI Sidebar Home
+            
             HomeController controller = loader.getController();
             controller.setUser(currentUser);
 
-            // Hiệu ứng chuyển trang mượt mà
+            
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) fullNameLabel.getScene().getWindow();
 
-            // Thay ruột scene cực mượt, không chớp màn hình
+            
             stage.getScene().setRoot(root);
             stage.setTitle("Trang chủ Đấu giá");
 

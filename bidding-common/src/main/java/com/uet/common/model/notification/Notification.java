@@ -7,7 +7,7 @@ public class Notification implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private String userId; // 🌟 Đã chuyển sang kiểu String cho khớp với VARCHAR(50) trong DB của Nam
+    private String userId; 
     private String title;
     private String content;
     private boolean isRead;

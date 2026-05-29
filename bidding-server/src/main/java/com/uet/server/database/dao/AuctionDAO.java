@@ -217,7 +217,7 @@ public class AuctionDAO {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
-        // 🌟 ĐÃ SỬA: Bồi thêm cột id vào câu lệnh INSERT của bảng auctions
+        
         String sqlAuction = """
                 INSERT INTO auctions 
                 (id, product_id, start_price, current_price, start_time, end_time, status) 
@@ -227,15 +227,15 @@ public class AuctionDAO {
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false); // Bật Transaction bảo mật
+            conn.setAutoCommit(false); 
 
-            // 🌟 1. Sinh ID ngẫu nhiên cho sản phẩm
+            
             String generatedItemId = com.uet.server.util.IdGenerator.generateId();
 
-            // 🌟 2. Sinh ID ngẫu nhiên cho phiên đấu giá (auction_id)
+            
             String generatedAuctionId = com.uet.server.util.IdGenerator.generateId();
 
-            // --- BƯỚC 1: CHÈN VÀO BẢNG ITEMS ---
+            
             try (PreparedStatement psItem = conn.prepareStatement(sqlItem)) {
                 psItem.setString(1, generatedItemId);
                 psItem.setString(2, productName);
@@ -251,10 +251,10 @@ public class AuctionDAO {
                 psItem.executeUpdate();
             }
 
-            // --- BƯỚC 2: CHÈN VÀO BẢNG AUCTIONS ---
+            
             try (PreparedStatement psAuction = conn.prepareStatement(sqlAuction)) {
-                psAuction.setString(1, generatedAuctionId); // Ném ID phiên đấu giá vừa sinh vào cột id
-                psAuction.setString(2, generatedItemId);    // Khóa ngoại liên kết sang bảng items
+                psAuction.setString(1, generatedAuctionId); 
+                psAuction.setString(2, generatedItemId);    
                 psAuction.setDouble(3, startPrice);
                 psAuction.setDouble(4, startPrice);
 
@@ -299,11 +299,11 @@ public class AuctionDAO {
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false); // Bật Transaction để an toàn cho ví tiền và giá cả
+            conn.setAutoCommit(false); 
 
-            String bidId = com.uet.server.util.IdGenerator.generateId(); // Dùng hàm sinh ID của Nam
+            String bidId = com.uet.server.util.IdGenerator.generateId(); 
 
-             // 1. Chèn vào bảng lịch sử bids
+             
             try (PreparedStatement psBid = conn.prepareStatement(sqlBid)) {
                 psBid.setString(1, bidId);
                 psBid.setString(2, auctionId);
@@ -318,7 +318,7 @@ public class AuctionDAO {
                 psBid.executeUpdate();
             }
 
-            // 2. Cập nhật giá cao nhất hiện tại và người đang tạm thắng vào bảng auctions
+            
             try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdateAuction)) {
                 psUpdate.setDouble(1, bidAmount);
                 psUpdate.setString(2, userId);
@@ -343,7 +343,7 @@ public class AuctionDAO {
         }
     }
 
-    // 🌟 HÀM 2: LẤY LỊCH SỬ ĐẤU GIÁ CỦA 1 SẢN PHẨM (Sắp xếp lượt mới nhất lên đầu)
+    
     public List<BidRecord> getBidHistory(String auctionId) {
         List<BidRecord> history = new ArrayList<>();
         String sql = """
@@ -364,7 +364,7 @@ public class AuctionDAO {
                     record.setId(rs.getString("id"));
                     record.setAuctionId(rs.getString("auction_id"));
                     record.setUserId(rs.getString("user_id"));
-                    record.setUsername(rs.getString("username")); // Lấy từ lệnh JOIN bảng users
+                    record.setUsername(rs.getString("username")); 
                     record.setBidAmount(rs.getDouble("bid_amount"));
 
                     java.util.Calendar cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
@@ -388,9 +388,9 @@ public class AuctionDAO {
     public List<AuctionItem> getAllAuctionsForAdmin() {
         List<AuctionItem> list = new java.util.ArrayList<>();
 
-        // 🌟 Câu lệnh SQL đã được khớp 100% với tên cột thực tế của Nam:
-        // a.product_id kết nối với i.id
-        // Sắp xếp theo thời gian bắt đầu a.start_time DESC
+        
+        
+        
         String sql = "SELECT a.id AS auction_id, " +
                 "       i.name AS product_name, " +
                 "       i.seller_id, " +
@@ -452,7 +452,7 @@ public class AuctionDAO {
     }
 
     public int startEligibleAuctions() {
-        // Lấy danh sách các phiên chuẩn bị được chuyển sang RUNNING để gửi thông báo
+        
         String selectSql = "SELECT a.id, i.name, i.seller_id " +
                            "FROM auctions a JOIN items i ON a.product_id = i.id " +
                            "WHERE a.status = 'ACTIVE' AND a.start_time <= NOW()";
@@ -464,7 +464,7 @@ public class AuctionDAO {
              java.sql.PreparedStatement psSelect = conn.prepareStatement(selectSql);
              java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
              
-            // 1. Đọc danh sách trước khi update
+            
             List<String[]> startingAuctions = new ArrayList<>();
             try (ResultSet rs = psSelect.executeQuery()) {
                 while (rs.next()) {
@@ -475,21 +475,21 @@ public class AuctionDAO {
                 }
             }
 
-            // 2. Cập nhật trạng thái
+            
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 logger.info("[Scheduler] Đã kích hoạt {} phiên đấu giá sang trạng thái RUNNING!", rows);
                 
-                // 3. Gửi thông báo
+                
                 com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
                 for (String[] auctionInfo : startingAuctions) {
                     String sellerId = auctionInfo[0];
                     String productName = auctionInfo[1];
                     
-                    // Xóa thông báo đã duyệt
+                    
                     userDAO.deleteNotificationByKeyword(sellerId, "Sản phẩm '" + productName + "' đã được phê duyệt");
                     
-                    // Thêm thông báo đang đấu giá
+                    
                     userDAO.createNotification(sellerId, "Đang đấu giá", "Sản phẩm '" + productName + "' đã bắt đầu phiên đấu giá.");
                 }
             }
@@ -500,10 +500,10 @@ public class AuctionDAO {
         }
     }
 
-    // 2. Hàm quét các phiên RUNNING đã hết giờ để chuyển sang FINISHED
+    
     public int finishExpiredAuctions() {
-        // 1. Dùng INNER JOIN để bốc luôn mã người bán (i.sender_id hoặc i.seller_id) từ bảng items lên
-        // 💡 Chú ý: Ở ảnh HeidiSQL trước Nam chụp, cột người bán trong bảng items tên là 'seller_id' nhé!
+        
+        
         String selectSql = "SELECT a.id AS auction_id, a.winner_id, a.current_price, i.seller_id, i.name " +
                 "FROM auctions a " +
                 "INNER JOIN items i ON a.product_id = i.id " +
@@ -511,7 +511,7 @@ public class AuctionDAO {
 
         String updateSql = "UPDATE auctions SET status = 'FINISHED' WHERE id = ?";
 
-        // Khởi tạo WalletDAO để xử lý luồng tiền
+        
         com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
         com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
         int finishedCount = 0;
@@ -523,11 +523,11 @@ public class AuctionDAO {
             while (rs.next()) {
                 String auctionId = rs.getString("auction_id");
                 String winnerId = rs.getString("winner_id");
-                String sellerId = rs.getString("seller_id"); // Mã của chủ sản phẩm (Người bán)
+                String sellerId = rs.getString("seller_id"); 
                 String productName = rs.getString("name");
                 double finalPrice = rs.getDouble("current_price");
 
-                // Cập nhật trạng thái phiên này thành FINISHED
+                
                 try (java.sql.PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
                     psUpdate.setString(1, auctionId);
                     psUpdate.executeUpdate();
@@ -535,30 +535,30 @@ public class AuctionDAO {
 
                 finishedCount++;
                 
-                // Xóa thông báo "đang đấu giá" của người bán
+                
                 userDAO.deleteNotificationByKeyword(sellerId, "Sản phẩm '" + productName + "' đã bắt đầu phiên đấu giá");
 
-                // Gửi thông báo kết thúc cho người bán
+                
                 userDAO.createNotification(sellerId, "Đấu giá kết thúc", "Sản phẩm '" + productName + "' đã kết thúc đấu giá. Đang chờ xử lý giao dịch.");
 
-                // Có người thắng cuộc -> Tiến hành luân chuyển dòng tiền
+                
                 if (winnerId != null && !winnerId.trim().isEmpty()) {
 
-                    // Dòng 1: TRỪ TIỀN THẬT CỦA NGƯỜI THẮNG CUỘC (Giá trị âm)
+                    
                     boolean isDeducted = walletDAO.updateBalance(winnerId, -finalPrice);
 
-                    // Dòng 2: CỘNG TIỀN THẬT VÀO VÍ NGƯỜI BÁN (Giá trị dương)
+                    
                     boolean isCredited = walletDAO.updateBalance(sellerId, finalPrice);
 
                     if (isDeducted && isCredited) {
                         logger.info("[Scheduler] Giao dịch thành công phiên {}:\n   -> Đã trừ {}đ từ người mua ({})\n   -> Đã cộng {}đ vào người bán ({})",
                                 auctionId, finalPrice, winnerId, finalPrice, sellerId);
                                 
-                        // Gửi thông báo thành công
+                        
                         userDAO.createNotification(winnerId, "Trúng đấu giá", "Chúc mừng! Bạn đã trúng đấu giá sản phẩm '" + productName + "' với mức giá " + String.format("%,.0f", finalPrice) + "đ.");
                         userDAO.createNotification(sellerId, "Giao dịch thành công", "Sản phẩm '" + productName + "' đã được bán với giá " + String.format("%,.0f", finalPrice) + "đ.");
                         
-                        // Cập nhật lại số dư trên UI cho Client
+                        
                         com.uet.common.model.user.User updatedWinner = userDAO.findUserByUserId(winnerId);
                         if (updatedWinner != null) {
                             com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedWinner));
@@ -615,7 +615,7 @@ public class AuctionDAO {
                 return false;
             }
             
-            // 1. Cập nhật trạng thái thành FINISHED
+            
             try (PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
                 psUpdate.setString(1, auctionId);
                 int updatedRows = psUpdate.executeUpdate();
@@ -624,13 +624,13 @@ public class AuctionDAO {
                 }
             }
             
-            // Xóa thông báo "đang đấu giá" của người bán
+            
             userDAO.deleteNotificationByKeyword(sellerId, "Sản phẩm '" + productName + "' đã bắt đầu phiên đấu giá");
 
-            // Gửi thông báo kết thúc cho người bán
+            
             userDAO.createNotification(sellerId, "Đấu giá bị buộc kết thúc", "Phiên đấu giá sản phẩm '" + productName + "' đã bị Admin buộc kết thúc.");
             
-            // 2. Thực hiện luân chuyển dòng tiền
+            
             if (winnerId != null && !winnerId.trim().isEmpty()) {
                 boolean isDeducted = walletDAO.updateBalance(winnerId, -finalPrice);
                 boolean isCredited = walletDAO.updateBalance(sellerId, finalPrice);
@@ -639,11 +639,11 @@ public class AuctionDAO {
                     logger.info("[Admin Force End] Giao dịch thành công phiên {}:\n   -> Đã trừ {}đ từ người mua ({})\n   -> Đã cộng {}đ vào người bán ({})",
                             auctionId, finalPrice, winnerId, finalPrice, sellerId);
                             
-                    // Gửi thông báo thành công
+                    
                     userDAO.createNotification(winnerId, "Trúng đấu giá (Admin đóng)", "Phiên đấu giá bị đóng. Bạn đã trúng đấu giá sản phẩm '" + productName + "' với mức giá " + String.format("%,.0f", finalPrice) + "đ.");
                     userDAO.createNotification(sellerId, "Giao dịch thành công", "Sản phẩm '" + productName + "' đã được bán với giá " + String.format("%,.0f", finalPrice) + "đ.");
                     
-                    // Cập nhật lại số dư trên UI cho Client
+                    
                     com.uet.common.model.user.User updatedWinner = userDAO.findUserByUserId(winnerId);
                     if (updatedWinner != null) {
                         com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedWinner));
@@ -694,26 +694,26 @@ public class AuctionDAO {
         }
     }
     public boolean deleteAuction(String auctionId) {
-        // 1. Câu lệnh lấy mã product_id trước khi xóa phiên đấu giá
+        
         String sqlGetProductId = "SELECT product_id FROM auctions WHERE id = ?";
 
-        // 2. Câu lệnh xóa ở bảng bids trước để gỡ ràng buộc khóa ngoại
+        
         String sqlDeleteBids = "DELETE FROM bids WHERE auction_id = ?";
 
-        // 3. Câu lệnh xóa ở bảng auctions sau khi bids sạch bóng
+        
         String sqlDeleteAuction = "DELETE FROM auctions WHERE id = ?";
 
-        // 4. Câu lệnh xóa ở bảng items sau khi auctions sạch bóng
+        
         String sqlDeleteItem = "DELETE FROM items WHERE id = ?";
 
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false); // 🌟 BẬT TRANSACTION: Đảm bảo xóa là phải xóa sạch cả hai, lỗi là hủy lệnh
+            conn.setAutoCommit(false); 
 
             String productId = null;
 
-            // BƯỚC 1: Tìm mã product_id liên kết
+            
             try (PreparedStatement psGet = conn.prepareStatement(sqlGetProductId)) {
                 psGet.setString(1, auctionId);
                 try (ResultSet rs = psGet.executeQuery()) {
@@ -723,34 +723,34 @@ public class AuctionDAO {
                 }
             }
 
-            // Nếu không tìm thấy phiên đấu giá này trong hệ thống, dừng lại luôn
+            
             if (productId == null) {
                 logger.warn("[DELETE WARN] Không tìm thấy phiên đấu giá với ID: {}", auctionId);
                 return false;
             }
 
-            // BƯỚC 2: Xóa các lượt đặt giá trong bảng bids liên kết trước
+            
             try (PreparedStatement psDelBids = conn.prepareStatement(sqlDeleteBids)) {
                 psDelBids.setString(1, auctionId);
                 psDelBids.executeUpdate();
                 logger.info("[DELETE] Đã xóa toàn bộ lượt bid liên quan ở bảng bids, ID: {}", auctionId);
             }
 
-            // BƯỚC 3: Xóa dữ liệu tại bảng auctions
+            
             try (PreparedStatement psDelAuction = conn.prepareStatement(sqlDeleteAuction)) {
                 psDelAuction.setString(1, auctionId);
                 psDelAuction.executeUpdate();
                 logger.info("[DELETE] Đã xóa phiên đấu giá ở bảng auctions, ID: {}", auctionId);
             }
 
-            // BƯỚC 4: Xóa dữ liệu tương ứng tại bảng items
+            
             try (PreparedStatement psDelItem = conn.prepareStatement(sqlDeleteItem)) {
                 psDelItem.setString(1, productId);
                 psDelItem.executeUpdate();
                 logger.info("[DELETE] Đã xóa sản phẩm ở bảng items thành công, ID: {}", productId);
             }
 
-            // Vượt qua tất cả an toàn -> Chốt lưu thay đổi vào Database thật
+            
             conn.commit();
             logger.info("[DELETE SUCCESS] Đã dọn dẹp sạch sẽ phiên {} và sản phẩm {} khỏi hệ thống!", auctionId, productId);
             return true;
@@ -759,14 +759,14 @@ public class AuctionDAO {
             logger.error("[DELETE ERROR] Gặp sự cố khi thực thi xóa. Tiến hành khôi phục dữ liệu (Rollback)...", e);
             if (conn != null) {
                 try {
-                    conn.rollback(); // Hủy toàn bộ các lệnh xóa dở dang nếu có một bảng bị lỗi
+                    conn.rollback(); 
                 } catch (Exception ignored) {}
             }
             return false;
         } finally {
             if (conn != null) {
                 try {
-                    conn.setAutoCommit(true); // Trả lại trạng thái mặc định cho Connection Pool
+                    conn.setAutoCommit(true); 
                     conn.close();
                 } catch (Exception ignored) {}
             }
@@ -789,23 +789,23 @@ public class AuctionDAO {
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false); // Bật Transaction bảo mật
+            conn.setAutoCommit(false); 
 
-            // BƯỚC 1: CẬP NHẬT BẢNG ITEMS
+            
             try (PreparedStatement psItem = conn.prepareStatement(sqlUpdateItem)) {
                 psItem.setString(1, item.getProductName());
                 psItem.setString(2, item.getDescription());
                 psItem.setString(3, item.getImageUrl());
                 psItem.setString(4, item.getCategory());
                 psItem.setString(5, item.getBrand());
-                psItem.setString(6, item.getProductId()); // items.id is product_id
+                psItem.setString(6, item.getProductId()); 
                 psItem.executeUpdate();
             }
 
-            // BƯỚC 2: CẬP NHẬT BẢNG AUCTIONS
+            
             try (PreparedStatement psAuction = conn.prepareStatement(sqlUpdateAuction)) {
                 psAuction.setDouble(1, item.getStartPrice());
-                psAuction.setDouble(2, item.getStartPrice()); // reset currentPrice về startPrice khi sửa
+                psAuction.setDouble(2, item.getStartPrice()); 
                 
                 java.util.Calendar cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
                 java.sql.Timestamp endTs = java.sql.Timestamp.from(item.getEndTime().atZone(java.time.ZoneId.of("Asia/Ho_Chi_Minh")).toInstant());

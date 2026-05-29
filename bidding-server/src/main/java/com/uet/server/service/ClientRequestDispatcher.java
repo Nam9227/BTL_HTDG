@@ -25,13 +25,13 @@ public class ClientRequestDispatcher {
     private final AuctionService auctionService = new AuctionService(this.auctionDAO);
 
     public boolean dispatch(Object obj, ClientHandler client) {
-        // 1. Xử lý yêu cầu lấy toàn bộ danh sách người dùng cho Admin
+        
         if (obj instanceof GetAllUsersRequest) {
             handleGetAllUsers(client);
             return true;
         }
 
-        // 2. Xử lý yêu cầu Khóa/Mở khóa tài khoản từ Admin
+        
         if (obj instanceof UpdateUserStatusRequest request) {
             try {
                 userDAO.updateActive(request.getUserId(), request.isActive());
@@ -44,7 +44,7 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        // 3. Xử lý yêu cầu XÓA tài khoản từ Admin gửi lên
+        
         if (obj instanceof DeleteUserRequest request) {
             try {
                 userDAO.deleteUser(request.getUserId());
@@ -57,7 +57,7 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        // 4. Xử lý Đăng nhập
+        
         if (obj instanceof LoginRequest request) {
             handleLogin(request, client);
             return true;
@@ -144,13 +144,13 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        // 🌟 ĐÃ GỘP: Xử lý chỉnh sửa thông tin phiên đấu giá gửi từ Client dạng AuctionItem
+        
         if (obj instanceof AuctionItem item) {
             handleUpdateAuction(item, client);
             return true;
         }
 
-        // 🌟 ĐÃ GỘP: Xử lý yêu cầu nạp/rút tiền (TransactionRequest) chờ duyệt
+        
         if (obj instanceof TransactionRequest request) {
             try {
                 userDAO.createTransaction(
@@ -166,7 +166,7 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        // 🌟 ĐÃ GỘP: Tải toàn bộ danh sách giao dịch đang chờ duyệt cho màn hình Admin
+        
         if (obj instanceof GetPendingTransactionRequest) {
             try {
                 List<Transaction> list = userDAO.getPendingTransaction();
@@ -247,7 +247,7 @@ public class ClientRequestDispatcher {
     private void handleUpdateAuction(AuctionItem item, ClientHandler client) {
         logger.info("[Server] Nhận yêu cầu chỉnh sửa sản phẩm ID: {}", item.getAuctionId());
         try {
-            // 1. Nếu người dùng chọn tải ảnh mới, thực hiện lưu trữ vào đĩa cứng
+            
             if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
                 FileStorageService fileStorageService = new FileStorageService();
                 com.uet.common.network.ImageData imgData = new com.uet.common.network.ImageData("product.png", "image/png", item.getProductImageBytes());
@@ -258,13 +258,13 @@ public class ClientRequestDispatcher {
                 }
             }
 
-            // 2. Lưu thay đổi vào Database
+            
             boolean isUpdated = auctionDAO.updateAuction(item);
 
             if (isUpdated) {
                 client.send(Response.success("Cập nhật thông tin sản phẩm thành công! Vui lòng chờ phê duyệt lại.", null));
 
-                // 3. Phát sóng danh sách cập nhật mới nhất cho tất cả Client ở trang chủ để xóa/ẩn sản phẩm đang chờ duyệt
+                
                 try {
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
                     com.uet.server.network.ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
@@ -286,11 +286,11 @@ public class ClientRequestDispatcher {
         logger.info("[Server] Đang xử lý lấy thông báo cho User ID: {}", userId);
 
         try {
-            // 1. Gọi DAO cào dữ liệu từ MySQL
+            
             List<com.uet.common.model.notification.Notification> list = userDAO.getNotificationsByUserId(userId);
             logger.info("[Server] Đã tìm thấy {} thông báo trong DB của User: {}", list.size(), userId);
 
-            // 2. Phản hồi kết quả về cho Client qua đường Socket
+            
             client.send(Response.success("Tải danh sách thông báo thành công", list));
             logger.info("[Server] Đã bắn gói tin phản hồi thành công về Client.");
 

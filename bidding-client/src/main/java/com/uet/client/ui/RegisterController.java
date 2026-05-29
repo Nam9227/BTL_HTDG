@@ -47,19 +47,19 @@ public class RegisterController {
     }
     @FXML
     private void handleTogglePassword(ActionEvent event) {
-        // Xác định nút nào vừa được bấm
+        
         Object source = event.getSource();
 
         if (source == btnTogglePassword) {
-            // Xử lý cho mật khẩu chính
+            
             toggleLogic(passwordField, passwordText, eyeIcon);
         } else if (source == btnToggleConfirm) {
-            // Xử lý cho xác nhận mật khẩu
+            
             toggleLogic(confirmPasswordField, confirmPasswordText, confirmEyeIcon);
         }
     }
 
-    // Hàm logic bổ trợ
+    
     private void toggleLogic(PasswordField pField, TextField tField, ImageView icon) {
         if (pField.isVisible()) {
             tField.setText(pField.getText());
@@ -81,7 +81,7 @@ public class RegisterController {
         logger.info("Nút Đăng ký đã được bấm!");
 
         try {
-            // Kiểm tra xem các ô nhập liệu có bị null không (do quên đặt fx:id)
+            
             if (fullNameField == null) {
                 logger.error("Lỗi: fullNameField bị null. Kiểm tra lại fx:id trong FXML!");
                 return;
@@ -96,7 +96,7 @@ public class RegisterController {
             String confirmPassword = confirmPasswordText.isVisible()
                     ? confirmPasswordText.getText().trim()
                     : confirmPasswordField.getText().trim();
-            // ... các logic kiểm tra khác ...
+            
 
             if (fullName.isEmpty()) {
                 showError("Thông báo", "Bạn chưa nhập tên!");
@@ -199,7 +199,7 @@ public class RegisterController {
             Stage stage = (Stage) fullNameField.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             
-            // Hiệu ứng mượt mà
+            
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
             
             Scene scene = new Scene(root);
