@@ -2994,3 +2994,55 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-05-29 11:21:17 [Thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-05-29 11:21:17 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-05-29 11:21:17 [Thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:23:24 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:23:24 [Thread-2] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 11:23:24 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 11:23:26 [Thread-2] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:23:27 [Thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:23:45 [Thread-2] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-29 11:23:45 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:23:45 [Thread-2] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:51:51 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:51:51 [Thread-3] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 11:51:51 [Thread-3] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 11:51:55 [Thread-3] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:51:56 [Thread-3] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:52:05 [Thread-3] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:52:14 [Thread-3] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:52:15 [Thread-3] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:52:22 [Thread-3] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-29 11:52:22 [Thread-3] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:52:22 [Thread-3] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:52:40 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:52:40 [Thread-4] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-29 11:52:43 [Thread-4] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-05-29 11:52:43 [Thread-4] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-29 11:52:43 [Thread-4] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-05-29 11:52:43 [Thread-4] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_9f521ee6-1e5d-4c39-b0f9-75ef1dd6e4ef.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_9f521ee6-1e5d-4c39-b0f9-75ef1dd6e4ef.png
+2026-05-29 11:53:01 [Thread-4] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-29 11:53:01 [Thread-4] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:53:01 [Thread-4] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:55:50 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:55:50 [Thread-5] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 11:55:50 [Thread-5] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 11:55:55 [Thread-5] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:55:57 [Thread-5] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:56:07 [Thread-5] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:56:26 [Thread-5] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-29 11:56:26 [Thread-5] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:56:26 [Thread-5] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:56:57 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:56:58 [Thread-6] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 11:56:58 [Thread-6] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 11:56:59 [Thread-6] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:57:01 [Thread-6] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:57:14 [Thread-6] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:57:14 [Thread-6] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:58:58 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:58:58 [Thread-7] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 11:58:58 [Thread-7] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 11:59:07 [Thread-7] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:59:08 [Thread-7] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:59:09 [Thread-7] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-29 11:59:09 [Thread-7] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:59:09 [Thread-7] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.

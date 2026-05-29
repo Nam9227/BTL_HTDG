@@ -32,21 +32,24 @@
 
     <center>
         <VBox spacing="20" style="-fx-padding: 30;">
-            <Label style="-fx-text-fill: white; -fx-font-size: 30px; -fx-font-weight: bold;" text="Quản lý người dùng" />
+            <Label styleClass="title-header" text="Quản lý người dùng" />
 
             <HBox spacing="12">
-                <TextField fx:id="searchField" prefWidth="420" promptText="Tìm theo username, email, họ tên..." />
+                <TextField fx:id="searchField" prefWidth="420" promptText="Tìm theo username, email, họ tên..." styleClass="text-field" />
 
-                <ComboBox fx:id="roleFilter" prefWidth="140" promptText="Vai trò" />
+                <ComboBox fx:id="roleFilter" prefWidth="140" promptText="Vai trò" styleClass="combo-box" />
 
-                <ComboBox fx:id="statusFilter" prefWidth="150" promptText="Trạng thái" />
+                <ComboBox fx:id="statusFilter" prefWidth="150" promptText="Trạng thái" styleClass="combo-box" />
 
-                <Button onAction="#handleSearch" style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold;" text="Tìm kiếm" />
+                <Button onAction="#handleSearch" styleClass="btn-primary" text="Tìm kiếm" />
 
-                <Button onAction="#handleRefresh" text="Làm mới" />
+                <Button onAction="#handleRefresh" styleClass="btn-secondary" text="Làm mới" />
             </HBox>
 
-            <TableView fx:id="userTable" prefHeight="440">
+            <TableView fx:id="userTable" prefHeight="440" VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
                 <columns>
                     <TableColumn fx:id="idColumn" prefWidth="60" text="ID" />
                     <TableColumn fx:id="usernameColumn" prefWidth="150" text="Username" />
@@ -60,13 +63,13 @@
             </TableView>
 
             <HBox alignment="CENTER_RIGHT" spacing="12">
-                <Button onAction="#handleViewDetail" text="Xem chi tiết" />
+                <Button onAction="#handleViewDetail" styleClass="btn-secondary" text="Xem chi tiết" />
 
-                <Button onAction="#handleLockUser" style="-fx-background-color: #d9822b; -fx-text-fill: white; -fx-font-weight: bold;" text="Khóa tài khoản" />
+                <Button onAction="#handleLockUser" styleClass="btn-warning" text="Khóa tài khoản" />
 
-                <Button onAction="#handleUnlockUser" style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold;" text="Mở khóa" />
+                <Button onAction="#handleUnlockUser" styleClass="btn-success" text="Mở khóa" />
 
-                <Button onAction="#handleDeleteUser" style="-fx-background-color: #b23b3b; -fx-text-fill: white; -fx-font-weight: bold;" text="Xóa" />
+                <Button onAction="#handleDeleteUser" styleClass="btn-danger" text="Xóa" />
             </HBox>
         </VBox>
     </center>

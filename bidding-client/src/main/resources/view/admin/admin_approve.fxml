@@ -32,16 +32,19 @@
 
     <!-- Main -->
     <center>
-        <VBox spacing="20" styleClass="main-content">
-            <Label styleClass="page-title" text="Quản lý phiên đấu giá" />
+        <VBox spacing="20" style="-fx-padding: 30;">
+            <Label styleClass="title-header" text="Quản lý phiên đấu giá" />
 
-            <HBox spacing="12" styleClass="filter-bar">
-                <TextField fx:id="searchField" prefWidth="300" promptText="🔍 Tìm mã SP, tên SP, người bán..." styleClass="search-field" />
-                <ComboBox fx:id="statusFilter" prefWidth="150" promptText="Trạng thái" styleClass="filter-combo" />
-                <Button onAction="#handleRefresh" styleClass="action-btn-primary" text="🔄 Làm mới" />
+            <HBox spacing="12">
+                <TextField fx:id="searchField" prefWidth="300" promptText="🔍 Tìm mã SP, tên SP, người bán..." styleClass="text-field" />
+                <ComboBox fx:id="statusFilter" prefWidth="150" promptText="Trạng thái" styleClass="combo-box" />
+                <Button onAction="#handleRefresh" styleClass="btn-secondary" text="🔄 Làm mới" />
             </HBox>
 
             <TableView fx:id="approvalTable" VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
                 <columns>
                     <TableColumn fx:id="idColumn" prefWidth="80" text="Mã SP" />
                     <TableColumn fx:id="nameColumn" prefWidth="160" text="Tên sản phẩm" />
