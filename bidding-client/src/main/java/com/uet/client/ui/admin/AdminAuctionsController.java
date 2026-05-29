@@ -37,10 +37,20 @@ public class AdminAuctionsController {
 
     @FXML private Label statusMessageLabel;
 
+    @FXML private javafx.scene.control.TextField searchField;
+    @FXML private javafx.scene.control.ComboBox<String> statusFilter;
+
+    private final javafx.collections.ObservableList<AuctionItem> masterData = javafx.collections.FXCollections.observableArrayList();
+    private javafx.collections.transformation.FilteredList<AuctionItem> filteredData;
+
     private final DecimalFormat moneyFormat = new DecimalFormat("#,###đ");
 
     @FXML
     public void initialize() {
+        if (statusFilter != null) {
+            statusFilter.getItems().addAll("Tất cả", "PENDING", "ACTIVE", "RUNNING", "FINISHED", "REJECTED");
+            statusFilter.getSelectionModel().selectFirst();
+        }
         // Cấu hình các cột thông tin cơ bản
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
@@ -87,7 +97,44 @@ public class AdminAuctionsController {
         // Sinh cặp nút bấm Duyệt / Từ chối động trên từng dòng
         setupActionColumn();
 
+        filteredData = new javafx.collections.transformation.FilteredList<>(masterData, p -> true);
+        approvalTable.setItems(filteredData);
+
+        if (searchField != null) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+        }
+        if (statusFilter != null) {
+            statusFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+        }
+
         // Tải dữ liệu từ server
+        loadPendingAuctions();
+    }
+
+    @FXML
+    private void handleSearch() {
+        String searchText = (searchField == null || searchField.getText() == null) ? "" : searchField.getText().toLowerCase().trim();
+        String selectedStatus = (statusFilter == null) ? "Tất cả" : statusFilter.getValue();
+
+        if (filteredData != null) {
+            filteredData.setPredicate(item -> {
+                boolean matchesText = searchText.isEmpty()
+                        || String.valueOf(item.getAuctionId()).contains(searchText)
+                        || (item.getProductName() != null && item.getProductName().toLowerCase().contains(searchText))
+                        || (item.getSellerId() != null && item.getSellerId().toLowerCase().contains(searchText));
+
+                boolean matchesStatus = selectedStatus == null || selectedStatus.equals("Tất cả")
+                        || (item.getStatus() != null && item.getStatus().equalsIgnoreCase(selectedStatus));
+
+                return matchesText && matchesStatus;
+            });
+        }
+    }
+
+    @FXML
+    private void handleRefresh(javafx.event.ActionEvent event) {
+        if (searchField != null) searchField.clear();
+        if (statusFilter != null) statusFilter.getSelectionModel().selectFirst();
         loadPendingAuctions();
     }
 
@@ -102,8 +149,9 @@ public class AdminAuctionsController {
                         List<AuctionItem> pendingList = (List<AuctionItem>) res.getData();
 
                         Platform.runLater(() -> {
-                            approvalTable.getItems().clear();
-                            approvalTable.getItems().addAll(pendingList);
+                            masterData.clear();
+                            masterData.addAll(pendingList);
+                            handleSearch();
                         });
                         ClientSocket.getInstance().removeMessageListener(this);
                     }
@@ -237,6 +285,12 @@ public class AdminAuctionsController {
 
     @FXML
     private void handleLogout() {
+        try {
+            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
+            com.uet.client.network.ClientSocket.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         switchScene("/view/login_view.fxml");
     }
 
@@ -246,6 +300,15 @@ public class AdminAuctionsController {
             Parent root = loader.load();
             Stage stage = (Stage) approvalTable.getScene().getWindow();
             stage.getScene().setRoot(root);
+
+            if (fxmlPath.contains("login_view.fxml")) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                stage.setTitle("Đăng nhập hệ thống");
+                stage.setMaximized(false);
+                stage.setWidth(850);
+                stage.setHeight(500);
+                stage.centerOnScreen();
+            }
         } catch (Exception e) {
             logger.error("Lỗi chuyển trang: " + fxmlPath, e);
         }

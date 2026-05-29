@@ -655,4 +655,37 @@ public class UserDAO {
             logger.error("Lỗi khi xóa thông báo cũ cho User: " + userId, e);
         }
     }
+
+    public Response changePassword(String userId, String oldPassword, String newPassword) {
+        String checkSql = "SELECT password FROM users WHERE id = ?";
+        String updateSql = "UPDATE users SET password = ? WHERE id = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement psCheck = conn.prepareStatement(checkSql)) {
+            
+            psCheck.setString(1, userId);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next()) {
+                    String currentPassword = rs.getString("password");
+                    if (!currentPassword.equals(oldPassword)) {
+                        return Response.fail("Mật khẩu cũ không chính xác!");
+                    }
+                    
+                    try (PreparedStatement psUpdate = conn.prepareStatement(updateSql)) {
+                        psUpdate.setString(1, newPassword);
+                        psUpdate.setString(2, userId);
+                        int rows = psUpdate.executeUpdate();
+                        if (rows > 0) {
+                            return Response.success("Đổi mật khẩu thành công!", null);
+                        }
+                    }
+                } else {
+                    return Response.fail("Không tìm thấy người dùng!");
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Lỗi khi đổi mật khẩu cho User ID: " + userId, e);
+        }
+        return Response.fail("Lỗi hệ thống khi đổi mật khẩu!");
+    }
 }

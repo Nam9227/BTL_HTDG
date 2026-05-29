@@ -155,16 +155,16 @@ public class AdminUsersController {
 
         filteredData.setPredicate(user -> {
             boolean matchesText = searchText.isEmpty()
-                    || user.getUsername().toLowerCase().contains(searchText)
-                    || user.getFullName().toLowerCase().contains(searchText)
-                    || user.getEmail().toLowerCase().contains(searchText);
+                    || (user.getUsername() != null && user.getUsername().toLowerCase().contains(searchText))
+                    || (user.getFullName() != null && user.getFullName().toLowerCase().contains(searchText))
+                    || (user.getEmail() != null && user.getEmail().toLowerCase().contains(searchText));
 
             boolean matchesRole = selectedRole == null || selectedRole.equals("Tất cả")
-                    || user.getRole().name().equalsIgnoreCase(selectedRole);
+                    || (user.getRole() != null && user.getRole().name().equalsIgnoreCase(selectedRole));
 
             boolean matchesStatus = selectedStatus == null || selectedStatus.equals("Tất cả")
-                    || (selectedStatus.equals("Hoạt động") && user.getActive())
-                    || (selectedStatus.equals("Bị khóa") && !user.getActive());
+                    || (selectedStatus.equals("Hoạt động") && Boolean.TRUE.equals(user.getActive()))
+                    || (selectedStatus.equals("Bị khóa") && Boolean.FALSE.equals(user.getActive()));
 
             return matchesText && matchesRole && matchesStatus;
         });
@@ -301,9 +301,20 @@ public class AdminUsersController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.getScene().setRoot(root);
-            stage.setTitle(title);
+
+            if (fxmlPath.contains("login_view.fxml")) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                stage.setTitle("Đăng nhập hệ thống");
+                stage.setMaximized(false);
+                stage.setWidth(850);
+                stage.setHeight(500);
+                stage.centerOnScreen();
+            } else {
+                stage.setTitle(title);
+            }
 
         } catch (IOException e) {
             System.err.println("Lỗi chuyển trang: " + fxmlPath);
@@ -318,6 +329,12 @@ public class AdminUsersController {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
+        try {
+            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
+            com.uet.client.network.ClientSocket.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switchScene(event, "/view/login_view.fxml", "Đăng nhập hệ thống");
     }
 }

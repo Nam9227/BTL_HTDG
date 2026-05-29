@@ -103,6 +103,11 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof ChangePasswordRequest request) {
+            handleChangePassword(request, client);
+            return true;
+        }
+
         if ("LOGOUT".equals(obj)) {
             client.send(Response.success("Đăng xuất thành công", null));
             return false;
@@ -293,5 +298,10 @@ public class ClientRequestDispatcher {
             logger.error("[Server LỖI] Sự cố tại handleGetNotifications của User: " + userId, e);
             client.send(Response.fail("Lỗi Server: Không thể lấy danh sách thông báo hiện tại."));
         }
+    }
+
+    private void handleChangePassword(ChangePasswordRequest request, ClientHandler client) {
+        Response response = userDAO.changePassword(request.getUserId(), request.getOldPassword(), request.getNewPassword());
+        client.send(response);
     }
 }

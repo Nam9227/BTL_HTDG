@@ -66,13 +66,20 @@ public class AdminDashboardController {
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             stage.getScene().setRoot(root);
 
-            stage.setTitle(title);
+            if (fxmlPath.contains("login_view.fxml")) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                stage.setTitle("Đăng nhập hệ thống");
+                stage.setMaximized(false);
+                stage.setWidth(850);
+                stage.setHeight(500);
+                stage.centerOnScreen();
+            } else {
+                stage.setTitle(title);
+            }
 
         } catch (IOException e) {
-            System.err.println("Lỗi chuyển trang: " + fxmlPath);
             e.printStackTrace();
         }
     }
@@ -99,6 +106,12 @@ public class AdminDashboardController {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
+        try {
+            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
+            com.uet.client.network.ClientSocket.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switchScene(event, "/view/login_view.fxml", "Đăng nhập hệ thống");
     }
 }

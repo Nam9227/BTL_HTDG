@@ -2956,3 +2956,30 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-05-29 01:33:22 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-05-29 01:33:22 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-05-29 01:33:22 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 11:16:15 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-29 11:16:15 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-29 11:16:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-29 11:16:15 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-29 11:16:15 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 6804710579: Đấu giá kết thúc
+2026-05-29 11:16:15 [pool-2-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Phiên 2332381913 đã đóng nhưng không có ai mua.
+2026-05-29 11:16:15 [pool-2-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 1). Tiến hành Broadcast...
+2026-05-29 11:16:15 [pool-2-thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_9f521ee6-1e5d-4c39-b0f9-75ef1dd6e4ef.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_9f521ee6-1e5d-4c39-b0f9-75ef1dd6e4ef.png
+2026-05-29 11:18:59 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-05-29 11:18:59 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-05-29 11:19:00 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - DB URL = jdbc:mysql://localhost:3306/auction_system?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+2026-05-29 11:19:00 [pool-2-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-05-29 11:19:13 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 11:19:13 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 11:19:13 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 11:19:15 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:19:16 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:19:22 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:19:23 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:19:24 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:19:27 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:19:28 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:19:29 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:19:31 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 11:19:34 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 11:19:36 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 11:19:36 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.

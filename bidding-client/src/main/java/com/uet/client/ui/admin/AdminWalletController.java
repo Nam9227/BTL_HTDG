@@ -24,93 +24,93 @@ import java.util.List;
 
 public class AdminWalletController {
 
-    @FXML private TextField searchField;
-    @FXML private ComboBox<String> statusFilter;
+    private final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminWalletController.class.getName());
 
-    @FXML private TableView<String[]> productTable;
+    @FXML private ComboBox<String> statusFilter;
+    @FXML private TextField searchField;
+    @FXML private TableView<Transaction> transactionTable;
+
     @FXML private TableColumn<Transaction, Long> idColumn;
     @FXML private TableColumn<Transaction, String> userIdColumn;
     @FXML private TableColumn<Transaction, String> typeColumn;
     @FXML private TableColumn<Transaction, Double> amountColumn;
     @FXML private TableColumn<Transaction, String> dateColumn;
-    @FXML private TableColumn<String[], String> createdAtColumn;
     @FXML private TableColumn<Transaction, String> statusColumn;
+
+    private final javafx.collections.ObservableList<Transaction> masterData = javafx.collections.FXCollections.observableArrayList();
+    private javafx.collections.transformation.FilteredList<Transaction> filteredData;
 
     @FXML
     public void initialize() {
-        System.out.println("Khởi tạo màn hình Quản lý sản phẩm...");
+        logger.info("Khởi tạo màn hình Quản lý sản phẩm...");
         if (statusFilter != null) {
-            statusFilter.getItems().addAll("Tất cả", "Chờ duyệt", "Đang đấu giá", "Đã bán", "Bị từ chối");
+            statusFilter.getItems().addAll("Tất cả", "PENDING", "APPROVED", "REJECTED");
+            statusFilter.getSelectionModel().selectFirst();
         }
-        idColumn.setCellValueFactory(
-                new PropertyValueFactory<>("id")
-        );
 
-        userIdColumn.setCellValueFactory(
-                new PropertyValueFactory<>("userId")
-        );
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        typeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("type")
-        );
+        filteredData = new javafx.collections.transformation.FilteredList<>(masterData, p -> true);
+        transactionTable.setItems(filteredData);
 
-        amountColumn.setCellValueFactory(
-                new PropertyValueFactory<>("amount")
-        );
+        if (searchField != null) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch(null));
+        }
+        if (statusFilter != null) {
+            statusFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch(null));
+        }
 
-        dateColumn.setCellValueFactory(
-                new PropertyValueFactory<>("createdAt")
-        );
-
-        statusColumn.setCellValueFactory(
-                new PropertyValueFactory<>("status")
-        );
         loadPendingTransactions();
     }
 
     @FXML
     private void handleSearch(ActionEvent event) {
-        String informationSearch = searchField.getText();
-        String selectedStatus = statusFilter.getValue();
-        System.out.println("Đang tìm kiếm sản phẩm với từ khóa: " + informationSearch + " | Trạng thái: " + selectedStatus);
+        String searchText = (searchField == null || searchField.getText() == null) ? "" : searchField.getText().toLowerCase().trim();
+        String selectedStatus = (statusFilter == null) ? "Tất cả" : statusFilter.getValue();
+
+        if (filteredData != null) {
+            filteredData.setPredicate(transaction -> {
+                boolean matchesText = searchText.isEmpty()
+                        || String.valueOf(transaction.getId()).contains(searchText)
+                        || (transaction.getUserId() != null && transaction.getUserId().toLowerCase().contains(searchText));
+
+                boolean matchesStatus = selectedStatus == null || selectedStatus.equals("Tất cả")
+                        || (transaction.getStatus() != null && transaction.getStatus().equalsIgnoreCase(selectedStatus));
+
+                return matchesText && matchesStatus;
+            });
+        }
     }
 
     @FXML
     private void handleRefresh(ActionEvent event) {
+        if (searchField != null) searchField.clear();
+        if (statusFilter != null) statusFilter.getSelectionModel().selectFirst();
         loadPendingTransactions();
     }
 
     @FXML
     private void handleViewDetail(ActionEvent event) {
-        System.out.println("Xem chi tiết sản phẩm đang chọn...");
+        logger.info("Xem chi tiết sản phẩm đang chọn...");
     }
 
-    @FXML
-    private TableView<Transaction> transactionTable;
     private void loadPendingTransactions(){
         try {
-
-            ClientSocket.getInstance().send(
-                    new GetPendingTransactionRequest()
-            );
+            ClientSocket.getInstance().send(new GetPendingTransactionRequest());
 
             ClientSocket.getInstance().addMessageListener(response -> {
-
                 if (response instanceof Response res) {
-
                     if (res.isSuccess()) {
-
-                        List<Transaction> list =
-                                (List<Transaction>) res.getData();
-                        System.out.println(list.size());
-
-
-                        Platform.runLater(() -> {
-                            System.out.println(list.get(0).getAmount());
-
-                            transactionTable
-                                    .getItems()
-                                    .setAll(list);
+                        List<Transaction> list = (List<Transaction>) res.getData();
+                        javafx.application.Platform.runLater(() -> {
+                            masterData.clear();
+                            masterData.addAll(list);
+                            handleSearch(null);
                         });
                     }
                 }
@@ -181,10 +181,18 @@ public class AdminWalletController {
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
             stage.getScene().setRoot(root);
 
-            stage.setTitle(title);
+            if (fxmlPath.contains("login_view.fxml")) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                stage.setTitle("Đăng nhập hệ thống");
+                stage.setMaximized(false);
+                stage.setWidth(850);
+                stage.setHeight(500);
+                stage.centerOnScreen();
+            } else {
+                stage.setTitle(title);
+            }
 
         } catch (IOException e) {
             System.err.println("Lỗi chuyển trang: " + fxmlPath);
@@ -209,20 +217,20 @@ public class AdminWalletController {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
+        try {
+            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
+            com.uet.client.network.ClientSocket.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switchScene(event, "/view/login_view.fxml", "Đăng nhập hệ thống");
     }
-    private void showAlert(String title,
-                           String text,
-                           Alert.AlertType type) {
 
+    private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
-
         alert.setTitle(title);
-
         alert.setHeaderText(null);
-
-        alert.setContentText(text);
-
+        alert.setContentText(content);
         alert.showAndWait();
     }
 }
