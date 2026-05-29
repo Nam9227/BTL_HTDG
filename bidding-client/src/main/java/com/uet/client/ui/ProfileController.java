@@ -46,6 +46,12 @@ public class ProfileController {
         usernameLabel.setText("@" + user.getUsername());
         balanceLabel.setText(String.format("%,.0f đ", user.getBalance() != null ? user.getBalance().doubleValue() : 0));
 
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                javafx.application.Platform.runLater(() -> setUser(updatedUser));
+            }
+        };
+
         fullNameField.setText(user.getFullName());
         usernameField.setText(user.getUsername());
         emailField.setText(user.getEmail());

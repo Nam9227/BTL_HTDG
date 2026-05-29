@@ -129,11 +129,27 @@ public class AuctionRealtimeService {
         try {
             String newStatus = request.isApproved() ? "ACTIVE" : "REJECTED";
             String statusText = request.isApproved() ? "Phê duyệt" : "Từ chối";
+            
+            // Lấy thông tin auction để biết sellerId và productName
+            AuctionItem item = auctionDAO.getAuctionById(request.getAuctionId(), false);
 
             boolean success = auctionDAO.updateAuctionStatus(request.getAuctionId(), newStatus);
 
             if (success) {
                 client.send(Response.success(statusText + " phiên đấu giá thành công!", null));
+                
+                if (item != null) {
+                    com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+                    // Xóa thông báo chờ duyệt
+                    userDAO.deleteNotificationByKeyword(item.getSellerId(), "Sản phẩm '" + item.getProductName() + "' đang chờ Admin duyệt");
+                    
+                    // Tạo thông báo mới
+                    String title = request.isApproved() ? "Sản phẩm đã duyệt" : "Sản phẩm bị từ chối";
+                    String content = request.isApproved() 
+                            ? "Sản phẩm '" + item.getProductName() + "' đã được phê duyệt." 
+                            : "Sản phẩm '" + item.getProductName() + "' đã bị từ chối.";
+                    userDAO.createNotification(item.getSellerId(), title, content);
+                }
 
                 // Nếu được phê duyệt, thử kích hoạt phiên đấu giá ngay lập tức nếu đến giờ
                 if (request.isApproved()) {

@@ -78,6 +78,13 @@ public class MyProductsController {
         if (balanceLabel != null) {
             balanceLabel.setText(String.format("💰 %,.0f đ", user.getBalance()));
         }
+
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                javafx.application.Platform.runLater(() -> setUser(updatedUser));
+            }
+        };
+
         if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0 && userAvatar != null) {
             try (ByteArrayInputStream bais = new ByteArrayInputStream(user.getAvatarBytes())) {
                 userAvatar.setImage(new Image(bais));

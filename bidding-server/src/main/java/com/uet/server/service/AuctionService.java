@@ -60,6 +60,10 @@ public class AuctionService {
             if (isInserted) {
                 client.send(Response.success("Đăng bán sản phẩm đấu giá thành công! Vui lòng chờ Admin phê duyệt.", null));
                 logger.info("[SERVER] Sản phẩm của User {} đang ở trạng thái PENDING.", req.getSellerId());
+                
+                // Gửi thông báo
+                com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+                userDAO.createNotification(req.getSellerId(), "Chờ duyệt sản phẩm", "Sản phẩm '" + req.getProductName() + "' đang chờ Admin duyệt.");
             } else {
                 client.send(Response.fail("Lỗi: Không thể ghi dữ liệu sản phẩm vào MySQL Database."));
             }

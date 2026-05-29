@@ -28,8 +28,7 @@ public class UserDAO {
     public Response handleLogin(LoginRequest request) {
         User user = findUserByUsernameAndPassword(
                 request.getUsername(),
-                request.getPassword()
-        );
+                request.getPassword());
 
         if (user == null) {
             return Response.fail("Sai tài khoản hoặc mật khẩu");
@@ -50,33 +49,34 @@ public class UserDAO {
             user.setLastLoginAt(LocalDateTime.now());
 
             logger.info("[UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: {}", user.getId());
+
         } catch (Exception e) {
             logger.error("Lỗi khi cập nhật thời gian đăng nhập: ", e);
         }
 
         return Response.success("Đăng nhập thành công", user);
     }
+
     public java.util.List<User> getAllUsers() {
         java.util.List<User> userList = new java.util.ArrayList<>();
 
-        // Đã thêm u.last_login_at vào câu SELECT
         String sql = """
-            SELECT 
-                u.id,
-                u.username,
-                u.role,
-                u.active,
-                u.last_login,
-                p.full_name,
-                p.email,
-                p.phone_number,
-                p.address,
-                p.avatar_path,
-                COALESCE(w.balance, 0) AS balance
-            FROM users u
-            LEFT JOIN user_profiles p ON u.id = p.user_id
-            LEFT JOIN wallet w ON u.id = w.user_id
-            """;
+                SELECT
+                    u.id,
+                    u.username,
+                    u.role,
+                    u.active,
+                    u.last_login,
+                    p.full_name,
+                    p.email,
+                    p.phone_number,
+                    p.address,
+                    p.avatar_path,
+                    COALESCE(w.balance, 0) AS balance
+                FROM users u
+                LEFT JOIN user_profiles p ON u.id = p.user_id
+                LEFT JOIN wallet w ON u.id = w.user_id
+                """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -95,7 +95,6 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
 
-                // --- ĐỌC TRƯỜNG LAST_LOGIN_AT TỪ RESULTSET VÀ CHUYỂN THÀNH LOCALDATETIME ---
                 java.sql.Timestamp timestamp = rs.getTimestamp("last_login");
                 if (timestamp != null) {
                     user.setLastLoginAt(timestamp.toLocalDateTime());
@@ -133,8 +132,8 @@ public class UserDAO {
             logger.error("Lỗi khi cập nhật quyền cho User ID: " + userId, e);
         }
     }
+
     public void deleteUser(String userId) {
-        // Lệnh xóa tài khoản dựa trên ID
         String sql = "DELETE FROM users WHERE id = ?";
 
         try (Connection conn = DBConnection.getConnection();
@@ -168,29 +167,23 @@ public class UserDAO {
     }
 
     public Response updateProfile(UpdateProfileRequest request) {
-        // 1. LẤY PATH AVATAR CŨ TRONG DATABASE RA TRƯỚC ĐỂ TÝ NỮA XÓA
         String oldAvatarPath = getAvatarPathByUserId(request.getUserId());
         String avatarPath = null;
 
-        // Kiểm tra xem Client có thực sự gửi ảnh mới lên không
-        if (request.getAvatar() != null && request.getAvatar().getData() != null && request.getAvatar().getData().length > 0) {
+        if (request.getAvatar() != null && request.getAvatar().getData() != null
+                && request.getAvatar().getData().length > 0) {
             try {
-                // 2. ÉP ĐỔI TÊN FILE MỚI BẰNG TIMESTAMP ĐỂ ĐÁNH LỪA CACHE JAVAFX
                 String originalName = request.getAvatar().getOriginalFileName();
                 String uniqueName = System.currentTimeMillis() + "_" + originalName;
                 request.getAvatar().setOriginalFileName(uniqueName);
 
-                // 3. LƯU FILE MỚI VÀO VPS
                 avatarPath = fileStorageService.save(
                         request.getAvatar(),
                         "avatars",
-                        request.getUserId()
-                );
+                        request.getUserId());
                 logger.info("🔄 Server đã lưu file mới tại path: {}", avatarPath);
 
-                // 4. TIẾN HÀNH XÓA FILE CŨ TRÊN ĐĨA CỦA VPS ĐỂ TRÁNH RÁC BỘ NHỚ
                 if (oldAvatarPath != null && !oldAvatarPath.isBlank()) {
-                    // Xử lý chuẩn hóa chuỗi đường dẫn nếu đường dẫn chứa tiền tố file://
                     String cleanOldPath = oldAvatarPath.replace("file://", "").replace("file:///", "/");
                     java.io.File oldFile = new java.io.File(cleanOldPath);
 
@@ -199,7 +192,8 @@ public class UserDAO {
                         if (deleted) {
                             logger.info("[Tối ưu đĩa] Đã xóa thành công file avatar cũ trên VPS: {}", cleanOldPath);
                         } else {
-                            logger.warn("Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): {}", cleanOldPath);
+                            logger.warn("Không thể xóa file cũ (có thể đang bị luồng khác chiếm dụng): {}",
+                                    cleanOldPath);
                         }
                     }
                 }
@@ -208,7 +202,6 @@ public class UserDAO {
             }
         }
 
-        // 5. CẬP NHẬT THÔNG TIN VÀO MYSQL (Giữ nguyên logic SQL động bám sát cấu trúc của Nam)
         String sql;
         if (avatarPath != null) {
             sql = "UPDATE user_profiles SET full_name = ?, email = ?, phone_number = ?, address = ?, avatar_path = ? WHERE user_id = ?";
@@ -234,7 +227,6 @@ public class UserDAO {
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                // 6. BUILD LẠI ĐỐI TƯỢNG USER MỚI NHẤT ĐỂ TRẢ VỀ CHO CLIENT ĐỒNG BỘ UI
                 User updatedUser = findUserByUserId(request.getUserId());
                 if (updatedUser != null) {
                     return Response.success("Cập nhật thông tin tài khoản thành công!", updatedUser);
@@ -256,7 +248,6 @@ public class UserDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, userId);
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -266,28 +257,27 @@ public class UserDAO {
         } catch (Exception e) {
             logger.error("Lỗi khi lấy avatar path cho User ID: " + userId, e);
         }
-
         return null;
     }
 
     private User findUserByUsernameAndPassword(String username, String password) {
         String sql = """
-            SELECT 
-                u.id,
-                u.username,
-                u.role,
-                u.active,
-                p.full_name,
-                p.email,
-                p.phone_number,
-                p.address,
-                p.avatar_path,
-                COALESCE(w.balance, 0) AS balance
-            FROM users u
-            LEFT JOIN user_profiles p ON u.id = p.user_id
-            LEFT JOIN wallet w ON u.id = w.user_id
-            WHERE u.username = ? AND u.password = ?
-            """;
+                SELECT
+                    u.id,
+                    u.username,
+                    u.role,
+                    u.active,
+                    p.full_name,
+                    p.email,
+                    p.phone_number,
+                    p.address,
+                    p.avatar_path,
+                    COALESCE(w.balance, 0) AS balance
+                FROM users u
+                LEFT JOIN user_profiles p ON u.id = p.user_id
+                LEFT JOIN wallet w ON u.id = w.user_id
+                WHERE u.username = ? AND u.password = ?
+                """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -313,13 +303,11 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(balance);
 
-                // ✅ Đọc ảnh từ disk nếu có avatar_path
                 String avatarPath = rs.getString("avatar_path");
                 if (avatarPath != null && !avatarPath.isBlank()) {
                     try {
                         byte[] bytes = null;
                         if (avatarPath.startsWith("file://")) {
-                            // normalize: remove prefix file:// or file:///
                             String p = avatarPath.replaceFirst("^file:///*", "/");
                             java.nio.file.Path filePath = java.nio.file.Paths.get(p);
                             if (java.nio.file.Files.exists(filePath)) {
@@ -334,7 +322,6 @@ public class UserDAO {
                                 logger.error("UserDAO: cannot download avatar from url: {}", avatarPath, e);
                             }
                         } else {
-                            // assume plain filesystem path
                             java.nio.file.Path filePath = java.nio.file.Paths.get(avatarPath);
                             if (java.nio.file.Files.exists(filePath)) {
                                 bytes = java.nio.file.Files.readAllBytes(filePath);
@@ -355,7 +342,6 @@ public class UserDAO {
         } catch (Exception e) {
             logger.error("Lỗi khi tìm user bằng username/password: ", e);
         }
-
         return null;
     }
 
@@ -363,7 +349,6 @@ public class UserDAO {
         if (roleStr == null || roleStr.isBlank()) {
             return null;
         }
-
         try {
             return Role.valueOf(roleStr.toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -371,18 +356,17 @@ public class UserDAO {
         }
     }
 
-    private User findUserByUserId(String userId) {
-        // Đã thêm u.last_login_at vào câu SELECT
+    public User findUserByUserId(String userId) {
         String sql = """
-            SELECT 
-                u.id, u.username, u.role, u.active, u.last_login,
-                p.full_name, p.email, p.phone_number, p.address, p.avatar_path,
-                COALESCE(w.balance, 0) AS balance
-            FROM users u
-            LEFT JOIN user_profiles p ON u.id = p.user_id
-            LEFT JOIN wallet w ON u.id = w.user_id
-            WHERE u.id = ?
-            """;
+                SELECT
+                    u.id, u.username, u.role, u.active, u.last_login,
+                    p.full_name, p.email, p.phone_number, p.address, p.avatar_path,
+                    COALESCE(w.balance, 0) AS balance
+                FROM users u
+                LEFT JOIN user_profiles p ON u.id = p.user_id
+                LEFT JOIN wallet w ON u.id = w.user_id
+                WHERE u.id = ?
+                """;
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -403,7 +387,6 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
 
-                // --- ĐỌC TRƯỜNG LAST_LOGIN_AT ---
                 java.sql.Timestamp timestamp = rs.getTimestamp("last_login");
                 if (timestamp != null) {
                     user.setLastLoginAt(timestamp.toLocalDateTime());
@@ -411,7 +394,6 @@ public class UserDAO {
                     user.setLastLoginAt(null);
                 }
 
-                // Đọc ảnh ra mảng byte y hệt hàm tìm theo Username
                 String avatarPath = rs.getString("avatar_path");
                 if (avatarPath != null && !avatarPath.isBlank()) {
                     try {
@@ -442,288 +424,189 @@ public class UserDAO {
         }
         return null;
     }
-    public void createTransaction(String userId,
-                                  double amount,
-                                  String type){
 
-        try{
-
-            Connection conn = DBConnection.getConnection();
-
-            String sql =
-                    "INSERT INTO transactions " +
-                            "(user_id, amount, type, status, created_at) " +
-                            "VALUES (?, ?, ?, ?, NOW())";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
+    public void createTransaction(String userId, double amount, String type) {
+        String sql = "INSERT INTO transactions (user_id, amount, type, status, created_at) VALUES (?, ?, ?, 'PENDING', NOW())";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, userId);
-
             ps.setDouble(2, amount);
-
             ps.setString(3, type);
-
-            ps.setString(4, "PENDING");
-
             ps.executeUpdate();
 
-        } catch (Exception e){
+            String actionStr = "DEPOSIT".equals(type) ? "nạp tiền" : "rút tiền";
+            String title = "Yêu cầu " + actionStr + " đang chờ duyệt";
+            String content = "Yêu cầu " + actionStr + " số tiền " + String.format("%,.0f", amount)
+                    + "đ của bạn đã được gửi và đang chờ Admin xử lý.";
+            createNotification(userId, title, content);
 
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Lỗi khi tạo transaction mới: ", e);
         }
     }
 
-    public List<Transaction> getPendingTransaction(){
+    public List<Transaction> getPendingTransaction() {
+        List<Transaction> list = new ArrayList<>();
+        String sql = "SELECT * FROM transactions WHERE status = 'PENDING'";
 
-        List<Transaction> list =
-                new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-        try{
-
-            Connection conn =
-                    DBConnection.getConnection();
-
-            String sql =
-                    "SELECT * FROM transactions " +
-                            "WHERE status = 'PENDING'";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
-
-            ResultSet rs =
-                    ps.executeQuery();
-
-            while(rs.next()){
-
-                Transaction t =
-                        new Transaction(rs.getLong("id"),
-                                rs.getString("user_id"),
-                                rs.getDouble("amount"),
-                                rs.getString("type"),
-                                rs.getTimestamp("created_at").toLocalDateTime().format(
-                                        DateTimeFormatter.ofPattern(
-                                                "dd/MM/yyyy HH:mm")),
-                                rs.getString("status")
-                        );
-
-                t.setId(rs.getLong("id"));
-
-                t.setUserId(
-                        rs.getString("user_id")
-                );
-
-                t.setAmount(
-                        rs.getDouble("amount")
-                );
-
-                t.setType(
-                        rs.getString("type")
-                );
-
-                t.setStatus(
-                        rs.getString("status")
-                );
-
+            while (rs.next()) {
+                Transaction t = new Transaction(
+                        rs.getLong("id"),
+                        rs.getString("user_id"),
+                        rs.getDouble("amount"),
+                        rs.getString("type"),
+                        rs.getTimestamp("created_at").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                        rs.getString("status"));
                 list.add(t);
             }
-
-        } catch (Exception e){
-
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Lỗi khi lấy danh sách pending transactions: ", e);
         }
-
         return list;
     }
 
-
-    public User deposit(String userId, double amount){
-        if(amount <= 0){
-
-            System.out.println(
-                    "Số tiền nạp không hợp lệ!"
-            );
-
+    // 🎯 Đã sửa: Hàm nạp tiền sử dụng Connection truyền từ ngoài vào để chạy chung Transaction
+    public User deposit(Connection conn, String userId, double amount) throws Exception {
+        if (amount <= 0) {
+            logger.warn("Số tiền nạp không hợp lệ: {}", amount);
             return null;
         }
-        try{
-            Connection conn = DBConnection.getConnection();
-
-            String sql =
-                    "UPDATE wallet " +
-                            "SET balance = balance + ? " +
-                            "WHERE user_id = ?";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
-
+        String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setDouble(1, amount);
             ps.setString(2, userId);
             int rows = ps.executeUpdate();
-            System.out.println("rows updated: " + rows);
-            // Không tìm thấy user
-            if (rows == 0) {
-                return null;
-            }
-
-            // Trả user mới sau khi update
+            if (rows == 0) return null;
             return findUserByUserId(userId);
+        }
+    }
 
-        } catch (Exception e) {
-
-            e.printStackTrace();
+    // 🎯 Đã sửa: Hàm rút tiền sử dụng Connection truyền từ ngoài vào để chạy chung Transaction
+    public User withdraw(Connection conn, String userId, double amount) throws Exception {
+        String balanceSql = "SELECT balance FROM wallet WHERE user_id = ?";
+        try (PreparedStatement balancePs = conn.prepareStatement(balanceSql)) {
+            balancePs.setString(1, userId);
+            try (ResultSet rs = balancePs.executeQuery()) {
+                if (rs.next()) {
+                    double balance = rs.getDouble("balance");
+                    if (amount > balance) {
+                        logger.warn("Số dư không đủ để rút! User: {}, Số dư: {}, Cần rút: {}", userId, balance, amount);
+                        return null; // Số dư không đủ
+                    }
+                } else {
+                    return null; // Không thấy ví
+                }
+            }
         }
 
-        return null;
+        String sql = "UPDATE wallet SET balance = balance - ? WHERE user_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setString(2, userId);
+            int rows = ps.executeUpdate();
+            if (rows == 0) return null;
+            return findUserByUserId(userId);
+        }
     }
-    public User withdraw(String userId, double amount){
 
-        try{
-            Connection conn = DBConnection.getConnection();
+    // 🎯 Đã sửa dứt điểm: Tách biệt quản lý Connection và quản lý đóng mở TRANSACTION an toàn
+    public User approveTransaction(long transactionId) {
+        String selectSql = "SELECT * FROM transactions WHERE id = ?";
+        String updateSql = "UPDATE transactions SET status = 'APPROVED' WHERE id = ?";
 
-            // ===== LẤY SỐ DƯ =====
+        Connection conn = null;
+        PreparedStatement ps = null;
+        PreparedStatement updatePs = null;
+        ResultSet rs = null;
 
-            String balanceSql =
-                    "SELECT balance FROM wallet " +
-                            "WHERE user_id = ?";
+        try {
+            conn = DBConnection.getConnection();
+            // 🌟 ĐỒNG BỘ: Tắt AutoCommit để bọc toàn bộ chuỗi cập nhật số dư + đổi status vào 1 phiên an toàn
+            conn.setAutoCommit(false);
 
-            PreparedStatement balancePs =
-                    conn.prepareStatement(balanceSql);
+            ps = conn.prepareStatement(selectSql);
+            ps.setLong(1, transactionId);
+            rs = ps.executeQuery();
 
-            balancePs.setString(1, userId);
+            if (rs.next()) {
+                String userId = rs.getString("user_id");
+                double amount = rs.getDouble("amount");
+                String type = rs.getString("type");
 
-            ResultSet rs =
-                    balancePs.executeQuery();
+                // Gọi hàm nạp/rút dùng chung Connection đang tắt autocommit
+                User updatedUser = null;
+                if ("DEPOSIT".equals(type)) {
+                    updatedUser = deposit(conn, userId, amount);
+                } else if ("WITHDRAW".equals(type)) {
+                    updatedUser = withdraw(conn, userId, amount);
+                }
 
-            if(rs.next()){
-
-                double balance =
-                        rs.getDouble("balance");
-
-                // ===== KIỂM TRA =====
-
-                if(amount > balance){
-
-                    System.out.println(
-                            "Số dư không đủ để rút!"
-                    );
-
+                // Nếu rút/nạp thất bại (ví dụ không đủ số dư) thì hủy bỏ luôn
+                if (updatedUser == null) {
+                    conn.rollback();
                     return null;
                 }
-            }
 
-
-            String sql =
-                    "UPDATE wallet " +
-                            "SET balance = balance - ? " +
-                            "WHERE user_id = ?";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
-
-            ps.setDouble(1, amount);
-            ps.setString(2, userId);
-
-            int rows = ps.executeUpdate();
-
-            // Không tìm thấy user
-            if (rows == 0) {
-                return null;
-            }
-
-            // Trả user mới sau khi update
-            return findUserByUserId(userId);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-    public void approveTransaction(long transactionId){
-
-        try{
-
-            Connection conn =
-                    DBConnection.getConnection();
-            System.out.println("URL = " + conn.getMetaData().getURL());
-            System.out.println("autoCommit = " + conn.getAutoCommit());
-
-            String sql =
-                    "SELECT * FROM transactions " +
-                            "WHERE id = ?";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
-
-            ps.setLong(1, transactionId);
-
-            ResultSet rs =
-                    ps.executeQuery();
-            System.out.println(
-                    "TRANSACTION ID = " + transactionId
-            );
-
-            boolean found = rs.next();
-
-            System.out.println(
-                    "FOUND = " + found
-            );
-
-
-            if(found){
-
-                String userId =
-                        rs.getString("user_id");
-
-                double amount =
-                        rs.getDouble("amount");
-
-                String type =
-                        rs.getString("type");
-
-                // ===== CỘNG/TRỪ TIỀN THẬT =====
-
-                if("DEPOSIT".equals(type)) {
-
-                    deposit(userId, amount);
-                }
-                else if("WITHDRAW".equals(type)){
-
-                    withdraw(userId, amount);
-                }
-
-                // ===== UPDATE STATUS =====
-                System.out.println("SẮP UPDATE STATUS");
-                String updateSql =
-                        "UPDATE transactions " +
-                                "SET status = 'APPROVED' " +
-                                "WHERE id = ?";
-
-                PreparedStatement updatePs =
-                        conn.prepareStatement(updateSql);
-
+                // Cập nhật trạng thái hóa đơn
+                updatePs = conn.prepareStatement(updateSql);
                 updatePs.setLong(1, transactionId);
-                int rows =
-                        updatePs.executeUpdate();
+                updatePs.executeUpdate();
+
+                // 🌟 LƯU THAY ĐỔI: Thành công mỹ mãn thì chốt hạ lưu vào ổ đĩa MySQL
                 conn.commit();
 
-                System.out.println("ROWS UPDATED = " + rows);
+                // Logic gửi thông báo
+                String actionStr = "DEPOSIT".equals(type) ? "nạp tiền" : "rút tiền";
+                String title = "Giao dịch " + actionStr + " thành công";
+                String content = "Yêu cầu " + actionStr + " số tiền " + String.format("%,.0f", amount)
+                        + "đ của bạn đã được phê duyệt.";
 
+                deleteNotificationByKeyword(userId, "Yêu cầu " + actionStr + " số tiền "
+                        + String.format("%,.0f", amount) + "đ của bạn đã được gửi");
+                createNotification(userId, title, content);
+
+                return updatedUser;
+            } else {
+                conn.rollback();
             }
 
-        } catch (Exception e){
-
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Lỗi xảy ra tại approveTransaction ID: " + transactionId + ", tiến hành rollback!", e);
+            if (conn != null) {
+                try { conn.rollback(); } catch (Exception ex) { ex.printStackTrace(); }
+            }
+        } finally {
+            // 🌟 KHÔI PHỤC: Trả lại trạng thái mặc định của Connection Pool để không làm hỏng hàm khác
+            if (conn != null) {
+                try { conn.setAutoCommit(true); } catch (Exception ex) { ex.printStackTrace(); }
+            }
+            try { if (rs != null) rs.close(); } catch (Exception e) { e.printStackTrace(); }
+            try { if (ps != null) ps.close(); } catch (Exception e) { e.printStackTrace(); }
+            try { if (updatePs != null) updatePs.close(); } catch (Exception e) { e.printStackTrace(); }
+            try { if (conn != null) conn.close(); } catch (Exception e) { e.printStackTrace(); }
         }
+        return null;
     }
 
     public List<com.uet.common.model.notification.Notification> getNotificationsByUserId(String userId) {
+        String deleteOldSql = "DELETE FROM notifications WHERE user_id = ? AND created_at < DATE_SUB(NOW(), INTERVAL 3 DAY)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(deleteOldSql)) {
+            ps.setString(1, userId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Lỗi khi xóa thông báo cũ hơn 3 ngày của user: " + userId, e);
+        }
+
         List<com.uet.common.model.notification.Notification> list = new ArrayList<>();
         String sql = "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
 
-        try (Connection conn = com.uet.server.database.DBConnection.getConnection();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, userId);
@@ -735,13 +618,41 @@ public class UserDAO {
                             rs.getString("title"),
                             rs.getString("content"),
                             rs.getBoolean("is_read"),
-                            rs.getTimestamp("created_at")
-                    ));
+                            rs.getTimestamp("created_at")));
                 }
             }
         } catch (Exception e) {
-            org.slf4j.LoggerFactory.getLogger(UserDAO.class).error("Lỗi lấy danh sách thông báo: ", e);
+            logger.error("Lỗi lấy danh sách thông báo: ", e);
         }
         return list;
+    }
+
+    public void createNotification(String userId, String title, String content) {
+        String sql = "INSERT INTO notifications (user_id, title, content, is_read, created_at) VALUES (?, ?, ?, 0, NOW())";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ps.setString(2, title);
+            ps.setString(3, content);
+            ps.executeUpdate();
+            logger.info("[Notification] Đã tạo thông báo mới cho User {}: {}", userId, title);
+        } catch (Exception e) {
+            logger.error("Lỗi khi tạo thông báo cho User: " + userId, e);
+        }
+    }
+
+    public void deleteNotificationByKeyword(String userId, String keyword) {
+        String sql = "DELETE FROM notifications WHERE user_id = ? AND content LIKE ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ps.setString(2, "%" + keyword + "%");
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                logger.info("[Notification] Đã xóa {} thông báo cũ chứa từ khóa '{}' của User {}", rows, keyword, userId);
+            }
+        } catch (Exception e) {
+            logger.error("Lỗi khi xóa thông báo cũ cho User: " + userId, e);
+        }
     }
 }

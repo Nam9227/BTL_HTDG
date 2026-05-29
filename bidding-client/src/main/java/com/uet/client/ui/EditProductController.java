@@ -53,6 +53,12 @@ public class EditProductController {
         this.currentUser = user;
         this.targetItem = item;
 
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                this.currentUser = updatedUser;
+            }
+        };
+
         // 1. Nạp danh sách ComboBox Danh mục
         if (ProductType != null) {
             ProductType.getItems().clear();

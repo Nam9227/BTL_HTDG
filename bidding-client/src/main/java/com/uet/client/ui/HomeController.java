@@ -61,6 +61,12 @@ public class HomeController {
         userNameLabel.setText(user.getFullName() != null ? user.getFullName() : user.getUsername());
         balanceLabel.setText("Số dư: " + formatMoney(user.getBalance()));
 
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                javafx.application.Platform.runLater(() -> setUser(updatedUser));
+            }
+        };
+
         // 🔥 THÊM ĐOẠN NÀY: Để khi từ Profile quay lại Home, ảnh đại diện ở Sidebar
         // Home cũng được cập nhật mới tinh!
         if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0) {
