@@ -99,25 +99,29 @@ public class AdminWalletController {
         logger.info("Xem chi tiết sản phẩm đang chọn...");
     }
 
+    private java.util.function.Consumer<Object> pendingTransactionsListener;
+
     private void loadPendingTransactions(){
         try {
+            if (pendingTransactionsListener == null) {
+                pendingTransactionsListener = response -> {
+                    if (response instanceof Response res) {
+                        if (res.isSuccess() && "Load pending transaction thành công".equals(res.getMessage())) {
+                            List<Transaction> list = (List<Transaction>) res.getData();
+                            javafx.application.Platform.runLater(() -> {
+                                masterData.clear();
+                                masterData.addAll(list);
+                                handleSearch(null);
+                            });
+                        }
+                    }
+                };
+                ClientSocket.getInstance().addMessageListener(pendingTransactionsListener);
+            }
+
             ClientSocket.getInstance().send(new GetPendingTransactionRequest());
 
-            ClientSocket.getInstance().addMessageListener(response -> {
-                if (response instanceof Response res) {
-                    if (res.isSuccess()) {
-                        List<Transaction> list = (List<Transaction>) res.getData();
-                        javafx.application.Platform.runLater(() -> {
-                            masterData.clear();
-                            masterData.addAll(list);
-                            handleSearch(null);
-                        });
-                    }
-                }
-            });
-
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }

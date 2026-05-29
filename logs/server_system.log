@@ -3046,3 +3046,22 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-05-29 11:59:09 [Thread-7] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-05-29 11:59:09 [Thread-7] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-05-29 11:59:09 [Thread-7] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-05-29 17:23:16 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-05-29 17:23:17 [Thread-8] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-05-29 17:23:17 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-05-29 17:23:28 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 17:23:34 [Thread-8] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 17:23:39 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã xóa 1 thông báo cũ chứa từ khóa 'Yêu cầu nạp tiền số tiền 10đ của bạn đã được gửi' của User 3846757029
+2026-05-29 17:23:39 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 3846757029: Giao dịch nạp tiền thành công
+2026-05-29 17:23:57 [Thread-8] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 17:24:03 [Thread-8] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 17:24:03 [Thread-8] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 17:24:20 [Thread-8] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-05-29 17:24:26 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 17:24:51 [Thread-8] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã cập nhật trạng thái active = false cho user ID: U004
+2026-05-29 17:24:51 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 17:25:00 [Thread-8] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã cập nhật trạng thái active = true cho user ID: U004
+2026-05-29 17:25:00 [Thread-8] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-05-29 17:25:02 [Thread-8] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-05-29 17:25:02 [Thread-8] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-05-29 17:25:02 [Thread-8] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
