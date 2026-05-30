@@ -5,6 +5,7 @@ import com.uet.common.model.auction.BidRecord;
 import com.uet.common.model.transaction.Transaction;
 import com.uet.common.model.user.User;
 import com.uet.common.network.*;
+import com.uet.server.database.dao.AdminDAO;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.RegisterDAO;
 import com.uet.server.database.dao.UserDAO;
@@ -150,6 +151,10 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof String str && "REQUEST_ADMIN_DASHBOARD".equals(str)) {
+            handleGetAdminDashboard(client);
+            return true;
+        }
         
         if (obj instanceof TransactionRequest request) {
             try {
@@ -303,5 +308,9 @@ public class ClientRequestDispatcher {
     private void handleChangePassword(ChangePasswordRequest request, ClientHandler client) {
         Response response = userDAO.changePassword(request.getUserId(), request.getOldPassword(), request.getNewPassword());
         client.send(response);
+    }
+
+    private void handleGetAdminDashboard(ClientHandler client) {
+        client.send(new AdminDAO().getDashboardData());
     }
 }
