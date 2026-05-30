@@ -313,7 +313,27 @@ public class ProfileController {
             }
         }
     }
-    @FXML private void handleChangePassword() { /* Logic đổi mật khẩu */ }
+    @FXML private void handleChangePassword() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/change_password_dialog.fxml"));
+            Parent root = loader.load();
+
+            ChangePasswordDialogController controller = loader.getController();
+            controller.initData(currentUser);
+
+            Stage stage = new Stage();
+            stage.setTitle("Đổi mật khẩu");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setResizable(false);
+            
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            logger.error("Lỗi khi mở form đổi mật khẩu: ", e);
+            showAlert("Lỗi", "Không thể mở form đổi mật khẩu!", Alert.AlertType.ERROR);
+        }
+    }
 
     
     @FXML

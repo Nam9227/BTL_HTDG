@@ -79,7 +79,7 @@
             <children>
                 <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="header-box">
                     <children>
-                        <Label styleClass="header-title" text="🏛️ Sản phẩm đang đấu giá" />
+                        <Label styleClass="header-title" text="🏛 Sản phẩm đang đấu giá" />
                         <Region HBox.hgrow="ALWAYS" />
 
                         <HBox alignment="CENTER" styleClass="search-container">

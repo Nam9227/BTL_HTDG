@@ -115,6 +115,14 @@ public class MyProductsController {
                 btnTabMine.setVisible(true);
                 btnTabMine.setManaged(true);
             }
+            
+            // Tự động chuyển sang tab "Sản phẩm tôi đăng bán" nếu là người bán
+            if (btnTabMine != null && btnTabWon != null) {
+                btnTabMine.getStyleClass().clear();
+                btnTabMine.getStyleClass().add("custom-tab-button-active");
+                btnTabWon.getStyleClass().clear();
+                btnTabWon.getStyleClass().add("custom-tab-button-normal");
+            }
         }
 
         loadDataFromServer();
@@ -156,7 +164,14 @@ public class MyProductsController {
 
                     Platform.runLater(() -> {
                         allAuctionsFromServer = items;
-                        switchTabDisplay(true);
+                        
+                        // Xác định xem tab nào đang active
+                        boolean isWonTab = true;
+                        if (btnTabMine != null && btnTabMine.getStyleClass().contains("custom-tab-button-active")) {
+                            isWonTab = false;
+                        }
+                        
+                        switchTabDisplay(isWonTab);
                     });
                 }
             };
@@ -306,6 +321,9 @@ public class MyProductsController {
                                             successAlert.setHeaderText(null);
                                             successAlert.setContentText(res.getMessage());
                                             successAlert.showAndWait();
+                                            
+                                            // Tải lại dữ liệu mới từ server để cập nhật giao diện
+                                            loadDataFromServer();
                                         } else {
                                             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                                             errorAlert.setTitle("Thất bại");

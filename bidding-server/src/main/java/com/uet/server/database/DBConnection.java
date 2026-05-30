@@ -33,7 +33,6 @@ public class DBConnection {
 
             
             if (!isLogPrinted) {
-                logger.info("DB URL = {}", url);
                 logger.info("Connected to database successfully!");
                 isLogPrinted = true; 
             }
