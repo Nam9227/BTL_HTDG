@@ -21,7 +21,7 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
     }
 
-    public void send(Object message) {
+    public synchronized void send(Object message) {
         try {
             out.writeObject(message);
             out.flush();

@@ -285,6 +285,17 @@ public class MyProductsController {
                 
                 Button deleteBtn = createDeleteButton(item, card);
                 actionBox.getChildren().add(deleteBtn);
+            } else if ("ACTIVE".equals(status)) {
+                
+                Label activeLabel = new Label("⏳ Chờ chạy");
+                activeLabel.setStyle("-fx-text-fill: #eab308; -fx-font-weight: bold;");
+                actionBox.getChildren().add(activeLabel);
+            } else if ("REJECTED".equals(status)) {
+                
+                Label rejectLabel = new Label("❌ Bị từ chối");
+                rejectLabel.setStyle("-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-padding: 0 10 0 0;");
+                Button deleteBtn = createDeleteButton(item, card);
+                actionBox.getChildren().addAll(rejectLabel, deleteBtn);
             }
         }
 

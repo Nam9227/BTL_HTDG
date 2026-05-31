@@ -19,7 +19,7 @@ public class AdminDAO {
         String countUsersSql = "SELECT COUNT(*) FROM users";
         String countProductsSql = "SELECT COUNT(*) FROM items"; // Tên bảng item của Nam
         String countAuctionsSql = "SELECT COUNT(*) FROM auctions WHERE status = 'RUNNING'";
-        String countPendingSql = "SELECT COUNT(*) FROM transactions WHERE status = 'PENDING'";
+        String countPendingSql = "SELECT (SELECT COUNT(*) FROM transactions WHERE status = 'PENDING') + (SELECT COUNT(*) FROM auctions WHERE status = 'PENDING')";
 
         // 2. Câu lệnh lấy 5 hoạt động gần nhất (Lấy từ bảng log hoặc lịch sử hệ thống của Nam)
         String logSql = "SELECT DATE_FORMAT(created_at, '%H:%i') as time, action_name, target_name, status FROM admin_logs ORDER BY id DESC LIMIT 5";
@@ -55,17 +55,23 @@ public class AdminDAO {
                 }
             }
 
-            // Nếu DB trống rỗng chưa có log, tạo dữ liệu ảo giống hệt ảnh của Nam để test UI
-            if (activities.isEmpty()) {
-                activities.add(new AdminActivity("10:30", "Đăng nhập hệ thống", "Admin_01", "Thành công"));
-                activities.add(new AdminActivity("10:25", "Duyệt sản phẩm", "Laptop Dell XPS", "Thành công"));
-                activities.add(new AdminActivity("10:15", "Khóa tài khoản", "User_Bad_01", "Hoàn tất"));
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        
         return new AdminDashboardResponse(users, products, auctions, pending, activities);
+    }
+
+    public static void logAdminAction(String actionName, String targetName, String status) {
+        String sql = "INSERT INTO admin_logs (action_name, target_name, status) VALUES (?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, actionName);
+            ps.setString(2, targetName);
+            ps.setString(3, status);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Lỗi khi lưu log admin: " + e.getMessage());
+        }
     }
 }

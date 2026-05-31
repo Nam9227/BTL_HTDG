@@ -95,9 +95,9 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
 
-                java.sql.Timestamp timestamp = rs.getTimestamp("last_login");
+                LocalDateTime timestamp = rs.getObject("last_login", LocalDateTime.class);
                 if (timestamp != null) {
-                    user.setLastLoginAt(timestamp.toLocalDateTime());
+                    user.setLastLoginAt(timestamp);
                 } else {
                     user.setLastLoginAt(null);
                 }
@@ -387,9 +387,9 @@ public class UserDAO {
                 user.setActive(rs.getBoolean("active"));
                 user.setBalance(rs.getBigDecimal("balance"));
 
-                java.sql.Timestamp timestamp = rs.getTimestamp("last_login");
+                LocalDateTime timestamp = rs.getObject("last_login", LocalDateTime.class);
                 if (timestamp != null) {
-                    user.setLastLoginAt(timestamp.toLocalDateTime());
+                    user.setLastLoginAt(timestamp);
                 } else {
                     user.setLastLoginAt(null);
                 }
@@ -460,7 +460,7 @@ public class UserDAO {
                         rs.getString("user_id"),
                         rs.getDouble("amount"),
                         rs.getString("type"),
-                        rs.getTimestamp("created_at").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                        rs.getObject("created_at", LocalDateTime.class).format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                         rs.getString("status"));
                 list.add(t);
             }

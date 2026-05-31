@@ -38,9 +38,11 @@ public class ClientRequestDispatcher {
                 userDAO.updateActive(request.getUserId(), request.isActive());
                 client.send(Response.success("Cập nhật trạng thái tài khoản thành công!", null));
                 logger.info("[Server] Đã cập nhật trạng thái active = {} cho user ID: {}", request.isActive(), request.getUserId());
+                AdminDAO.logAdminAction(request.isActive() ? "Mở khóa tài khoản" : "Khóa tài khoản", request.getUserId(), "Thành công");
             } catch (Exception e) {
                 logger.error("Lỗi khi cập nhật trạng thái hoạt động của User ID: " + request.getUserId(), e);
                 client.send(Response.fail("Lỗi Server: Không thể cập nhật trạng thái người dùng."));
+                AdminDAO.logAdminAction(request.isActive() ? "Mở khóa tài khoản" : "Khóa tài khoản", request.getUserId(), "Thất bại");
             }
             return true;
         }
@@ -51,9 +53,11 @@ public class ClientRequestDispatcher {
                 userDAO.deleteUser(request.getUserId());
                 client.send(Response.success("Xóa tài khoản người dùng thành công!", null));
                 logger.info("[Server] Đã xử lý xóa thành công user ID: {}", request.getUserId());
+                AdminDAO.logAdminAction("Xóa tài khoản", request.getUserId(), "Thành công");
             } catch (Exception e) {
                 logger.error("Lỗi khi xử lý xóa User ID: " + request.getUserId(), e);
                 client.send(Response.fail("Lỗi Server: Không thể xóa tài khoản người dùng."));
+                AdminDAO.logAdminAction("Xóa tài khoản", request.getUserId(), "Thất bại");
             }
             return true;
         }
@@ -187,12 +191,14 @@ public class ClientRequestDispatcher {
             try {
                 User updatedUser = userDAO.approveTransaction(request.getTransactionId());
                 client.send(Response.success("Duyệt giao dịch thành công", null));
+                AdminDAO.logAdminAction("Duyệt giao dịch", String.valueOf(request.getTransactionId()), "Thành công");
                 if (updatedUser != null) {
                     com.uet.server.network.ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedUser));
                 }
             } catch (Exception e) {
                 logger.error("Lỗi khi phê duyệt giao dịch ID: " + request.getTransactionId(), e);
                 client.send(Response.fail("Phê duyệt giao dịch thất bại"));
+                AdminDAO.logAdminAction("Duyệt giao dịch", String.valueOf(request.getTransactionId()), "Thất bại");
             }
             return true;
         }
@@ -223,8 +229,14 @@ public class ClientRequestDispatcher {
     }
 
     private void handleUpdateRole(UpdateRoleRequest request, ClientHandler client) {
-        userDAO.updateRole(request.getUserId(), request.getRole());
-        client.send(Response.success("Cập nhật quyền thành công", null));
+        try {
+            userDAO.updateRole(request.getUserId(), request.getRole());
+            client.send(Response.success("Cập nhật quyền thành công", null));
+            AdminDAO.logAdminAction("Phân quyền (" + request.getRole() + ")", request.getUserId(), "Thành công");
+        } catch (Exception e) {
+            client.send(Response.fail("Lỗi cập nhật quyền"));
+            AdminDAO.logAdminAction("Phân quyền", request.getUserId(), "Thất bại");
+        }
     }
 
     private void handleGetActiveAuctions(GetActiveAuctionsRequest request, ClientHandler client) {

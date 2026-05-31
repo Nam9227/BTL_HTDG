@@ -1,86 +1,73 @@
-# Hệ thống Đấu giá Trực tuyến (Bidding System) 🔨
+# Hệ Thống Đấu Giá Trực Tuyến (Online Bidding System)
 
-Hệ thống Đấu giá trực tuyến (Bidding System) được xây dựng theo mô hình **Client-Server** qua giao thức TCP/IP (Java Sockets). Ứng dụng cung cấp một nền tảng thời gian thực cho phép người dùng tham gia đấu giá các sản phẩm, quản lý ví điện tử (nạp/rút tiền), đăng bán sản phẩm và nhận thông báo. Bên cạnh đó, hệ thống cung cấp một phân hệ Quản trị (Admin) toàn diện để kiểm duyệt và giám sát.
+## 1. Mô tả ngắn gọn bài toán và phạm vi hệ thống
+Hệ thống là một ứng dụng client-server cho phép người dùng tham gia đấu giá các sản phẩm trực tuyến theo thời gian thực. 
+- **Người dùng (Bidder/Seller):** Có thể đăng ký bán sản phẩm, nạp/rút tiền vào ví ảo, tham gia đặt giá (bid) cho các sản phẩm đang mở bán, và nhận thông báo kết quả.
+- **Quản trị viên (Admin):** Quản lý người dùng, phê duyệt các yêu cầu nạp/rút tiền, duyệt các phiên đấu giá mới và có quyền ép đóng phiên đấu giá nếu có vi phạm.
 
----
+## 2. Công nghệ sử dụng, môi trường chạy và yêu cầu cài đặt
+- **Ngôn ngữ:** Java 17+
+- **Giao diện Client:** JavaFX
+- **Giao tiếp mạng:** TCP Socket (Real-time hai chiều)
+- **Cơ sở dữ liệu:** MySQL 8.0+ & JDBC
+- **Công cụ Build:** Maven
+- **Môi trường:** Đa nền tảng (Windows, Linux, macOS).
 
-## 1. Mô tả bài toán và phạm vi hệ thống
-- **Bài toán:** Giải quyết nhu cầu mua bán và đấu giá tài sản/sản phẩm trên môi trường mạng một cách công bằng, minh bạch và theo thời gian thực (Real-time).
-- **Phạm vi (Scope):**
-  - **Người dùng (Bidder/Seller):** Có thể mở gian hàng đăng bán sản phẩm, nạp tiền vào ví, đặt giá (bid) đua top với người khác và nhận sản phẩm khi thắng cuộc. Dòng tiền được tính toán và luân chuyển tự động.
-  - **Quản trị viên (Admin):** Quản lý toàn bộ vòng đời của ứng dụng bao gồm kiểm duyệt người dùng, duyệt sản phẩm tải lên, duyệt các yêu cầu nạp/rút tiền thật và giám sát luồng đấu giá.
+**Yêu cầu cài đặt:**
+1. Cài đặt JDK 17 trở lên.
+2. Cài đặt Maven.
+3. Cài đặt MySQL Server, tạo database `auction_system` và chạy script SQL (nếu có) để tạo bảng.
+4. Cập nhật thông tin kết nối CSDL trong file `bidding-server/config/db.properties`.
 
-## 2. Công nghệ sử dụng, môi trường chạy & Yêu cầu cài đặt
-### Công nghệ & Thư viện
-- **Ngôn ngữ:** Java (JDK 17 trở lên, tương thích tốt với JDK 21/25).
-- **Kiến trúc mạng:** TCP/IP Sockets (Giao tiếp luồng đối tượng - `ObjectOutputStream` / `ObjectInputStream`).
-- **Giao diện (GUI):** JavaFX, FXML, CSS.
-- **Cơ sở dữ liệu:** MySQL 8.0+ (Tương tác qua JDBC).
-- **Quản lý dự án:** Maven (Multi-module Architecture).
-- **Ghi log:** SLF4J, Logback (Quản lý log chuẩn doanh nghiệp).
+## 3. Cấu trúc thư mục / module chính
+Hệ thống được chia thành 3 module Maven chính:
+- `bidding-common`: Chứa các model, DTO, và các class cấu trúc gói tin (Request/Response) dùng chung cho cả Client và Server.
+- `bidding-server`: Chứa logic xử lý nghiệp vụ, quản lý database (DAO), quản lý Socket connection (ClientManager, ClientHandler), và các luồng lập lịch tự động (Scheduler).
+- `bidding-client`: Chứa giao diện người dùng JavaFX và logic kết nối socket tới server.
 
-### Yêu cầu cài đặt
-Để chạy được hệ thống, máy tính của bạn cần được cài đặt sẵn:
-1. **JDK 17+** (Cần thiết lập biến môi trường `JAVA_HOME`).
-2. **Apache Maven 3.8+** (Thiết lập biến môi trường `M2_HOME` hoặc có sẵn lệnh `mvn` trong Terminal).
-3. **MySQL Server** (Khởi tạo Database bằng file `mydb.sql` đính kèm trong thư mục gốc).
+## 4. Hướng dẫn chạy chương trình (Dòng lệnh)
 
----
+### Trên Windows:
+```cmd
+# Build toàn bộ project
+mvn clean install
 
-## 3. Cấu trúc thư mục (Multi-module Maven)
-Dự án được chia thành 3 module chính nhằm tách biệt logic và tái sử dụng code:
-- 📁 **`bidding-common`**: Chứa các Model dữ liệu (User, AuctionItem, Transaction, Notification...) và các đối tượng gói tin (Requests / Responses) dùng để trao đổi giữa Client và Server.
-- 📁 **`bidding-server`**: Bộ não của hệ thống. Chứa các Service xử lý đa luồng, kết nối Database (DAO), phân luồng luân chuyển tiền tệ, và bộ lập lịch (Scheduler) đóng/mở phiên đấu giá tự động.
-- 📁 **`bidding-client`**: Phân hệ giao diện đồ họa JavaFX. Tương tác với người dùng, kết nối đến Server thông qua `ClientSocket` và cập nhật giao diện theo thời gian thực.
+# Chạy Server
+cd bidding-server
+mvn exec:java -Dexec.mainClass="com.uet.server.ServerApp"
 
----
-
-## 4. Hướng dẫn cài đặt & Câu lệnh khởi chạy
-Dưới đây là các câu lệnh có thể chạy đa nền tảng (**Windows / Linux / MacOS**) thông qua Terminal (hoặc PowerShell/Command Prompt).
-
-### Bước 1: Build toàn bộ dự án
-Mở Terminal tại thư mục gốc của dự án (nơi chứa file `pom.xml` tổng) và chạy lệnh:
-```bash
-mvn clean install -DskipTests
+# Mở một terminal khác, chạy Client
+cd bidding-client
+mvn javafx:run
 ```
 
-### Bước 2: Khởi chạy Server
-Phải **chạy Server trước** để mở cổng lắng nghe (Port: `27915`).
+### Trên Linux / macOS:
 ```bash
-mvn exec:java -pl bidding-server -Dexec.mainClass="com.uet.server.network.ServerMain"
-```
-*Lưu ý: Đảm bảo cấu hình Database (URL, username, password) trong file `DBConnection.java` của `bidding-server` trùng khớp với MySQL của máy bạn.*
+# Build toàn bộ project
+mvn clean install
 
-### Bước 3: Khởi chạy Client
-Mở một cửa sổ Terminal mới (giữ nguyên cửa sổ Server đang chạy), thực thi lệnh sau để mở giao diện:
-```bash
-mvn javafx:run -pl bidding-client
-```
-*(Bạn có thể mở nhiều cửa sổ Client cùng lúc để test tính năng đấu giá cạnh tranh)*
+# Chạy Server
+cd bidding-server
+mvn exec:java -Dexec.mainClass="com.uet.server.ServerApp"
 
----
+# Mở một terminal khác, chạy Client
+cd bidding-client
+mvn javafx:run
+```
 
 ## 5. Danh sách chức năng đã hoàn thành
-✅ **Phân hệ Client / Người dùng (User)**
-- [x] Đăng nhập, Đăng ký, Quên mật khẩu.
-- [x] Chỉnh sửa hồ sơ cá nhân, tải lên ảnh đại diện (Avatar).
-- [x] Quản lý Ví (Wallet): Gửi yêu cầu Nạp tiền / Rút tiền.
-- [x] Đăng bán sản phẩm (Đính kèm ảnh, mô tả, danh mục, giá khởi điểm).
-- [x] Đấu giá thời gian thực: Đặt giá (Bid), tự động trừ/cộng tiền khi kết thúc.
-- [x] Nhận thông báo (Notifications) theo thời gian thực khi có sự kiện (Thắng đấu giá, giao dịch thành công...).
+- [x] Đăng ký, Đăng nhập và xác thực phân quyền (Admin, Bidder, Seller).
+- [x] Giao tiếp Client-Server qua TCP Socket (đa luồng).
+- [x] Quản lý thông tin tài khoản và đổi mật khẩu.
+- [x] Quản lý ví tiền (Nạp/Rút tiền) có sự phê duyệt của Admin.
+- [x] Đăng bán sản phẩm đấu giá (Seller).
+- [x] Quản lý và phê duyệt sản phẩm đấu giá (Admin).
+- [x] Hệ thống lập lịch tự động: Mở phiên khi đến giờ, đóng phiên và tự động thanh toán khi hết giờ.
+- [x] Đặt giá (Bid) realtime: Trực tiếp cập nhật giá lên UI của mọi client đang xem bằng cơ chế Broadcast.
+- [x] Lịch sử đặt giá và Lịch sử giao dịch dòng tiền.
+- [x] Hệ thống Thông báo (Notification) realtime đẩy về cho Client.
+- [x] Dashboard thống kê cho Admin.
 
-✅ **Phân hệ Quản trị viên (Admin)**
-- [x] Dashboard thống kê (Tổng người dùng, tổng sản phẩm, số phiên đang chạy).
-- [x] Quản lý Người dùng: Khóa/Mở khóa tài khoản, Xóa tài khoản, Xem chi tiết lịch sử.
-- [x] Xét duyệt Sản phẩm: Duyệt để lên sàn hoặc Từ chối sản phẩm vi phạm.
-- [x] Quản lý Giao dịch: Duyệt các yêu cầu Nạp/Rút tiền từ người dùng.
-- [x] Quản lý Đấu giá: Xem tiến trình đấu giá, ép kết thúc sớm (Force End) một phiên bất kỳ.
-
----
-
-## 6. Báo cáo và Video Demo
-- 📄 **Báo cáo chi tiết (PDF):** [Tải xuống / Xem Báo Cáo Tại Đây](#) *(Thêm link tại đây)*
-- 🎥 **Video Demo Hệ thống:** [Xem Video Demo Trên YouTube/Drive](#) *(Thêm link tại đây)*
-
----
-*Dự án Bài Tập Lớn - Lập trình Mạng / Hệ thống đa tầng.*
+## 6. Link báo cáo PDF và Video Demo
+- **Báo cáo PDF:** [Link Google Drive / đính kèm]
+- **Video Demo:** [Link Youtube / đính kèm]

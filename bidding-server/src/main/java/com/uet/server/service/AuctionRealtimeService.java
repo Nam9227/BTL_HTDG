@@ -103,6 +103,7 @@ public class AuctionRealtimeService {
             boolean success = auctionDAO.forceEndAuctionAndProcessTransaction(auctionId);
             if (success) {
                 client.send(Response.success("Đã ép kết thúc phiên đấu giá thành công!", null));
+                com.uet.server.database.dao.AdminDAO.logAdminAction("Ép kết thúc đấu giá", auctionId, "Thành công");
 
                 
                 com.uet.server.network.ClientManager.broadcastAuction(
@@ -137,6 +138,7 @@ public class AuctionRealtimeService {
 
             if (success) {
                 client.send(Response.success(statusText + " phiên đấu giá thành công!", null));
+                com.uet.server.database.dao.AdminDAO.logAdminAction(statusText + " đấu giá", request.getAuctionId(), "Thành công");
                 
                 if (item != null) {
                     com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
