@@ -220,9 +220,25 @@ public class AuctionDetailController {
                         List<BidRecord> list = (List<BidRecord>) res.getData();
 
                         Platform.runLater(() -> {
-                            
+                            // Cập nhật TableView lịch sử đấu giá
                             bidHistoryTable.getItems().clear();
                             bidHistoryTable.getItems().addAll(list);
+                            
+                            // Cập nhật Biểu đồ giá
+                            priceSeries.getData().clear();
+                            if (list.isEmpty()) {
+                                addBidHistory("Giá hiện tại", currentPrice);
+                            } else {
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                                int maxIndex = Math.min(list.size() - 1, 9); // Giới hạn 10 điểm gần nhất
+                                for (int i = maxIndex; i >= 0; i--) {
+                                    BidRecord record = list.get(i);
+                                    if (record.getBidTime() != null) {
+                                        String timeStr = record.getBidTime().format(formatter);
+                                        priceSeries.getData().add(new XYChart.Data<>(timeStr, record.getBidAmount()));
+                                    }
+                                }
+                            }
                         });
 
                         ClientSocket.getInstance().removeMessageListener(this);

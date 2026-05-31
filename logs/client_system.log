@@ -898,3 +898,99 @@ java.net.SocketException: Connection reset by peer
 	at java.base/java.lang.Thread.run(Thread.java:1474)
 2026-05-31 10:43:58 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
 2026-05-31 10:43:58 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-31 17:01:24 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:01:24 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-31 17:01:24 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:01:24 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:09:06 [Thread-3] WARN  com.uet.client.network.ClientSocket - Đột ngột mất kết nối vật lý tới Server!
+2026-05-31 17:09:28 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:09:28 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-31 17:09:28 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:09:28 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:10:28 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:10:28 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:10:31 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:10:31 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:10:36 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:10:40 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: 1
+2026-05-31 17:10:40 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:10:40 [Thread-12] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:10:50 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:10:50 [Thread-12] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:10:58 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:10:58 [Thread-12] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:11:00 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người bán (SELLER). Hiện đầy đủ tính năng thêm/quản lý sản phẩm.
+2026-05-31 17:11:00 [Thread-12] INFO  c.uet.client.ui.MyProductsController - Data received: 3 items
+2026-05-31 17:11:09 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:11:09 [Thread-12] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:11:14 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:11:14 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam3
+2026-05-31 17:11:14 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:11:14 [Thread-24] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:11:33 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:11:33 [Thread-24] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:11:46 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:11:46 [Thread-24] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:11:59 [JavaFX Application Thread] INFO  c.u.c.ui.InformationUploadController - 📸 Đã đọc và render thành công mảng byte của ảnh: Screenshot 2026-05-31 121008.png
+2026-05-31 17:12:39 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:12:39 [Thread-24] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:12:42 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:12:42 [Thread-24] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:12:46 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:12:46 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-31 17:12:56 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:12:56 [Thread-40] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:13:04 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:13:11 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-31 17:13:11 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:13:11 [Thread-43] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:15:13 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:15:13 [Thread-43] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:15:18 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:15:18 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam3
+2026-05-31 17:15:18 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:15:18 [Thread-47] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:15:21 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người bán (SELLER). Hiện đầy đủ tính năng thêm/quản lý sản phẩm.
+2026-05-31 17:15:21 [Thread-47] INFO  c.uet.client.ui.MyProductsController - Data received: 2 items
+2026-05-31 17:15:49 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:15:49 [Thread-47] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:15:52 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:15:52 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam3
+2026-05-31 17:15:52 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:15:52 [Thread-52] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:16:03 [JavaFX Application Thread] INFO  c.u.c.ui.InformationUploadController - 📸 Đã đọc và render thành công mảng byte của ảnh: Screenshot 2026-05-31 121008.png
+2026-05-31 17:16:39 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-05-31 17:16:39 [Thread-52] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:16:44 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:16:44 [Thread-52] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:16:57 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:16:57 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-05-31 17:17:02 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-05-31 17:17:02 [Thread-59] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-05-31 17:17:10 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-05-31 17:17:13 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-05-31 17:17:13 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:17:13 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:17:34 [JavaFX Application Thread] INFO  com.uet.client.ui.ProfileController - ProfileController: displayed avatar from path: file:///root/uploads/avatars/3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-05-31 17:17:36 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:17:36 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:18:03 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 3
+2026-05-31 17:19:14 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:19:14 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 3
+2026-05-31 17:19:27 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:19:27 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 3
+2026-05-31 17:21:14 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-05-31 17:21:14 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:21:24 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-05-31 17:21:24 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 5
+2026-05-31 17:21:24 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 5 items
+2026-05-31 17:21:28 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Sent DeleteProductRequest for auctionId: 4
+2026-05-31 17:21:28 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:21:28 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 2 items
+2026-05-31 17:21:29 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 4
+2026-05-31 17:21:29 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 4 items
+2026-05-31 17:21:31 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Sent DeleteProductRequest for auctionId: 8969258191
+2026-05-31 17:21:31 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-05-31 17:21:31 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 2 items
+2026-05-31 17:21:32 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 3
+2026-05-31 17:21:32 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 3 items
