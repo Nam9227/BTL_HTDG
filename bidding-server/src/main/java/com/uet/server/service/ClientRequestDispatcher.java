@@ -232,10 +232,8 @@ public class ClientRequestDispatcher {
         try {
             userDAO.updateRole(request.getUserId(), request.getRole());
             client.send(Response.success("Cập nhật quyền thành công", null));
-            AdminDAO.logAdminAction("Phân quyền (" + request.getRole() + ")", request.getUserId(), "Thành công");
         } catch (Exception e) {
             client.send(Response.fail("Lỗi cập nhật quyền"));
-            AdminDAO.logAdminAction("Phân quyền", request.getUserId(), "Thất bại");
         }
     }
 
