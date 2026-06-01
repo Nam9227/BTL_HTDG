@@ -174,13 +174,19 @@ public class AdminUsersController {
     private void handleLockUser() {
         User selected = userTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            if (selected.getRole() == Role.ADMIN) {
+                showWarning("Không thể khóa tài khoản Admin!");
+                return;
+            }
             if (!selected.getActive()) {
                 showWarning("Tài khoản này đã bị khóa từ trước!");
                 return;
             }
             new Thread(() -> {
                 try {
-                    ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false));
+                    ClientSocket.getInstance().send(
+                            new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false)
+                    );
                     System.out.println("[Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -218,6 +224,11 @@ public class AdminUsersController {
     private void handleDeleteUser() {
         User selected = userTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            if (selected.getRole() == Role.ADMIN) {
+                showWarning("Không thể xóa tài khoản Admin!");
+                return;
+            }
+
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmAlert.setTitle("Xác nhận xóa");
             confirmAlert.setHeaderText(null);
