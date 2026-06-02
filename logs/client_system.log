@@ -994,3 +994,7 @@ java.net.SocketException: Connection reset by peer
 2026-05-31 17:21:31 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 2 items
 2026-05-31 17:21:32 [Thread-62] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 3
 2026-05-31 17:21:32 [Thread-62] INFO  c.uet.client.ui.MyProductsController - Data received: 3 items
+2026-06-02 08:33:14 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 08:33:17 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-06-02 08:33:17 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-06-02 08:33:17 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
