@@ -16,9 +16,21 @@ import java.util.List;
 public class AuctionRealtimeService {
     private static final Logger logger = LoggerFactory.getLogger(AuctionRealtimeService.class);
 
-    private final AuctionDAO auctionDAO = new AuctionDAO();
-    private final BidDAO bidDAO = new BidDAO();
-    private final WalletDAO walletDAO = new WalletDAO();
+    private final AuctionDAO auctionDAO;
+    private final BidDAO bidDAO;
+    private final WalletDAO walletDAO;
+
+    public AuctionRealtimeService() {
+        this.auctionDAO = new AuctionDAO();
+        this.bidDAO = new BidDAO();
+        this.walletDAO = new WalletDAO();
+    }
+
+    public AuctionRealtimeService(AuctionDAO auctionDAO, BidDAO bidDAO, WalletDAO walletDAO) {
+        this.auctionDAO = auctionDAO;
+        this.bidDAO = bidDAO;
+        this.walletDAO = walletDAO;
+    }
 
     public void joinAuction(String auctionId, ClientHandler client) {
         ClientManager.joinAuction(auctionId, client);
@@ -59,29 +71,38 @@ public class AuctionRealtimeService {
             return;
         }
 
-        Response response = bidDAO.handleBid(request);
-        client.send(response);
-
-        if (!response.isSuccess()) {
-            return;
-        }
-
-        AuctionItem updatedAuction = auctionDAO.getAuctionById(request.getAuctionId(), false);
-        List<BidRecord> updatedHistory = auctionDAO.getBidHistory(request.getAuctionId());
-
-        ClientManager.broadcastAuction(
-                request.getAuctionId(),
-                new AuctionUpdateResponse(updatedAuction, "Có giá mới từ người dùng!", updatedHistory));
-
         try {
-            List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
-            ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
-        } catch (Exception e) {
-            logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi bid: ", e);
-        }
+            Response response = bidDAO.handleBid(request);
 
-        // --- KÍCH HOẠT VÒNG LẶP AUTO BID ---
-        processAutoBids(request.getAuctionId());
+            if (response.isSuccess()) {
+                ClientManager.broadcast(Response.success("NEW_BID", response.getData()));
+
+                AuctionItem updatedAuction = auctionDAO.getAuctionById(request.getAuctionId(), false);
+                List<BidRecord> updatedHistory = auctionDAO.getBidHistory(request.getAuctionId());
+
+                ClientManager.broadcastAuction(
+                        request.getAuctionId(),
+                        new AuctionUpdateResponse(updatedAuction, "Có giá mới từ người dùng!", updatedHistory));
+
+                try {
+                    List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                    ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                } catch (Exception e) {
+                    logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi bid: ", e);
+                }
+
+                // --- KÍCH HOẠT VÒNG LẶP AUTO BID ---
+                processAutoBids(request.getAuctionId());
+            } else {
+                client.send(response);
+            }
+        } catch (com.uet.common.exception.InvalidBidException | com.uet.common.exception.AuctionClosedException e) {
+            logger.warn("Bid bị từ chối: {}", e.getMessage());
+            client.send(Response.fail(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("Lỗi hệ thống khi đặt giá: ", e);
+            client.send(Response.fail("Lỗi hệ thống khi đặt giá"));
+        }
     }
 
     private static final java.util.concurrent.ConcurrentHashMap<String, java.util.concurrent.atomic.AtomicBoolean> botRunningMap = new java.util.concurrent.ConcurrentHashMap<>();
@@ -144,33 +165,39 @@ public class AuctionRealtimeService {
                         }
 
                         if (bestCandidate != null) {
-                            BidRequest autoRequest = new BidRequest(auctionId, bestCandidate.getUserId(),
-                                    bestNextPrice);
-                            Response response = bidDAO.handleBid(autoRequest);
-
-                            if (response.isSuccess()) {
-                                logger.info("🤖 AutoBid: User {} đã tự động đặt giá {}", bestCandidate.getUserId(),
+                            try {
+                                BidRequest autoRequest = new BidRequest(auctionId, bestCandidate.getUserId(),
                                         bestNextPrice);
-                                bidPlacedInThisRound = true;
+                                Response response = bidDAO.handleBid(autoRequest);
 
-                                AuctionItem updatedAuction = auctionDAO.getAuctionById(auctionId, false);
-                                List<BidRecord> updatedHistory = auctionDAO.getBidHistory(auctionId);
-                                ClientManager.broadcastAuction(
-                                        auctionId,
-                                        new AuctionUpdateResponse(updatedAuction, "🤖 Bot tự động đặt giá!",
-                                                updatedHistory));
+                                if (response.isSuccess()) {
+                                    logger.info("🤖 AutoBid: User {} đã tự động đặt giá {}", bestCandidate.getUserId(),
+                                            bestNextPrice);
+                                    bidPlacedInThisRound = true;
 
-                                try {
-                                    List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
-                                    ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
-                                } catch (Exception e) {
+                                    AuctionItem updatedAuction = auctionDAO.getAuctionById(auctionId, false);
+                                    List<BidRecord> updatedHistory = auctionDAO.getBidHistory(auctionId);
+                                    ClientManager.broadcastAuction(
+                                            auctionId,
+                                            new AuctionUpdateResponse(updatedAuction, "🤖 Bot tự động đặt giá!",
+                                                    updatedHistory));
+
+                                    try {
+                                        List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                                        ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                                    } catch (Exception e) {
+                                    }
+
+                                    // Ngủ 1 giây để tạo hiệu ứng Bot đang "suy nghĩ" và tránh spam nghẽn mạng
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                    }
                                 }
-
-                                // Ngủ 1 giây để tạo hiệu ứng Bot đang "suy nghĩ" và tránh spam nghẽn mạng
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                }
+                            } catch (com.uet.common.exception.InvalidBidException | com.uet.common.exception.AuctionClosedException e) {
+                                logger.info("AutoBid thất bại: {}", e.getMessage());
+                            } catch (Exception e) {
+                                logger.error("AutoBid gặp lỗi hệ thống: ", e);
                             }
                         }
                     }
