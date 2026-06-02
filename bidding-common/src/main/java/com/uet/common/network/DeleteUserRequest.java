@@ -1,8 +1,8 @@
 package com.uet.common.network;
 
-/**
- * Class gửi yêu cầu XÓA người dùng từ Admin lên Server
- */
+
+
+
 public class DeleteUserRequest extends NetworkMessage {
     private static final long serialVersionUID = 1L;
 

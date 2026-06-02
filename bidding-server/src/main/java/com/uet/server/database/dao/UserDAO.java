@@ -560,7 +560,7 @@ public class UserDAO {
                 
                 conn.commit();
 
-                // Lấy lại thông tin user sau khi đã commit transaction để có số dư mới nhất
+                
                 updatedUser = findUserByUserId(userId);
 
                 

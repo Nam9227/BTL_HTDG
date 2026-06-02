@@ -36,50 +36,50 @@ public class AdminDashboardController {
 
     @FXML
     public void initialize() {
-        // Cấu hình mapping cột TableView dữ liệu
+        
         timeColumn.setCellValueFactory(cellData -> cellData.getValue().timeProperty());
         actionColumn.setCellValueFactory(cellData -> cellData.getValue().actionProperty());
         targetColumn.setCellValueFactory(cellData -> cellData.getValue().targetProperty());
         statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
 
-        // Kích hoạt nạp dữ liệu từ luồng mạng Socket
+        
         refreshData();
     }
 
     private void refreshData() {
-        // 🌟 ĐÃ SỬA: Đăng ký tai nghe bất đồng bộ nhận dữ liệu REALTIME từ Server
+        
         java.util.function.Consumer<Object> responseListener = new java.util.function.Consumer<>() {
             @Override
             public void accept(Object response) {
                 if (response instanceof AdminDashboardResponse data) {
-                    // Tháo tai nghe sau khi nhận phản hồi thành công
+                    
                     ClientSocket.getInstance().removeMessageListener(this);
 
-                    // Đồng bộ giao diện mượt mà trên luồng đồ họa JavaFX Application Thread
+                    
                     Platform.runLater(() -> {
-                        // 1. Cập nhật số liệu đếm thời gian thực
+                        
                         totalUsersLabel.setText(String.format("%,d", data.getTotalUsers()));
                         totalProductsLabel.setText(String.format("%,d", data.getTotalProducts()));
                         activeAuctionsLabel.setText(String.format("%,d", data.getActiveAuctions()));
                         pendingProductsLabel.setText(String.format("%,d", data.getPendingApprovals()));
 
-                        // 2. Chuyển đổi dữ liệu từ module common (AdminActivity) sang JavaFX Model (DashboardActivity)
+                        
                         List<DashboardActivity> fxList = new ArrayList<>();
                         for (AdminActivity act : data.getRecentActivities()) {
                             fxList.add(new DashboardActivity(act.getTime(), act.getAction(), act.getTarget(), act.getStatus()));
                         }
 
-                        // Đổ dữ liệu thật lên bảng
+                        
                         recentActivityTable.setItems(FXCollections.observableArrayList(fxList));
                     });
                 }
             }
         };
 
-        // Đăng ký bộ lắng nghe vào cổng Socket vật lý
+        
         ClientSocket.getInstance().addMessageListener(responseListener);
 
-        // Bắn chuỗi tín hiệu yêu cầu Server quét Database tính toán số liệu
+        
         try {
             ClientSocket.getInstance().send("REQUEST_ADMIN_DASHBOARD");
         } catch (IOException e) {

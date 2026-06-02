@@ -7,10 +7,10 @@ import javafx.scene.Node;
 import javafx.util.Duration;
 
 public class TransitionUtils {
-    /**
-     * Áp dụng hiệu ứng mượt mà (Fade-in kết hợp Slide-up nhẹ) khi chuyển trang.
-     * @param node Đối tượng giao diện (thường là root pane) cần tạo hiệu ứng.
-     */
+    
+
+
+
     public static void applyFadeIn(Node node) {
         if (node == null) return;
         

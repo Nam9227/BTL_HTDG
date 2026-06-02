@@ -29,7 +29,7 @@ public class AutoBidDialogController {
         this.userId = userId;
         this.network = network;
 
-        // Fetch current config
+        
         listener = new Consumer<>() {
             @Override
             public void accept(Object message) {

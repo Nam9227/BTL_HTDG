@@ -116,7 +116,7 @@ public class MyProductsController {
                 btnTabMine.setManaged(true);
             }
             
-            // Tự động chuyển sang tab "Sản phẩm tôi đăng bán" nếu là người bán
+            
             if (btnTabMine != null && btnTabWon != null) {
                 btnTabMine.getStyleClass().clear();
                 btnTabMine.getStyleClass().add("custom-tab-button-active");
@@ -165,7 +165,7 @@ public class MyProductsController {
                     Platform.runLater(() -> {
                         allAuctionsFromServer = items;
                         
-                        // Xác định xem tab nào đang active
+                        
                         boolean isWonTab = true;
                         if (btnTabMine != null && btnTabMine.getStyleClass().contains("custom-tab-button-active")) {
                             isWonTab = false;
@@ -333,7 +333,7 @@ public class MyProductsController {
                                             successAlert.setContentText(res.getMessage());
                                             successAlert.showAndWait();
                                             
-                                            // Tải lại dữ liệu mới từ server để cập nhật giao diện
+                                            
                                             loadDataFromServer();
                                         } else {
                                             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
