@@ -33,11 +33,11 @@ public class AuctionServiceTest {
     @Test
     public void testHandleRegisterProduct_NoImage_Success() {
         // 1. Chuẩn bị Request không có hình ảnh
-        AddProductRequest request = new AddProductRequest();
-        request.setSellerId("seller123");
-        request.setProductName("Laptop Dell");
-        request.setStartPrice(1000.0);
-        request.setProductImage(null); // Bỏ qua xử lý File Storage
+        AddProductRequest request = new AddProductRequest(
+            "seller123", "Laptop Dell", "Desc", 1000.0, null, "ELECTRONICS", "Dell",
+            java.time.LocalDateTime.now(), java.time.LocalDateTime.now().plusDays(1)
+        );
+        // Bỏ qua xử lý File Storage (đã để null ở tham số thứ 5)
         
         // Giả lập lưu vào DB thành công
         when(mockAuctionDAO.createNewAuction(

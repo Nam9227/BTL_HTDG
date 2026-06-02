@@ -1,7 +1,7 @@
 package com.uet.server.service;
 
 import com.uet.common.model.auction.AuctionItem;
-import com.uet.common.model.auction.BidRecord; 
+import com.uet.common.model.auction.BidRecord;
 import com.uet.common.network.*;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.BidDAO;
@@ -43,7 +43,6 @@ public class AuctionRealtimeService {
                 bidderId,
                 bidAmount);
 
-        
         AuctionItem auctionItem = auctionDAO.getAuctionById(request.getAuctionId(), false);
         if (auctionItem != null && bidderId.equals(auctionItem.getSellerId())) {
             logger.warn("[Chặn Bid] Người dùng {} cố tình đấu giá sản phẩm của chính mình!", bidderId);
@@ -55,7 +54,8 @@ public class AuctionRealtimeService {
 
         if (bidAmount > availableBalance) {
             logger.warn("-> [Chặn Bid] Người dùng {} không đủ số dư khả dụng! (Có: {})", bidderId, availableBalance);
-            client.send(Response.fail("Số dư khả dụng không đủ! Bạn đang có khoản tiền bị đóng băng do dẫn đầu ở phiên đấu giá khác."));
+            client.send(Response.fail(
+                    "Số dư khả dụng không đủ! Bạn đang có khoản tiền bị đóng băng do dẫn đầu ở phiên đấu giá khác."));
             return;
         }
 
@@ -71,23 +71,121 @@ public class AuctionRealtimeService {
 
         ClientManager.broadcastAuction(
                 request.getAuctionId(),
-                new AuctionUpdateResponse(updatedAuction, "Có giá mới từ người dùng!", updatedHistory)
-        );
+                new AuctionUpdateResponse(updatedAuction, "Có giá mới từ người dùng!", updatedHistory));
 
-        
         try {
             List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
             ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
         } catch (Exception e) {
             logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi bid: ", e);
         }
+
+        // --- KÍCH HOẠT VÒNG LẶP AUTO BID ---
+        processAutoBids(request.getAuctionId());
     }
 
-    public void handleGetPendingAuctions(ClientHandler client) { 
+    private static final java.util.concurrent.ConcurrentHashMap<String, java.util.concurrent.atomic.AtomicBoolean> botRunningMap = new java.util.concurrent.ConcurrentHashMap<>();
+
+    public void processAutoBids(String auctionId) {
+        java.util.concurrent.atomic.AtomicBoolean isRunning = botRunningMap.computeIfAbsent(auctionId,
+                k -> new java.util.concurrent.atomic.AtomicBoolean(false));
+
+        if (isRunning.compareAndSet(false, true)) {
+            new Thread(() -> {
+                try {
+                    com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
+                    boolean bidPlacedInThisRound = true;
+
+                    while (bidPlacedInThisRound) {
+                        bidPlacedInThisRound = false;
+
+                        AuctionItem item = auctionDAO.getAuctionById(auctionId, false);
+                        if (item == null || !"RUNNING".equals(item.getStatus())) {
+                            break;
+                        }
+
+                        double currentPrice = item.getCurrentPrice();
+                        String currentWinner = item.getWinnerId();
+
+                        List<com.uet.common.model.auction.AutoBid> autoBids = autoBidDAO.getActiveAutoBids(auctionId);
+
+                        com.uet.common.model.auction.AutoBid bestCandidate = null;
+                        double bestNextPrice = 0;
+
+                        for (com.uet.common.model.auction.AutoBid ab : autoBids) {
+                            if (ab.getUserId().equals(currentWinner))
+                                continue;
+                            if (ab.getUserId().equals(item.getSellerId()))
+                                continue;
+
+                            double nextPrice = currentPrice + ab.getStepPrice();
+
+                            if (nextPrice > ab.getMaxPrice()) {
+                                nextPrice = ab.getMaxPrice();
+                            }
+
+                            if (nextPrice > currentPrice) {
+                                double availableBalance = walletDAO.getAvailableBalanceForAuction(ab.getUserId(),
+                                        auctionId);
+                                if (nextPrice > availableBalance) {
+                                    logger.info("Auto-bid của user {} bị tắt do không đủ số dư.", ab.getUserId());
+                                    autoBidDAO.deactivateAutoBid(auctionId, ab.getUserId());
+                                    continue;
+                                }
+
+                                if (bestCandidate == null) {
+                                    bestCandidate = ab;
+                                    bestNextPrice = nextPrice;
+                                }
+                            } else {
+                                logger.info("Auto-bid của user {} bị tắt do chạm ngưỡng maxPrice.", ab.getUserId());
+                                autoBidDAO.deactivateAutoBid(auctionId, ab.getUserId());
+                            }
+                        }
+
+                        if (bestCandidate != null) {
+                            BidRequest autoRequest = new BidRequest(auctionId, bestCandidate.getUserId(),
+                                    bestNextPrice);
+                            Response response = bidDAO.handleBid(autoRequest);
+
+                            if (response.isSuccess()) {
+                                logger.info("🤖 AutoBid: User {} đã tự động đặt giá {}", bestCandidate.getUserId(),
+                                        bestNextPrice);
+                                bidPlacedInThisRound = true;
+
+                                AuctionItem updatedAuction = auctionDAO.getAuctionById(auctionId, false);
+                                List<BidRecord> updatedHistory = auctionDAO.getBidHistory(auctionId);
+                                ClientManager.broadcastAuction(
+                                        auctionId,
+                                        new AuctionUpdateResponse(updatedAuction, "🤖 Bot tự động đặt giá!",
+                                                updatedHistory));
+
+                                try {
+                                    List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
+                                    ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                                } catch (Exception e) {
+                                }
+
+                                // Ngủ 1 giây để tạo hiệu ứng Bot đang "suy nghĩ" và tránh spam nghẽn mạng
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    isRunning.set(false);
+                }
+            }).start();
+        }
+    }
+
+    public void handleGetPendingAuctions(ClientHandler client) {
         logger.info("==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!");
 
         try {
-            
+
             List<AuctionItem> allList = auctionDAO.getAllAuctionsForAdmin();
             client.send(Response.success("Tải danh sách chờ duyệt thành công", allList));
         } catch (Exception e) {
@@ -96,22 +194,19 @@ public class AuctionRealtimeService {
         }
     }
 
-    
     public void handleForceEndAuction(String auctionId, ClientHandler client) {
         try {
-            
+
             boolean success = auctionDAO.forceEndAuctionAndProcessTransaction(auctionId);
             if (success) {
                 client.send(Response.success("Đã ép kết thúc phiên đấu giá thành công!", null));
                 com.uet.server.database.dao.AdminDAO.logAdminAction("Ép kết thúc đấu giá", auctionId, "Thành công");
 
-                
                 com.uet.server.network.ClientManager.broadcastAuction(
                         auctionId,
-                        new com.uet.common.network.AuctionUpdateResponse(auctionDAO.getAuctionById(auctionId, false), "Phiên đấu giá đã bị Admin kết thúc.")
-                );
+                        new com.uet.common.network.AuctionUpdateResponse(auctionDAO.getAuctionById(auctionId, false),
+                                "Phiên đấu giá đã bị Admin kết thúc."));
 
-                
                 try {
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
                     ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
@@ -130,35 +225,36 @@ public class AuctionRealtimeService {
         try {
             String newStatus = request.isApproved() ? "ACTIVE" : "REJECTED";
             String statusText = request.isApproved() ? "Phê duyệt" : "Từ chối";
-            
-            
+
             AuctionItem item = auctionDAO.getAuctionById(request.getAuctionId(), false);
 
             boolean success = auctionDAO.updateAuctionStatus(request.getAuctionId(), newStatus);
 
             if (success) {
                 client.send(Response.success(statusText + " phiên đấu giá thành công!", null));
-                com.uet.server.database.dao.AdminDAO.logAdminAction(statusText + " đấu giá", request.getAuctionId(), "Thành công");
-                
+                com.uet.server.database.dao.AdminDAO.logAdminAction(statusText + " đấu giá", request.getAuctionId(),
+                        "Thành công");
+
                 if (item != null) {
                     com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
-                    
-                    userDAO.deleteNotificationByKeyword(item.getSellerId(), "Sản phẩm '" + item.getProductName() + "' đang chờ Admin duyệt");
-                    
-                    
+
+                    userDAO.deleteNotificationByKeyword(item.getSellerId(),
+                            "Sản phẩm '" + item.getProductName() + "' đang chờ Admin duyệt");
+
                     String title = request.isApproved() ? "Sản phẩm đã duyệt" : "Sản phẩm bị từ chối";
-                    String content = request.isApproved() 
-                            ? "Sản phẩm '" + item.getProductName() + "' đã được phê duyệt." 
+                    String content = request.isApproved()
+                            ? "Sản phẩm '" + item.getProductName() + "' đã được phê duyệt."
                             : "Sản phẩm '" + item.getProductName() + "' đã bị từ chối.";
                     userDAO.createNotification(item.getSellerId(), title, content);
                 }
 
-                
                 if (request.isApproved()) {
                     try {
                         int started = auctionDAO.startEligibleAuctions();
                         if (started > 0) {
-                            logger.info("[Approve] Đã kích hoạt trực tiếp {} phiên đấu giá sang RUNNING. Tiến hành phát sóng...", started);
+                            logger.info(
+                                    "[Approve] Đã kích hoạt trực tiếp {} phiên đấu giá sang RUNNING. Tiến hành phát sóng...",
+                                    started);
                             List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
                             ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
                         }
@@ -180,15 +276,13 @@ public class AuctionRealtimeService {
             String auctionId = deleteReq.getAuctionId();
             String userId = deleteReq.getUserId();
 
-            
             AuctionItem item = auctionDAO.getAuctionById(auctionId);
 
             if (item == null) {
-                client.send( Response.fail("Sản phẩm hoặc phiên đấu giá không tồn tại!"));
+                client.send(Response.fail("Sản phẩm hoặc phiên đấu giá không tồn tại!"));
                 return;
             }
 
-            
             boolean isSeller = item.getSellerId() != null && item.getSellerId().equals(userId);
             boolean isWinner = item.getWinnerId() != null && item.getWinnerId().equals(userId);
 
@@ -197,23 +291,20 @@ public class AuctionRealtimeService {
                 return;
             }
 
-            
-            
             if ("RUNNING".equalsIgnoreCase(item.getStatus())) {
                 client.send(Response.fail("Không thể xóa! Phiên đấu giá đang diễn ra (RUNNING)."));
                 return;
             }
 
-            
             if (isSeller && !isWinner) {
-                
+
                 if ("FINISHED".equalsIgnoreCase(item.getStatus())) {
                     if (item.getWinnerId() != null && !item.getWinnerId().trim().isEmpty()) {
                         client.send(Response.fail("Không thể xóa! Phiên đấu giá đã kết thúc giao dịch thành công."));
                         return;
                     }
                 } else {
-                    
+
                     if (item.getWinnerId() != null && !item.getWinnerId().trim().isEmpty()) {
                         client.send(Response.fail("Không thể xóa! Phiên đấu giá đã có thành viên đặt giá."));
                         return;
@@ -221,14 +312,12 @@ public class AuctionRealtimeService {
                 }
             }
 
-            
             boolean isDeleted = auctionDAO.deleteAuction(auctionId);
 
             if (isDeleted) {
-                
-                client.send( Response.success("Đã gỡ bỏ sản phẩm và hủy phiên đấu giá thành công!", null));
 
-                
+                client.send(Response.success("Đã gỡ bỏ sản phẩm và hủy phiên đấu giá thành công!", null));
+
                 try {
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
                     ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
@@ -236,14 +325,15 @@ public class AuctionRealtimeService {
                     logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi xóa phiên: ", e);
                 }
             } else {
-                client.send( Response.fail("Lỗi hệ thống cơ sở dữ liệu, không thể xóa lúc này!"));
+                client.send(Response.fail("Lỗi hệ thống cơ sở dữ liệu, không thể xóa lúc này!"));
             }
 
         } catch (Exception e) {
             logger.error("Lỗi xảy ra khi xử lý xóa phiên đấu giá: ", e);
             try {
-                client.send( Response.fail("Hệ thống gặp sự cố ngoài ý muốn khi xử lý lệnh xóa!"));
-            } catch (Exception ignored) {}
+                client.send(Response.fail("Hệ thống gặp sự cố ngoài ý muốn khi xử lý lệnh xóa!"));
+            } catch (Exception ignored) {
+            }
         }
     }
 }

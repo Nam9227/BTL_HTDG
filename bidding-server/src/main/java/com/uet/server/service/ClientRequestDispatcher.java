@@ -108,6 +108,24 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof AutoBidRequest request) {
+            com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
+            com.uet.common.network.AutoBidResponse response = autoBidDAO.saveAutoBidConfig(request);
+            client.send(response);
+            
+            if (request.isActive() && response.isSuccess()) {
+                auctionRealtimeService.processAutoBids(request.getAuctionId());
+            }
+            return true;
+        }
+
+        if (obj instanceof com.uet.common.network.GetAutoBidRequest request) {
+            com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
+            com.uet.common.model.auction.AutoBid autoBid = autoBidDAO.getAutoBidConfig(request.getAuctionId(), request.getUserId());
+            client.send(new com.uet.common.network.GetAutoBidResponse(true, autoBid));
+            return true;
+        }
+
         if (obj instanceof ChangePasswordRequest request) {
             handleChangePassword(request, client);
             return true;
@@ -199,6 +217,35 @@ public class ClientRequestDispatcher {
                 logger.error("Lỗi khi phê duyệt giao dịch ID: " + request.getTransactionId(), e);
                 client.send(Response.fail("Phê duyệt giao dịch thất bại"));
                 AdminDAO.logAdminAction("Duyệt giao dịch", String.valueOf(request.getTransactionId()), "Thất bại");
+            }
+            return true;
+        }
+
+        if(obj instanceof RejectTransactionRequest request){
+            try {
+                userDAO.rejectTransaction(request.getTransactionId());
+
+                client.send(Response.success("Từ chối giao dịch thành công", null));
+
+                AdminDAO.logAdminAction(
+                        "Từ chối giao dịch",
+                        String.valueOf(request.getTransactionId()),
+                        "Thành công"
+                );
+
+            } catch (Exception e) {
+                logger.error(
+                        "Lỗi khi từ chối giao dịch ID: " + request.getTransactionId(),
+                        e
+                );
+
+                client.send(Response.fail("Từ chối giao dịch thất bại"));
+
+                AdminDAO.logAdminAction(
+                        "Từ chối giao dịch",
+                        String.valueOf(request.getTransactionId()),
+                        "Thất bại"
+                );
             }
             return true;
         }

@@ -351,7 +351,7 @@ public class AuctionDAO {
                 FROM bids b
                 JOIN users u ON b.user_id = u.id
                 WHERE b.auction_id = ?
-                ORDER BY b.bid_amount DESC, b.bid_time DESC
+                ORDER BY b.bid_time DESC, b.bid_amount DESC
                 """;
 
         try (Connection conn = DBConnection.getConnection();

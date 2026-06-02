@@ -39,9 +39,7 @@ public class RegisterDAOTest {
         // 1. Chuẩn bị dữ liệu đầu vào
         RegisterRequest request = new RegisterRequest("testuser", "password123", "test@gmail.com", "Test User");
 
-        // 2. Làm giả các đối tượng Database
         Connection mockConnection = mock(Connection.class);
-        PreparedStatement mockPreparedStatement = mock(Connection.class); // Vẫn mock được dù là interface
         PreparedStatement mockStmt = mock(PreparedStatement.class);
         ResultSet mockResultSet = mock(ResultSet.class);
 
