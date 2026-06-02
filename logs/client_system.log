@@ -998,3 +998,17 @@ java.net.SocketException: Connection reset by peer
 2026-06-02 08:33:17 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
 2026-06-02 08:33:17 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
 2026-06-02 08:33:17 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 10:56:50 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 10:56:50 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 11:00:54 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 11:00:54 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-06-02 11:00:54 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-06-02 11:00:54 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 11:01:02 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
+2026-06-02 11:01:02 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 3
+2026-06-02 11:01:02 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 3 items
+2026-06-02 11:01:05 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Sent DeleteProductRequest for auctionId: 9262993283
+2026-06-02 11:01:05 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 11:01:05 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 0 items
+2026-06-02 11:01:07 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
+2026-06-02 11:01:07 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 2 items

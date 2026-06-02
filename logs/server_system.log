@@ -5312,3 +5312,45 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-05-31 18:00:03 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 1683432468: Giao dịch thành công
 2026-05-31 18:00:03 [pool-1-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 1). Tiến hành Broadcast...
 2026-05-31 18:00:03 [pool-1-thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_48b2a990-8973-4311-8ca5-41da698fe32c.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_48b2a990-8973-4311-8ca5-41da698fe32c.png
+2026-06-02 10:56:31 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-02 10:56:31 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-06-02 10:56:31 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-02 10:56:31 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã xóa 1 thông báo cũ chứa từ khóa 'Sản phẩm '44' đã bắt đầu phiên đấu giá' của User 1683432468
+2026-06-02 10:56:31 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 1683432468: Đấu giá kết thúc
+2026-06-02 10:56:31 [pool-1-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Giao dịch thành công phiên 9262993283:
+   -> Đã trừ 1000000.0đ từ người mua (3846757029)
+   -> Đã cộng 1000000.0đ vào người bán (1683432468)
+2026-06-02 10:56:32 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 3846757029: Trúng đấu giá
+2026-06-02 10:56:32 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 1683432468: Giao dịch thành công
+2026-06-02 10:56:32 [pool-1-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 1). Tiến hành Broadcast...
+2026-06-02 10:56:50 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-02 10:56:50 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-06-02 10:56:50 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-06-02 10:56:52 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 19 người dùng cho Admin.
+2026-06-02 10:56:57 [Thread-0] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-06-02 10:57:03 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-06-02 10:57:03 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-02 10:57:03 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-02 11:00:46 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-02 11:00:46 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-06-02 11:00:46 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-02 11:00:54 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-02 11:00:54 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-06-02 11:00:54 [Thread-0] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-06-02 11:00:54 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-06-02 11:00:57 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đang xử lý lấy thông báo cho User ID: 3846757029
+2026-06-02 11:00:57 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã tìm thấy 2 thông báo trong DB của User: 3846757029
+2026-06-02 11:00:57 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - [Server] Đã bắn gói tin phản hồi thành công về Client.
+2026-06-02 11:01:02 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_48b2a990-8973-4311-8ca5-41da698fe32c.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_48b2a990-8973-4311-8ca5-41da698fe32c.png
+2026-06-02 11:01:02 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png
+2026-06-02 11:01:02 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png
+2026-06-02 11:01:05 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_48b2a990-8973-4311-8ca5-41da698fe32c.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_48b2a990-8973-4311-8ca5-41da698fe32c.png
+2026-06-02 11:01:05 [Thread-0] INFO  c.uet.server.database.dao.AuctionDAO - [DELETE] Đã xóa toàn bộ lượt bid liên quan ở bảng bids, ID: 9262993283
+2026-06-02 11:01:05 [Thread-0] INFO  c.uet.server.database.dao.AuctionDAO - [DELETE] Đã xóa phiên đấu giá ở bảng auctions, ID: 9262993283
+2026-06-02 11:01:05 [Thread-0] INFO  c.uet.server.database.dao.AuctionDAO - [DELETE] Đã xóa sản phẩm ở bảng items thành công, ID: 1088272983
+2026-06-02 11:01:05 [Thread-0] INFO  c.uet.server.database.dao.AuctionDAO - [DELETE SUCCESS] Đã dọn dẹp sạch sẽ phiên 9262993283 và sản phẩm 1088272983 khỏi hệ thống!
+2026-06-02 11:01:07 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png
+2026-06-02 11:01:07 [Thread-0] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png
+2026-06-02 11:01:09 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-06-02 11:01:09 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-02 11:01:09 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
