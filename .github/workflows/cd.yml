@@ -48,6 +48,6 @@ jobs:
           sleep 2
           
           echo "Đang khởi động Server mới..."
-          nohup java -jar bidding-server.jar > server.log 2>&1 &
+          nohup java -Dserver.port=27915 -jar bidding-server.jar > server_output.log 2>&1 </dev/null &
           
           echo "✅ Server deploy thành công và đang chạy ngầm!"
