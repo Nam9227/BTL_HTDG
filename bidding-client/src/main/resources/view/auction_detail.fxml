@@ -86,6 +86,7 @@
 
                                 <TextField fx:id="bidAmountField" promptText="Nhập giá muốn đặt..." styleClass="custom-textfield" />
                                 <Button maxWidth="Infinity" onAction="#handlePlaceBid" styleClass="bid-submit-button" text="🔨 Đặt giá" />
+                                <Button maxWidth="Infinity" onAction="#handleOpenAutoBid" styleClass="auto-bid-button" text="🤖 Đấu giá tự động" style="-fx-background-color: #f59e0b; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;" />
                                 <Label fx:id="messageLabel" style="-fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-text-fill: #ef4444;" text="" />
                             </children>
                         </VBox>

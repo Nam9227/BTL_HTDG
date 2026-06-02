@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="CENTER" prefWidth="400" prefHeight="350"
+      style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.uet.client.ui.AutoBidDialogController">
+
+    <Label text="🤖 Cài đặt Đấu giá tự động" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e293b;" />
+    
+    <Label text="Hệ thống sẽ tự động trả giá thay bạn ngay khi có người khác đặt giá cao hơn, cho đến khi chạm ngưỡng Giá tối đa."
+           wrapText="true" style="-fx-text-fill: #64748b; -fx-text-alignment: center;" />
+
+    <VBox spacing="8" alignment="CENTER_LEFT">
+        <Label text="💰 Giá tối đa (Max Price) - VNĐ:" style="-fx-font-weight: bold; -fx-text-fill: #334155;" />
+        <TextField fx:id="maxPriceField" promptText="Ví dụ: 50000000" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #cbd5e1;" />
+    </VBox>
+
+    <VBox spacing="8" alignment="CENTER_LEFT">
+        <Label text="📈 Bước giá (Step Price) - VNĐ:" style="-fx-font-weight: bold; -fx-text-fill: #334155;" />
+        <TextField fx:id="stepPriceField" promptText="Ví dụ: 1000000" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #cbd5e1;" />
+    </VBox>
+
+    <Label fx:id="errorLabel" text="" style="-fx-text-fill: #ef4444; -fx-font-weight: bold;" />
+
+    <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+        <Button text="❌ Tắt Auto Bid" onAction="#handleTurnOff" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 6; -fx-cursor: hand;" />
+        <Button text="✅ Bật Auto Bid" onAction="#handleTurnOn" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 6; -fx-cursor: hand;" />
+    </HBox>
+</VBox>

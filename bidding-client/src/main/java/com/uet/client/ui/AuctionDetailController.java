@@ -359,6 +359,34 @@ public class AuctionDetailController {
         }
     }
 
+    @FXML
+    private void handleOpenAutoBid() {
+        if (auctionItem == null || currentUser == null) return;
+        if (currentUser.getId().equals(auctionItem.getSellerId())) {
+            showMessage("Bạn không thể tự đấu giá sản phẩm của chính mình!", false);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/auto_bid_dialog.fxml"));
+            Parent root = loader.load();
+
+            AutoBidDialogController controller = loader.getController();
+            controller.initData(auctionItem.getAuctionId(), currentUser.getId(), ClientSocket.getInstance());
+
+            Stage stage = new Stage();
+            stage.setTitle("Cài đặt Đấu giá tự động");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+            
+        } catch (Exception e) {
+            logger.error("Lỗi khi mở cửa sổ Auto Bid: ", e);
+            showMessage("Không thể mở cài đặt Auto Bid.", false);
+        }
+    }
+
     private void addBidHistory(String bidder, double amount) {
         String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 

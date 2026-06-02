@@ -108,6 +108,24 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if (obj instanceof AutoBidRequest request) {
+            com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
+            com.uet.common.network.AutoBidResponse response = autoBidDAO.saveAutoBidConfig(request);
+            client.send(response);
+            
+            if (request.isActive() && response.isSuccess()) {
+                auctionRealtimeService.processAutoBids(request.getAuctionId());
+            }
+            return true;
+        }
+
+        if (obj instanceof com.uet.common.network.GetAutoBidRequest request) {
+            com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
+            com.uet.common.model.auction.AutoBid autoBid = autoBidDAO.getAutoBidConfig(request.getAuctionId(), request.getUserId());
+            client.send(new com.uet.common.network.GetAutoBidResponse(true, autoBid));
+            return true;
+        }
+
         if (obj instanceof ChangePasswordRequest request) {
             handleChangePassword(request, client);
             return true;
