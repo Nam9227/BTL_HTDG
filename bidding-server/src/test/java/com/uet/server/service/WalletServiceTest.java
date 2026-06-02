@@ -23,20 +23,20 @@ public class WalletServiceTest {
 
     @Test
     public void testCheckAndFreezeBalance_Success() {
-        // Giả lập ví có 1000 khả dụng
+        
         when(mockWalletDAO.getAvailableBalanceForAuction("user1", "auc1")).thenReturn(1000.0);
         
-        // Đặt giá 500 -> Hợp lệ
+        
         boolean result = walletService.checkAndFreezeBalance("user1", "auc1", 500.0);
         assertTrue(result, "Hệ thống phải cho phép đóng băng số dư nếu ví còn đủ tiền");
     }
 
     @Test
     public void testCheckAndFreezeBalance_Fail_InsufficientFunds() {
-        // Giả lập ví có 200 khả dụng
+        
         when(mockWalletDAO.getAvailableBalanceForAuction("user2", "auc1")).thenReturn(200.0);
         
-        // Đặt giá 500 -> Từ chối
+        
         boolean result = walletService.checkAndFreezeBalance("user2", "auc1", 500.0);
         assertFalse(result, "Hệ thống phải từ chối nếu số tiền đặt cao hơn số dư khả dụng");
     }

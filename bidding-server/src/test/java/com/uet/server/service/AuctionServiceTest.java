@@ -48,12 +48,12 @@ public class AuctionServiceTest {
         
         auctionService.placeBid(request, mockClientHandler);
         
-        // Cần verify là bidDAO đã gọi handleBid (bước quan trọng nhất)
+        
         verify(mockBidDAO, times(1)).handleBid(request);
         
-        // Vì response.isSuccess() nên không có client.send(Response.fail) nào được gọi.
-        // Broadcast sẽ được kích hoạt (ClientManager.broadcast), ở đây mình mock tĩnh hoặc bỏ qua
-        // Tuy nhiên có thể bắt IllegalArgumentException ở Mockito nếu gọi tĩnh.
+        
+        
+        
     }
 
     @Test

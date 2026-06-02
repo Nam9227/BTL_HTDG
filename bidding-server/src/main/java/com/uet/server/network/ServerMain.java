@@ -16,7 +16,7 @@ public class ServerMain {
         
         java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
 
-        // AuctionBroadcastService.start(); // Tắt gửi update định kỳ 1.5s
+        
         AuctionScheduler scheduler = new AuctionScheduler();
         scheduler.start();
         new ServerMain().start();

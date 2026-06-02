@@ -91,7 +91,7 @@ public class AuctionRealtimeService {
                     logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi bid: ", e);
                 }
 
-                // --- KÍCH HOẠT VÒNG LẶP AUTO BID ---
+                
                 processAutoBids(request.getAuctionId());
             } else {
                 client.send(response);
@@ -188,7 +188,7 @@ public class AuctionRealtimeService {
                                     } catch (Exception e) {
                                     }
 
-                                    // Ngủ 1 giây để tạo hiệu ứng Bot đang "suy nghĩ" và tránh spam nghẽn mạng
+                                    
                                     try {
                                         Thread.sleep(1000);
                                     } catch (InterruptedException e) {

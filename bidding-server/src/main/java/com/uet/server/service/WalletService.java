@@ -16,17 +16,17 @@ public class WalletService {
         this.auctionDAO = auctionDAO;
     }
 
-    /**
-     * Lấy số dư khả dụng (sau khi trừ các khoản đang đóng băng)
-     */
+    
+
+
     public double getAvailableBalance(String userId, String auctionId) {
         return walletDAO.getAvailableBalanceForAuction(userId, auctionId);
     }
 
-    /**
-     * Kiểm tra và đóng băng số dư tạm thời (ảo)
-     * Hệ thống hiện tại tính toán freeze on-the-fly nên chỉ cần kiểm tra.
-     */
+    
+
+
+
     public boolean checkAndFreezeBalance(String userId, String auctionId, double bidAmount) {
         double available = getAvailableBalance(userId, auctionId);
         if (bidAmount > available) {
@@ -36,12 +36,12 @@ public class WalletService {
         return true;
     }
 
-    /**
-     * Xử lý kết thúc phiên đấu giá:
-     * - Tự động trừ tiền người thắng cuộc
-     * - Cộng tiền cho Seller (sau khi trừ phí)
-     * - Hoàn tiền tự động cho người thua (do cơ chế freeze tự nhả)
-     */
+    
+
+
+
+
+
     public boolean processAuctionEnd(String auctionId) {
         logger.info("Bắt đầu xử lý giao dịch kết thúc cho phiên {}", auctionId);
         return auctionDAO.forceEndAuctionAndProcessTransaction(auctionId);

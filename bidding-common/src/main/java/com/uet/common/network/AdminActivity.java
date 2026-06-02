@@ -17,7 +17,7 @@ public class AdminActivity implements Serializable {
         this.status = status;
     }
 
-    // Getter/Setter cho TableView khớp cột
+    
     public String getTime() { return time; }
     public String getAction() { return action; }
     public String getTarget() { return target; }

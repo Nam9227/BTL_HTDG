@@ -6,13 +6,13 @@ import java.util.List;
 public class AdminDashboardResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // 4 số liệu trên các thẻ Card
+    
     private int totalUsers;
     private int totalProducts;
     private int activeAuctions;
     private int pendingApprovals;
 
-    // Danh sách lịch sử hiển thị ở bảng dưới
+    
     private List<AdminActivity> recentActivities;
 
     public AdminDashboardResponse(int totalUsers, int totalProducts, int activeAuctions, int pendingApprovals, List<AdminActivity> recentActivities) {
@@ -23,7 +23,7 @@ public class AdminDashboardResponse implements Serializable {
         this.recentActivities = recentActivities;
     }
 
-    // Gõ nhanh các hàm Getter/Setter ở đây...
+    
     public int getTotalUsers() { return totalUsers; }
     public int getTotalProducts() { return totalProducts; }
     public int getActiveAuctions() { return activeAuctions; }

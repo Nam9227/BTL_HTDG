@@ -15,35 +15,35 @@ public class AdminDAO {
         int users = 0, products = 0, auctions = 0, pending = 0;
         List<AdminActivity> activities = new ArrayList<>();
 
-        // 1. Câu lệnh đếm số lượng tổng quan
+        
         String countUsersSql = "SELECT COUNT(*) FROM users";
-        String countProductsSql = "SELECT COUNT(*) FROM items"; // Tên bảng item của Nam
+        String countProductsSql = "SELECT COUNT(*) FROM items"; 
         String countAuctionsSql = "SELECT COUNT(*) FROM auctions WHERE status = 'RUNNING'";
         String countPendingSql = "SELECT (SELECT COUNT(*) FROM transactions WHERE status = 'PENDING') + (SELECT COUNT(*) FROM auctions WHERE status = 'PENDING')";
 
-        // 2. Câu lệnh lấy 5 hoạt động gần nhất (Lấy từ bảng log hoặc lịch sử hệ thống của Nam)
+        
         String logSql = "SELECT DATE_FORMAT(created_at, '%H:%i') as time, action_name, target_name, status FROM admin_logs ORDER BY id DESC LIMIT 5";
 
         try (Connection conn = DBConnection.getConnection()) {
 
-            // Đếm số User
+            
             try (PreparedStatement ps = conn.prepareStatement(countUsersSql); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) users = rs.getInt(1);
             }
-            // Đếm sản phẩm
+            
             try (PreparedStatement ps = conn.prepareStatement(countProductsSql); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) products = rs.getInt(1);
             }
-            // Đếm phiên đấu giá đang chạy
+            
             try (PreparedStatement ps = conn.prepareStatement(countAuctionsSql); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) auctions = rs.getInt(1);
             }
-            // Đếm số giao dịch nạp rút / phiên chờ duyệt
+            
             try (PreparedStatement ps = conn.prepareStatement(countPendingSql); ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) pending = rs.getInt(1);
             }
 
-            // Đổ dữ liệu lịch sử hoạt động vào bảng
+            
             try (PreparedStatement ps = conn.prepareStatement(logSql); ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     activities.add(new AdminActivity(

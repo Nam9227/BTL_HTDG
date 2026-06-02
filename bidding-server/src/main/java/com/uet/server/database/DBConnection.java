@@ -21,7 +21,11 @@ public class DBConnection {
             Properties properties = new Properties();
 
             
-            FileInputStream fis = new FileInputStream("bidding-server/config/db.properties");
+            java.io.File dbPropFile = new java.io.File("config/db.properties");
+            if (!dbPropFile.exists()) {
+                dbPropFile = new java.io.File("bidding-server/config/db.properties");
+            }
+            FileInputStream fis = new FileInputStream(dbPropFile);
             properties.load(fis);
 
             String url = properties.getProperty("db.url");

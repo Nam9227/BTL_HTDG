@@ -8,10 +8,10 @@ import java.sql.ResultSet;
 
 public class WalletDAO {
 
-    /**
-     * 1. LẤY TỔNG SỐ DƯ THỰC TẾ TRONG VÍ
-     * Đọc trực tiếp số tiền đang có trong bảng wallet của người dùng
-     */
+    
+
+
+
     public double getBalance(String userId) {
         String sql = "SELECT balance FROM wallet WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -29,11 +29,11 @@ public class WalletDAO {
         return 0.0;
     }
 
-    /**
-     * 2. LẤY SỐ TIỀN ĐANG BỊ ĐÓNG BĂNG (SỐ DƯ ẢO)
-     * Quét toàn bộ các phiên đang chạy (RUNNING) mà user này đang dẫn đầu (winner_id).
-     * Tổng số tiền này sẽ tạm thời không được dùng để đi đấu giá sản phẩm khác.
-     */
+    
+
+
+
+
     public double getFrozenBalance(String userId) {
         String sql = "SELECT SUM(current_price) AS total_frozen FROM auctions " +
                 "WHERE winner_id = ? AND status = 'RUNNING'";
@@ -75,20 +75,20 @@ public class WalletDAO {
         return 0.0;
     }
 
-    /**
-     * 3b. TÍNH TOÁN SỐ DƯ KHẢ DỤNG KHI ĐANG ĐỨNG TRONG MỘT PHÒNG CỤ THỂ
-     * Công thức: Available = Total - (Frozen - Tiền_Phiên_Hiện_Tại)
-     */
+    
+
+
+
     public double getAvailableBalanceForAuction(String userId, String auctionId) {
         double total = getBalance(userId);
         double frozenExceptCurrent = getFrozenBalanceExcludeCurrent(userId, auctionId);
         double available = total - frozenExceptCurrent;
         return available < 0 ? 0.0 : available;
     }
-    /**
-     * 3. TÍNH TOÁN SỐ DƯ KHẢ DỤNG (TIỀN THỰC SỰ CÓ THỂ XÀI LÚC NÀY)
-     * Công thức: Available = Total - Frozen
-     */
+    
+
+
+
     public double getAvailableBalance(String userId) {
         double total = getBalance(userId);
         double frozen = getFrozenBalance(userId);
@@ -96,10 +96,10 @@ public class WalletDAO {
         return available < 0 ? 0.0 : available; 
     }
 
-    /**
-     * 4. CẬP NHẬT TĂNG/GIẢM SỐ DƯ THỰC TẾ (Nạp tiền / Trừ tiền khi thắng cuộc)
-     * Dùng để cộng tiền khi nạp, hoặc trừ hẳn tiền khi phiên đấu giá kết thúc thực sự.
-     */
+    
+
+
+
     public boolean updateBalance(String userId, double amount) {
         
         String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
@@ -116,9 +116,9 @@ public class WalletDAO {
         }
     }
 
-    /**
-     * 5. XỬ LÝ LỆNH NẠP TIỀN (DEPOSIT)
-     */
+    
+
+
     public Response handleDeposit(String userId, double amount) {
         if (amount <= 0) {
             return Response.fail("Số tiền nạp phải lớn hơn 0");
@@ -130,10 +130,10 @@ public class WalletDAO {
         return Response.fail("Lỗi hệ thống, không thể nạp tiền.");
     }
 
-    /**
-     * 6. XỬ LÝ LỆNH RÚT TIỀN (WITHDRAW)
-     * Chỉ được rút trong phạm vi SỐ DƯ KHẢ DỤNG (Không được rút khoản tiền đang đi đóng băng đấu giá)
-     */
+    
+
+
+
     public Response handleWithdraw(String userId, double amount) {
         if (amount <= 0) {
             return Response.fail("Số tiền rút phải lớn hơn 0");
