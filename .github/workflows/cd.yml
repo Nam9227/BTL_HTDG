@@ -42,7 +42,7 @@ jobs:
           cd /root
           
           echo "Đang dừng Server cũ..."
-          pkill -f bidding-server.jar || true
+          pkill -f "[b]idding-server.jar" || true
           
           # Đợi 2 giây cho cổng mạng 27915 được hệ điều hành giải phóng hoàn toàn
           sleep 2
