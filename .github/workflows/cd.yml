@@ -32,6 +32,7 @@ jobs:
         target: "/root"
         strip_components: 2
 
+    # 🚀 BƯỚC THẦN THÁNH: Gọi file start.sh chạy độc lập trên VPS
     - name: Restart Server
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -40,14 +41,4 @@ jobs:
         password: ${{ secrets.VPS_PASSWORD }}
         script: |
           cd /root
-          
-          echo "Đang dừng Server cũ..."
-          pkill -f "[b]idding-server.jar" || true
-          
-          # Đợi 2 giây cho cổng mạng 27915 được hệ điều hành giải phóng hoàn toàn
-          sleep 2
-          
-          echo "Đang khởi động Server mới..."
-          nohup java -Dserver.port=27915 -jar bidding-server.jar > server_output.log 2>&1 </dev/null &
-          
-          echo "✅ Server deploy thành công và đang chạy ngầm!"
+          ./start.sh
