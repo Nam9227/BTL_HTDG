@@ -4,6 +4,7 @@ import com.uet.client.network.ClientSocket;
 import com.uet.common.model.transaction.Transaction;
 import com.uet.common.network.ApproveTransactionRequest;
 import com.uet.common.network.GetPendingTransactionRequest;
+import com.uet.common.network.RejectTransactionRequest;
 import com.uet.common.network.Response;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -171,6 +172,33 @@ public class AdminWalletController {
 
     @FXML
     private void handleReject(ActionEvent event) {
+        Transaction transaction =
+                transactionTable.getSelectionModel().getSelectedItem();
+
+        if(transaction == null){
+            showAlert(
+                    "Lỗi",
+                    "Hãy chọn giao dịch cần từ chối",
+                    Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        try {
+
+            ClientSocket.getInstance().send(
+                    new RejectTransactionRequest(transaction.getId())
+            );
+            showAlert(
+                    "Thông báo",
+                    "Đã từ chỗi yêu cầu",
+                    Alert.AlertType.INFORMATION
+            );
+
+            loadPendingTransactions();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println("Từ chối sản phẩm...");
     }
 

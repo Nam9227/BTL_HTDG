@@ -593,6 +593,130 @@ public class UserDAO {
         return null;
     }
 
+    public User rejectTransaction(long transactionId) {
+
+        String selectSql =
+                "SELECT * FROM transactions WHERE id = ?";
+
+        String updateSql =
+                "UPDATE transactions " +
+                        "SET status = 'REJECTED' " +
+                        "WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        PreparedStatement updatePs = null;
+        ResultSet rs = null;
+
+        try {
+
+            conn = DBConnection.getConnection();
+
+            conn.setAutoCommit(false);
+
+            ps = conn.prepareStatement(selectSql);
+            ps.setLong(1, transactionId);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                String userId = rs.getString("user_id");
+                double amount = rs.getDouble("amount");
+                String type = rs.getString("type");
+
+                updatePs = conn.prepareStatement(updateSql);
+                updatePs.setLong(1, transactionId);
+
+                updatePs.executeUpdate();
+
+                conn.commit();
+
+                String actionStr =
+                        "DEPOSIT".equals(type)
+                                ? "nạp tiền"
+                                : "rút tiền";
+
+                String title =
+                        "Giao dịch " + actionStr + " bị từ chối";
+
+                String content =
+                        "Yêu cầu " + actionStr +
+                                " số tiền " +
+                                String.format("%,.0f", amount) +
+                                "đ của bạn đã bị từ chối.";
+
+                deleteNotificationByKeyword(
+                        userId,
+                        "Yêu cầu " + actionStr +
+                                " số tiền " +
+                                String.format("%,.0f", amount) +
+                                "đ của bạn đã được gửi"
+                );
+
+                createNotification(
+                        userId,
+                        title,
+                        content
+                );
+
+            } else {
+                conn.rollback();
+            }
+
+        } catch (Exception e) {
+
+            logger.error(
+                    "Lỗi xảy ra tại rejectTransaction ID: "
+                            + transactionId,
+                    e
+            );
+
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        } finally {
+
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            try {
+                if (rs != null) rs.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (updatePs != null) updatePs.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public List<com.uet.common.model.notification.Notification> getNotificationsByUserId(String userId) {
         String deleteOldSql = "DELETE FROM notifications WHERE user_id = ? AND created_at < DATE_SUB(NOW(), INTERVAL 3 DAY)";
         try (Connection conn = DBConnection.getConnection();

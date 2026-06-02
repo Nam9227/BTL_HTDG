@@ -1012,3 +1012,185 @@ java.net.SocketException: Connection reset by peer
 2026-06-02 11:01:05 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 0 items
 2026-06-02 11:01:07 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 2
 2026-06-02 11:01:07 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 2 items
+2026-06-02 15:28:00 [JavaFX Application Thread] ERROR com.uet.client.ui.LoginController - Lỗi khi đăng nhập: 
+java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:549)
+	at java.base/sun.nio.ch.Net.connect(Net.java:538)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:590)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:284)
+	at java.base/java.net.Socket.connect(Socket.java:668)
+	at java.base/java.net.Socket.connect(Socket.java:598)
+	at java.base/java.net.Socket.<init>(Socket.java:464)
+	at java.base/java.net.Socket.<init>(Socket.java:276)
+	at com.uet.client.network.ClientSocket.connect(ClientSocket.java:40)
+	at com.uet.client.ui.LoginController.handleLogin(LoginController.java:66)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1855)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1726)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8875)
+	at javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.scene.control.skin.ButtonSkin.lambda$new$0(ButtonSkin.java:71)
+	at com.sun.javafx.scene.KeyboardShortcutsHandler.processAccelerators(KeyboardShortcutsHandler.java:383)
+	at com.sun.javafx.scene.KeyboardShortcutsHandler.dispatchBubblingEvent(KeyboardShortcutsHandler.java:163)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene.processKeyEvent(Scene.java:2194)
+	at javafx.scene.Scene$ScenePeerListener.keyEvent(Scene.java:2715)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$KeyEventNotification.run(GlassViewEventHandler.java:218)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$KeyEventNotification.run(GlassViewEventHandler.java:150)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:138)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleKeyEvent$1(GlassViewEventHandler.java:250)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleKeyEvent(GlassViewEventHandler.java:249)
+	at com.sun.glass.ui.View.handleKeyEvent(View.java:542)
+	at com.sun.glass.ui.View.notifyKey(View.java:966)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:28:51 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:28:51 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: minh
+2026-06-02 15:28:51 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:28:52 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:29:00 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:29:01 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:29:02 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-06-02 15:29:02 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-06-02 15:29:08 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:29:08 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 15:29:13 [Thread-6] WARN  com.uet.client.network.ClientSocket - Đột ngột mất kết nối vật lý tới Server!
+2026-06-02 15:33:25 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:33:30 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 15:33:34 [Thread-3] WARN  com.uet.client.network.ClientSocket - Đột ngột mất kết nối vật lý tới Server!
+2026-06-02 15:33:45 [Thread-6] ERROR c.u.c.u.a.AdminAuctionsController - Lỗi khi gửi yêu cầu danh sách đấu giá lên Server: 
+java.net.SocketException: An established connection was aborted by the software in your host machine
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:57)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:408)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:425)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:458)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:825)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1097)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1087)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1767)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1676)
+	at java.base/java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1180)
+	at java.base/java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1134)
+	at java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1311)
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1081)
+	at java.base/java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1483)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:330)
+	at com.uet.client.network.ClientSocket.send(ClientSocket.java:59)
+	at com.uet.client.ui.admin.AdminAuctionsController.lambda$loadPendingAuctions$0(AdminAuctionsController.java:165)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:37:25 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:37:26 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 15:37:33 [Thread-3] WARN  com.uet.client.network.ClientSocket - Đột ngột mất kết nối vật lý tới Server!
+2026-06-02 15:37:35 [Thread-5] ERROR c.u.c.u.a.AdminAuctionsController - Lỗi khi gửi yêu cầu danh sách đấu giá lên Server: 
+java.net.SocketException: An established connection was aborted by the software in your host machine
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:57)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:408)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:425)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:458)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:825)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1097)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1087)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1767)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1676)
+	at java.base/java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1180)
+	at java.base/java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1134)
+	at java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1311)
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1081)
+	at java.base/java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1483)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:330)
+	at com.uet.client.network.ClientSocket.send(ClientSocket.java:59)
+	at com.uet.client.ui.admin.AdminAuctionsController.lambda$loadPendingAuctions$0(AdminAuctionsController.java:165)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:37:40 [Thread-7] ERROR c.u.c.u.a.AdminAuctionsController - Lỗi khi gửi yêu cầu danh sách đấu giá lên Server: 
+java.net.SocketException: An established connection was aborted by the software in your host machine
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:57)
+	at java.base/sun.nio.ch.NioSocketImpl.tryWrite(NioSocketImpl.java:408)
+	at java.base/sun.nio.ch.NioSocketImpl.implWrite(NioSocketImpl.java:425)
+	at java.base/sun.nio.ch.NioSocketImpl.write(NioSocketImpl.java:458)
+	at java.base/sun.nio.ch.NioSocketImpl$2.write(NioSocketImpl.java:825)
+	at java.base/java.net.Socket$SocketOutputStream.implWrite(Socket.java:1097)
+	at java.base/java.net.Socket$SocketOutputStream.write(Socket.java:1087)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1767)
+	at java.base/java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1676)
+	at java.base/java.io.ObjectOutputStream.writeNonProxyDesc(ObjectOutputStream.java:1180)
+	at java.base/java.io.ObjectOutputStream.writeClassDesc(ObjectOutputStream.java:1134)
+	at java.base/java.io.ObjectOutputStream.writeOrdinaryObject(ObjectOutputStream.java:1311)
+	at java.base/java.io.ObjectOutputStream.writeObject0(ObjectOutputStream.java:1081)
+	at java.base/java.io.ObjectOutputStream.writeFatalException(ObjectOutputStream.java:1483)
+	at java.base/java.io.ObjectOutputStream.writeObject(ObjectOutputStream.java:330)
+	at com.uet.client.network.ClientSocket.send(ClientSocket.java:59)
+	at com.uet.client.ui.admin.AdminAuctionsController.lambda$loadPendingAuctions$0(AdminAuctionsController.java:165)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:45:00 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:45:01 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 15:45:05 [Thread-3] WARN  com.uet.client.network.ClientSocket - Đột ngột mất kết nối vật lý tới Server!
+2026-06-02 15:46:21 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:46:21 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: minh
+2026-06-02 15:46:21 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:46:21 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:47:06 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:47:07 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:47:09 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-06-02 15:47:09 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-06-02 15:47:13 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:47:13 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 15:47:45 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-06-02 15:47:45 [Thread-6] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-06-02 15:47:50 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:47:50 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: minh
+2026-06-02 15:47:50 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:47:50 [Thread-7] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:48:04 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:48:04 [Thread-7] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:48:07 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-06-02 15:48:07 [Thread-7] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-06-02 15:48:12 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:48:13 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1
+2026-06-02 15:48:20 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-06-02 15:48:20 [Thread-10] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-06-02 15:48:24 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:48:25 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: minh
+2026-06-02 15:48:25 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:48:25 [Thread-11] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:56:32 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:56:40 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: minh
+2026-06-02 15:56:40 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:56:40 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:56:54 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người bán hàng
+2026-06-02 15:56:54 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-02 15:56:56 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!
+2026-06-02 15:56:56 [Thread-3] INFO  com.uet.client.network.ClientSocket - ClientSocket: Luồng nghe ngầm đã dừng an toàn sau khi Đăng xuất.
+2026-06-02 15:57:00 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-02 15:57:00 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: admin1

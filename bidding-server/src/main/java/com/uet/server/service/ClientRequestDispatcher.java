@@ -203,6 +203,35 @@ public class ClientRequestDispatcher {
             return true;
         }
 
+        if(obj instanceof RejectTransactionRequest request){
+            try {
+                userDAO.rejectTransaction(request.getTransactionId());
+
+                client.send(Response.success("Từ chối giao dịch thành công", null));
+
+                AdminDAO.logAdminAction(
+                        "Từ chối giao dịch",
+                        String.valueOf(request.getTransactionId()),
+                        "Thành công"
+                );
+
+            } catch (Exception e) {
+                logger.error(
+                        "Lỗi khi từ chối giao dịch ID: " + request.getTransactionId(),
+                        e
+                );
+
+                client.send(Response.fail("Từ chối giao dịch thất bại"));
+
+                AdminDAO.logAdminAction(
+                        "Từ chối giao dịch",
+                        String.valueOf(request.getTransactionId()),
+                        "Thất bại"
+                );
+            }
+            return true;
+        }
+
         client.send(Response.fail("Yêu cầu không hợp lệ"));
         return true;
     }

@@ -5354,3 +5354,63 @@ java.sql.SQLSyntaxErrorException: Unknown column 'u.last_login_at' in 'field lis
 2026-06-02 11:01:09 [Thread-0] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-06-02 11:01:09 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-06-02 11:01:09 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-02 15:56:16 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-02 15:56:16 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-06-02 15:56:17 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-02 15:56:32 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-02 15:56:32 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: minh
+2026-06-02 15:56:35 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: minh
+2026-06-02 15:56:40 [Thread-0] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: minh
+2026-06-02 15:56:40 [Thread-0] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 6804710579
+2026-06-02 15:56:52 [Thread-0] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi tạo thông báo cho User: 6804710579
+java.sql.SQLSyntaxErrorException: Table 'auction_system.notifications' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.createNotification(UserDAO.java:761)
+	at com.uet.server.database.dao.UserDAO.createTransaction(UserDAO.java:442)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:165)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:56:56 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-02 15:56:56 [Thread-0] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-02 15:57:00 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-02 15:57:00 [Thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-06-02 15:57:00 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-06-02 15:57:10 [Thread-1] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi xóa thông báo cũ cho User: 6804710579
+java.sql.SQLSyntaxErrorException: Table 'auction_system.notifications' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.deleteNotificationByKeyword(UserDAO.java:774)
+	at com.uet.server.database.dao.UserDAO.rejectTransaction(UserDAO.java:649)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:208)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:57:10 [Thread-1] ERROR com.uet.server.database.dao.UserDAO - Lỗi khi tạo thông báo cho User: 6804710579
+java.sql.SQLSyntaxErrorException: Table 'auction_system.notifications' doesn't exist
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1061)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdateInternal(ClientPreparedStatement.java:1009)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeLargeUpdate(ClientPreparedStatement.java:1320)
+	at com.mysql.cj.jdbc.ClientPreparedStatement.executeUpdate(ClientPreparedStatement.java:994)
+	at com.uet.server.database.dao.UserDAO.createNotification(UserDAO.java:761)
+	at com.uet.server.database.dao.UserDAO.rejectTransaction(UserDAO.java:657)
+	at com.uet.server.service.ClientRequestDispatcher.dispatch(ClientRequestDispatcher.java:208)
+	at com.uet.server.network.ClientHandler.listenClientMessages(ClientHandler.java:62)
+	at com.uet.server.network.ClientHandler.run(ClientHandler.java:43)
+	at java.base/java.lang.Thread.run(Thread.java:1516)
+2026-06-02 15:57:33 [Thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] Đã tải thành công 18 người dùng cho Admin.
+2026-06-02 15:57:34 [Thread-1] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
