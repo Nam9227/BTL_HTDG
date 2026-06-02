@@ -16,9 +16,21 @@ import java.util.List;
 public class AuctionRealtimeService {
     private static final Logger logger = LoggerFactory.getLogger(AuctionRealtimeService.class);
 
-    private final AuctionDAO auctionDAO = new AuctionDAO();
-    private final BidDAO bidDAO = new BidDAO();
-    private final WalletDAO walletDAO = new WalletDAO();
+    private final AuctionDAO auctionDAO;
+    private final BidDAO bidDAO;
+    private final WalletDAO walletDAO;
+
+    public AuctionRealtimeService() {
+        this.auctionDAO = new AuctionDAO();
+        this.bidDAO = new BidDAO();
+        this.walletDAO = new WalletDAO();
+    }
+
+    public AuctionRealtimeService(AuctionDAO auctionDAO, BidDAO bidDAO, WalletDAO walletDAO) {
+        this.auctionDAO = auctionDAO;
+        this.bidDAO = bidDAO;
+        this.walletDAO = walletDAO;
+    }
 
     public void joinAuction(String auctionId, ClientHandler client) {
         ClientManager.joinAuction(auctionId, client);

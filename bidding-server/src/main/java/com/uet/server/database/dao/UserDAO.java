@@ -560,6 +560,9 @@ public class UserDAO {
                 
                 conn.commit();
 
+                // Lấy lại thông tin user sau khi đã commit transaction để có số dư mới nhất
+                updatedUser = findUserByUserId(userId);
+
                 
                 String actionStr = "DEPOSIT".equals(type) ? "nạp tiền" : "rút tiền";
                 String title = "Giao dịch " + actionStr + " thành công";
