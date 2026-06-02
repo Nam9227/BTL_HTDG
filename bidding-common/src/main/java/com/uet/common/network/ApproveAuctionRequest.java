@@ -8,13 +8,13 @@ public class ApproveAuctionRequest implements Serializable {
     private String auctionId;
     private boolean approved;
 
-    // Hàm tạo (Constructor)
+    
     public ApproveAuctionRequest(String auctionId, boolean approved) {
         this.auctionId = auctionId;
         this.approved = approved;
     }
 
-    // Các hàm Getter để Server bóc tách dữ liệu
+    
     public String getAuctionId() {
         return auctionId;
     }

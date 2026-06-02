@@ -10,7 +10,7 @@ public class Auction implements Serializable {
     private Item item;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private String status; // OPEN / RUNNING / FINISHED / PAID / CANCELED
+    private String status; 
     private BidRecord highestBid;
 
     public Auction() {}

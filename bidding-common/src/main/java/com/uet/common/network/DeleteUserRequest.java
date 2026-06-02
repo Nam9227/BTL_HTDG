@@ -8,12 +8,12 @@ public class DeleteUserRequest extends NetworkMessage {
 
     private String userId;
 
-    // Constructor để bọc ID user cần xóa
+    
     public DeleteUserRequest(String userId) {
         this.userId = userId;
     }
 
-    // Getter và Setter để Server có thể trích xuất thông tin
+    
     public String getUserId() {
         return userId;
     }

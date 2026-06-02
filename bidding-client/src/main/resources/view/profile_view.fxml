@@ -110,7 +110,7 @@
 
                 <HBox alignment="CENTER_RIGHT" spacing="15">
                     <children>
-                        <Button fx:id="editButton" onAction="#handleEdit" styleClass="btn-action-edit" text="✏️ Chỉnh sửa" />
+                        <Button fx:id="editButton" onAction="#handleEdit" styleClass="btn-action-edit" text="✏ Chỉnh sửa" />
                         <Button fx:id="saveButton" disable="true" onAction="#handleSave" styleClass="btn-action-save" text="💾 Lưu thay đổi" />
                         <Button fx:id="changePasswordButton" onAction="#handleChangePassword" styleClass="btn-action-password" text="🔒 Đổi mật khẩu" />
                     </children>

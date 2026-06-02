@@ -20,16 +20,16 @@ public class AuctionScheduler {
     public void start() {
         logger.info("[Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!");
 
-        // Thiết lập: Cứ mỗi 5 giây (TimeUnit.SECONDS), bộ quét sẽ tự động chạy lại một lần
+        
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                // 1. Kiểm tra kích hoạt phiên mới
+                
                 int activated = auctionDAO.startEligibleAuctions();
 
-                // 2. Kiểm tra đóng phiên hết hạn
+                
                 int finished = auctionDAO.finishExpiredAuctions();
 
-                // Nếu có bất cứ thay đổi nào, phát sóng danh sách mới đến trang chủ của tất cả Client
+                
                 if (activated > 0 || finished > 0) {
                     logger.info("[Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: {}, Kết thúc: {}). Tiến hành Broadcast...", activated, finished);
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();

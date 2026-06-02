@@ -6,7 +6,7 @@ public class GetActiveAuctionsRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String userId;
-    private String type; // "ACTIVE" or "USER"
+    private String type; 
 
     public GetActiveAuctionsRequest() {
         this.type = "ACTIVE";

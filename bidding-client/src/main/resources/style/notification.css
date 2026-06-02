@@ -1,0 +1,68 @@
+/* Tùy biến thanh cuộn ScrollPane */
+.noti-scrollpane {
+    -fx-background-color: transparent;
+    -fx-background-visible: false;
+    -fx-border-color: transparent;
+}
+
+.noti-scrollpane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Thùng chứa các thẻ dọc */
+.noti-list-container {
+    -fx-background-color: transparent;
+}
+
+
+/* Text bên trong thẻ */
+.noti-card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.noti-card-time {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6c757d;
+}
+
+.noti-card-content {
+    -fx-font-size: 13.5px;
+    -fx-text-fill: #dee2e6;
+}
+
+
+.notification-card {
+    -fx-background-color: #ffffff !important; /* Đổi sang nền trắng tinh để tương phản tốt hơn */
+    -fx-background-radius: 10;
+    -fx-border-color: #cbd5e1 !important;    /* Viền mặc định màu xám mờ nhã nhặn, không bị quá đậm như màu xanh */
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-padding: 15;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* 🌟 HIỆU ỨNG HOVER: Di chuột vào thì thẻ mới sáng bừng viền xanh lên */
+.notification-card:hover {
+    -fx-background-color: #f8fafc !important; /* Đổi nền sang màu kem nhẹ */
+    -fx-border-color: #3b82f6 !important;     /* Viền xanh rực rỡ khi chỉ chuột vào */
+    -fx-cursor: hand;
+}
+
+/* 🎯 ÉP MÀU CHỮ TỐI CHO CÁC LINH KIỆN BÊN TRONG THẺ ĐỂ RÕ CHỮ */
+.notification-card .label {
+    -fx-text-fill: #334155 !important; /* Ép toàn bộ chữ mặc định về màu xám than */
+}
+
+.notification-card .noti-card-title {
+    -fx-text-fill: #0f172a !important; /* Tiêu đề thông báo bắt buộc màu đen đậm */
+}
+
+.notification-card .noti-card-time {
+    -fx-text-fill: #64748b !important; /* Thời gian màu xám mờ tinh tế */
+}
+
+.notification-card .noti-card-content {
+    -fx-text-fill: #475569 !important; /* Nội dung chi tiết màu chữ tối rõ ràng */
+}

@@ -21,7 +21,7 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
     }
 
-    public void send(Object message) {
+    public synchronized void send(Object message) {
         try {
             out.writeObject(message);
             out.flush();
@@ -69,17 +69,17 @@ public class ClientHandler implements Runnable {
 
     private void cleanup() {
         try {
-            // 1. Chủ động đóng luồng ghi dữ liệu trước
+            
             if (out != null) {
                 try { out.close(); } catch (Exception ignored) {}
             }
 
-            // 2. Chủ động đóng luồng đọc (Ép in.readObject() văng Exception để thoát vòng lặp)
+            
             if (in != null) {
                 try { in.close(); } catch (Exception ignored) {}
             }
 
-            // 3. Đóng Socket vật lý
+            
             if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
@@ -87,10 +87,10 @@ public class ClientHandler implements Runnable {
             logger.info("[SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.");
 
         } catch (Exception ignored) {
-            // Đúng bài Clean Code, những lỗi đóng tài nguyên này có thể bỏ qua
+            
         } finally {
-            // 🌟 BẮT BUỘC ĐỂ Ở ĐÂY: Dù đống đóng Socket ở trên có lỗi hay không,
-            // thì Client này VẪN PHẢI được xóa khỏi danh sách quản lý để tránh rò rỉ RAM!
+            
+            
             ClientManager.removeClient(this);
             logger.info("[SERVER] Đã Xóa Client khỏi ClientManager thành công.");
         }

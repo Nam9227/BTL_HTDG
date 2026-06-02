@@ -23,10 +23,15 @@ public class AppConfig {
     }
 
     public static String get(String key) {
-        return properties.getProperty(key);
+        String val = properties.getProperty(key);
+        return val != null ? val.trim() : null;
     }
 
     public static int getInt(String key) {
-        return Integer.parseInt(properties.getProperty(key));
+        String val = properties.getProperty(key);
+        if (val != null) {
+            val = val.trim();
+        }
+        return Integer.parseInt(val);
     }
 }

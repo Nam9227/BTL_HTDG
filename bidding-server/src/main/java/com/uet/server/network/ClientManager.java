@@ -32,6 +32,7 @@ public class ClientManager {
         }
     }
 
+
     public static void joinAuction(String auctionId, ClientHandler client) {
         auctionViewers
                 .computeIfAbsent(auctionId, key -> ConcurrentHashMap.newKeySet())
@@ -58,11 +59,11 @@ public class ClientManager {
         Set<ClientHandler> viewers = auctionViewers.get(auctionId);
 
         if (viewers == null || viewers.isEmpty()) {
-            logger.info("Không có client nào đang xem auction: {}", auctionId);
+            logger.debug("Không có client nào đang xem auction: {}", auctionId);
             return;
         }
 
-        logger.info("Gửi cập nhật ngay cho {} client đang xem auction: {}", viewers.size(), auctionId);
+        logger.debug("Gửi cập nhật ngay cho {} client đang xem auction: {}", viewers.size(), auctionId);
 
         for (ClientHandler client : viewers) {
             client.send(message);

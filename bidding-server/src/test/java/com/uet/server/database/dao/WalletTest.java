@@ -6,12 +6,12 @@ public class WalletTest {
 
     @Test
     public void testAvailableBalanceCalculation() {
-        double totalBalance = 10000000.0; // 10 triệu
-        double frozenBalance = 6000000.0; // Đang giam 6 triệu ở phiên khác
+        double totalBalance = 10000000.0; 
+        double frozenBalance = 6000000.0; 
 
         double available = totalBalance - frozenBalance;
 
-        // Mong đợi số dư khả dụng phải là 4 triệu
+        
         Assertions.assertEquals(4000000.0, available, "Logic tính số dư khả dụng bị sai rồi Nam ơi!");
     }
 }

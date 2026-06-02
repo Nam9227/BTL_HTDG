@@ -14,7 +14,7 @@ public class BidDAO {
 
     public Response handleBid(BidRequest request) {
         String selectSql = """
-                SELECT id, current_price, status
+                SELECT id, current_price, status, end_time
                 FROM auctions
                 WHERE id = ?
                 FOR UPDATE
@@ -27,7 +27,7 @@ public class BidDAO {
 
         String updateAuctionSql = """
                 UPDATE auctions
-                SET current_price = ?, winner_id = ?
+                SET current_price = ?, winner_id = ?, end_time = ?
                 WHERE id = ?
                 """;
 
@@ -46,6 +46,8 @@ public class BidDAO {
 
                 String status = rs.getString("status");
                 double currentPrice = rs.getDouble("current_price");
+                java.util.Calendar cal = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+                java.sql.Timestamp endTimeStamp = rs.getTimestamp("end_time", cal);
 
                 if (!"RUNNING".equalsIgnoreCase(status) && !"ACTIVE".equalsIgnoreCase(status)) {
                     conn.rollback();
@@ -55,6 +57,16 @@ public class BidDAO {
                 if (request.getAmount() <= currentPrice) {
                     conn.rollback();
                     return Response.fail("Giá đặt phải lớn hơn giá hiện tại");
+                }
+
+                if (endTimeStamp != null) {
+                    long endMillis = endTimeStamp.getTime();
+                    long nowMillis = System.currentTimeMillis();
+                    long diffMillis = endMillis - nowMillis;
+                    if (diffMillis >= 0 && diffMillis <= 30000) {
+                        endMillis += 10000;
+                        endTimeStamp = new java.sql.Timestamp(endMillis);
+                    }
                 }
 
                 String bidId = IdGenerator.generateId();
@@ -71,7 +83,8 @@ public class BidDAO {
                 try (PreparedStatement updateAuctionPs = conn.prepareStatement(updateAuctionSql)) {
                     updateAuctionPs.setDouble(1, request.getAmount());
                     updateAuctionPs.setString(2, request.getBidderId());
-                    updateAuctionPs.setString(3, request.getAuctionId());
+                    updateAuctionPs.setTimestamp(3, endTimeStamp, cal);
+                    updateAuctionPs.setString(4, request.getAuctionId());
                     updateAuctionPs.executeUpdate();
                 }
 

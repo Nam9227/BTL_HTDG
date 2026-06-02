@@ -33,7 +33,7 @@ import java.util.List;
 public class InformationUploadController {
     private static final Logger logger = LoggerFactory.getLogger(InformationUploadController.class);
 
-    // --- KHAI BÁO CÁC PHẦN TỬ MAP CHÍNH XÁC VỚI FXML MỚI ---
+    
     @FXML private TextField productNameField;
     @FXML private TextArea productDescriptionField;
     @FXML private ComboBox<String> ProductType;
@@ -54,15 +54,21 @@ public class InformationUploadController {
     @FXML private Spinner<Integer> minuteEndSpinner;
 
     private User currentUser;
-    private ImageData selectedProductImage; // Bộ nhớ đệm lưu mảng byte của duy nhất 1 ảnh
+    private ImageData selectedProductImage; 
 
     public void setUser(User user) {
         this.currentUser = user;
+        
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                this.currentUser = updatedUser;
+            }
+        };
     }
 
     @FXML
     public void initialize() {
-        // 1. Nạp danh sách danh mục Tiếng Việt mượt mà
+        
         if (ProductType != null) {
             ProductType.getItems().clear();
             ProductType.getItems().addAll(
@@ -82,7 +88,7 @@ public class InformationUploadController {
             ProductType.getSelectionModel().selectFirst();
         }
 
-        // 2. Cấu hình Spinner và mốc thời gian mặc định
+        
         hourStartSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 12));
         hourEndSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 18));
         minuteStartSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
@@ -91,7 +97,7 @@ public class InformationUploadController {
         startDatePicker.setValue(LocalDate.now());
         endDatePicker.setValue(LocalDate.now().plusDays(1));
 
-        // 3. HIỆU ỨNG DI CHUỘT: Tự động đổi màu Drop Zone khi kéo thả ảnh qua lại
+        
         dropImageZone.setOnDragEntered(e -> {
             if (e.getDragboard().hasFiles()) {
                 dropImageZone.setStyle("-fx-background-color: #f0f7ff; -fx-border-color: #2980b9; -fx-border-style: dashed; -fx-border-width: 2; -fx-background-radius: 12; -fx-border-radius: 12;");
@@ -99,11 +105,11 @@ public class InformationUploadController {
         });
 
         dropImageZone.setOnDragExited(e -> {
-            dropImageZone.setStyle(null); // Quay về Class CSS mặc định trong file upload_style.css
+            dropImageZone.setStyle(null); 
         });
     }
 
-    // --- LUỒNG XỬ LÝ MEDIA FILE (CLICK CHUỘT HOẶC KÉO THẢ) ---
+    
 
     @FXML
     private void handleSelectFile() {
@@ -135,7 +141,7 @@ public class InformationUploadController {
         if (event.getDragboard().hasFiles()) {
             List<File> files = event.getDragboard().getFiles();
             if (!files.isEmpty()) {
-                processAndPreviewImage(files.get(0)); // Chỉ bốc duy nhất file đầu tiên
+                processAndPreviewImage(files.get(0)); 
                 success = true;
             }
         }
@@ -147,20 +153,20 @@ public class InformationUploadController {
         try {
             byte[] fileBytes = Files.readAllBytes(file.toPath());
 
-            // Đóng gói dữ liệu ảnh vào Common Model
+            
             this.selectedProductImage = new ImageData(
                     file.getName(),
                     Files.probeContentType(file.toPath()),
                     fileBytes
             );
 
-            // Ẩn chữ gợi ý, đẩy ảnh lên khít khịt khung hình
+            
             uploadPromptBox.setVisible(false);
 
             Image img = new Image(file.toURI().toString());
             productImageView.setImage(img);
 
-            // Ép ảnh tự động co dãn căn giữa mượt mà trong Drop Zone
+            
             productImageView.setPreserveRatio(true);
             productImageView.setSmooth(true);
 
@@ -172,7 +178,7 @@ public class InformationUploadController {
         }
     }
 
-    // --- LUỒNG CHỐT DỮ LIỆU ĐĂNG BÁN LÊN SERVER ---
+    
 
     @FXML
     private void handleConfirmUpload() {
@@ -181,7 +187,7 @@ public class InformationUploadController {
         String priceText = startPriceField.getText().trim();
         String brand = brandField.getText().trim();
 
-        // 1. Chặn validate rỗng lề
+        
         if (name.isEmpty() || priceText.isEmpty() || selectedProductImage == null) {
             showAlert("Cảnh báo", "Vui lòng điền Tên sản phẩm, Giá khởi điểm và CHỌN 1 ẢNH MINH HỌA!", Alert.AlertType.WARNING);
             return;
@@ -190,7 +196,7 @@ public class InformationUploadController {
         try {
             double startPrice = Double.parseDouble(priceText);
 
-            // 2. Đồng bộ gộp dữ liệu thời gian thành LocalDateTime hoàn chỉnh
+            
             LocalDateTime startDateTime = LocalDateTime.of(
                     startDatePicker.getValue(),
                     LocalTime.of(hourStartSpinner.getValue(), minuteStartSpinner.getValue())
@@ -206,7 +212,7 @@ public class InformationUploadController {
                 return;
             }
 
-            // 3. Mapping chuẩn ngôn ngữ quốc tế sang Server
+            
             String selectedType = ProductType.getSelectionModel().getSelectedItem().trim();
             String itemType = switch (selectedType) {
                 case "Điện tử" -> "Electronics";
@@ -220,7 +226,7 @@ public class InformationUploadController {
                 default -> "Item";
             };
 
-            // 4. Đóng gói chuẩn chỉ 9 tham số gửi qua Socket lên Server
+            
             AddProductRequest req = new AddProductRequest(
                     currentUser.getId(),
                     name,
@@ -232,7 +238,7 @@ public class InformationUploadController {
                     startDateTime,
                     endDateTime   );
 
-            // 5. Khởi tạo Listener bắt kết quả phản hồi của Server
+            
             java.util.function.Consumer<Object> addProductListener = new java.util.function.Consumer<>() {
                 @Override
                 public void accept(Object response) {
@@ -240,7 +246,7 @@ public class InformationUploadController {
                         Platform.runLater(() -> {
                             if (res.isSuccess()) {
                                 showAlert("Thành công", res.getMessage(), Alert.AlertType.INFORMATION);
-                                handleCancel(); // Đăng thành công tự trả về màn hình trang chủ
+                                handleCancel(); 
                             } else {
                                 showAlert("Thất bại", res.getMessage(), Alert.AlertType.ERROR);
                             }
@@ -251,7 +257,7 @@ public class InformationUploadController {
             };
 
             ClientSocket.getInstance().addMessageListener(addProductListener);
-            ClientSocket.getInstance().send(req); // Gửi Request
+            ClientSocket.getInstance().send(req); 
 
         } catch (NumberFormatException e) {
             showAlert("Cập nhật thất bại", "Giá khởi điểm đưa vào bắt buộc phải là một chuỗi ký tự số!", Alert.AlertType.ERROR);
@@ -261,7 +267,7 @@ public class InformationUploadController {
         }
     }
 
-    // NÚT HỦY: QUAY VỀ TRANG CHỦ GIỮ NGUYÊN SESSION TÀI KHOẢN
+    
     @FXML
     private void handleCancel() {
         try {
@@ -269,7 +275,7 @@ public class InformationUploadController {
             Parent root = loader.load();
 
             HomeController controller = loader.getController();
-            controller.setUser(currentUser); // Bắn lại session user để giữ nguyên avatar/số dư ở Sidebar
+            controller.setUser(currentUser); 
 
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
 

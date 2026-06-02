@@ -54,7 +54,7 @@
                                 <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenProfile" styleClass="menu-button" text="👤   Thông tin tài khoản" />
                                 <Button fx:id="addProductBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenAddProduct" styleClass="menu-button" text="➕   Thêm Sản Phẩm" />
                                 <Button fx:id="myProductsBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenMyProducts" styleClass="menu-button" text="📦   Sản Phẩm Của Tôi" />
-                                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button" text="📜   Lịch Sử Giao Dịch" />
+                                <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenNotifications" styleClass="menu-button" text="🔔   Thông Báo Hệ Thống" />
                             </children>
                         </VBox>
 
@@ -79,7 +79,7 @@
             <children>
                 <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" styleClass="header-box">
                     <children>
-                        <Label styleClass="header-title" text="🏛️ Sản phẩm đang đấu giá" />
+                        <Label styleClass="header-title" text="🏛 Sản phẩm đang đấu giá" />
                         <Region HBox.hgrow="ALWAYS" />
 
                         <HBox alignment="CENTER" styleClass="search-container">

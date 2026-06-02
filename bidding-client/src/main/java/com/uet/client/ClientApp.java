@@ -18,7 +18,7 @@ public class ClientApp extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
             Parent root = loader.load();
             
-            // Hiệu ứng mượt mà khi mở ứng dụng
+            
             com.uet.client.util.TransitionUtils.applyFadeIn(root);
             
             Scene scene = new Scene(root);
@@ -34,7 +34,7 @@ public class ClientApp extends Application {
         }
     }
     public static void main(String[] args) {
-        // Thiết lập múi giờ mặc định của Client JVM sang Asia/Ho_Chi_Minh (GMT+7)
+        
         java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         launch(args);
     }

@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import com.uet.common.network.Response;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AdminUsersController {
 
@@ -37,15 +39,17 @@ public class AdminUsersController {
     @FXML private TableColumn<User, String> roleColumn;
     @FXML private TableColumn<User, Boolean> statusColumn;
 
+    
+    @FXML private TableColumn<User, LocalDateTime> lastLoginColumn;
+
     private final ObservableList<User> masterData = FXCollections.observableArrayList();
     private FilteredList<User> filteredData;
 
-    // Bộ lắng nghe phản hồi từ Socket Server ngầm
     private Consumer<Object> serverMessageListener;
 
     @FXML
     public void initialize() {
-        // 1. Map dữ liệu vào các cột TableView
+        
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -68,7 +72,26 @@ public class AdminUsersController {
             }
         });
 
-        // 2. Thiết lập dữ liệu lọc cho TableView
+        
+        lastLoginColumn.setCellValueFactory(new PropertyValueFactory<>("lastLoginAt"));
+        lastLoginColumn.setCellFactory(column -> new TableCell<>() {
+            private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Chưa từng đăng nhập");
+                    setStyle("-fx-text-fill: #888888; -fx-font-style: italic;"); 
+                } else {
+                    setText(item.format(formatter));
+                    
+                    setStyle("-fx-text-fill: #1e293b; -fx-font-weight: bold; -fx-font-style: normal;");
+                }
+            }
+        });
+
+        
         filteredData = new FilteredList<>(masterData, p -> true);
         userTable.setItems(filteredData);
 
@@ -82,19 +105,15 @@ public class AdminUsersController {
         roleFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
         statusFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
 
-        // 3. Đăng ký nhận gói tin kết quả từ Socket và kéo dữ liệu thời gian thực
+        
         setupSocketListener();
         fetchUsersFromServer();
     }
 
-    /**
-     * Lắng nghe gói tin GetAllUsersResponse được trả về từ Server Dispatcher
-     */
     private void setupSocketListener() {
         serverMessageListener = message -> {
             System.out.println("[Client] Nhận gói tin từ Server: " + message.getClass().getSimpleName());
 
-            // Trường hợp 1: Nhận danh sách người dùng đổ lên TableView
             if (message instanceof GetAllUsersResponse response) {
                 List<User> userList = response.getUsers();
                 Platform.runLater(() -> {
@@ -103,13 +122,10 @@ public class AdminUsersController {
                     handleSearch();
                 });
             }
-
-            // Trường hợp 2: Nhận phản hồi báo Khóa/Mở khóa/Xóa thành công từ Server
             else if (message instanceof Response response) {
                 Platform.runLater(() -> {
                     if (response.isSuccess()) {
                         System.out.println("[Client] Server báo lệnh thực thi thành công!");
-                        // Ép Client chủ động kéo lại dữ liệu mới nhất từ DB lên giao diện
                         fetchUsersFromServer();
                     } else {
                         showWarning(response.getMessage());
@@ -120,9 +136,6 @@ public class AdminUsersController {
         ClientSocket.getInstance().addMessageListener(serverMessageListener);
     }
 
-    /**
-     * Gửi yêu cầu lấy dữ liệu lên Server qua Socket
-     */
     private void fetchUsersFromServer() {
         new Thread(() -> {
             try {
@@ -142,16 +155,16 @@ public class AdminUsersController {
 
         filteredData.setPredicate(user -> {
             boolean matchesText = searchText.isEmpty()
-                    || user.getUsername().toLowerCase().contains(searchText)
-                    || user.getFullName().toLowerCase().contains(searchText)
-                    || user.getEmail().toLowerCase().contains(searchText);
+                    || (user.getUsername() != null && user.getUsername().toLowerCase().contains(searchText))
+                    || (user.getFullName() != null && user.getFullName().toLowerCase().contains(searchText))
+                    || (user.getEmail() != null && user.getEmail().toLowerCase().contains(searchText));
 
             boolean matchesRole = selectedRole == null || selectedRole.equals("Tất cả")
-                    || user.getRole().name().equalsIgnoreCase(selectedRole);
+                    || (user.getRole() != null && user.getRole().name().equalsIgnoreCase(selectedRole));
 
             boolean matchesStatus = selectedStatus == null || selectedStatus.equals("Tất cả")
-                    || (selectedStatus.equals("Hoạt động") && user.getActive())
-                    || (selectedStatus.equals("Bị khóa") && !user.getActive());
+                    || (selectedStatus.equals("Hoạt động") && Boolean.TRUE.equals(user.getActive()))
+                    || (selectedStatus.equals("Bị khóa") && Boolean.FALSE.equals(user.getActive()));
 
             return matchesText && matchesRole && matchesStatus;
         });
@@ -161,13 +174,19 @@ public class AdminUsersController {
     private void handleLockUser() {
         User selected = userTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            if (selected.getRole() == Role.ADMIN) {
+                showWarning("Không thể khóa tài khoản Admin!");
+                return;
+            }
             if (!selected.getActive()) {
                 showWarning("Tài khoản này đã bị khóa từ trước!");
                 return;
             }
             new Thread(() -> {
                 try {
-                    ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false));
+                    ClientSocket.getInstance().send(
+                            new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false)
+                    );
                     System.out.println("[Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -205,6 +224,11 @@ public class AdminUsersController {
     private void handleDeleteUser() {
         User selected = userTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            if (selected.getRole() == Role.ADMIN) {
+                showWarning("Không thể xóa tài khoản Admin!");
+                return;
+            }
+
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmAlert.setTitle("Xác nhận xóa");
             confirmAlert.setHeaderText(null);
@@ -232,7 +256,7 @@ public class AdminUsersController {
         searchField.clear();
         roleFilter.getSelectionModel().selectFirst();
         statusFilter.getSelectionModel().selectFirst();
-        fetchUsersFromServer(); // Kéo lại dữ liệu mới nhất sạch từ DB
+        fetchUsersFromServer();
     }
 
     @FXML
@@ -243,6 +267,9 @@ public class AdminUsersController {
             detailAlert.setTitle("Chi tiết người dùng");
             detailAlert.setHeaderText("Thông tin tài khoản: " + selected.getUsername());
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+            String lastLoginStr = selected.getLastLoginAt() != null ? selected.getLastLoginAt().format(formatter) : "Chưa từng đăng nhập";
+
             String details = String.format(
                     "ID: %s\n" +
                             "Họ tên: %s\n" +
@@ -250,14 +277,16 @@ public class AdminUsersController {
                             "Số điện thoại: %s\n" +
                             "Vai trò: %s\n" +
                             "Số dư ví: %s VND\n" +
-                            "Trạng thái: %s",
+                            "Trạng thái: %s\n" +
+                            "Đăng nhập gần nhất: %s",
                     selected.getId(),
                     selected.getFullName(),
                     selected.getEmail(),
                     selected.getPhone(),
                     selected.getRole(),
                     selected.getBalance() != null ? selected.getBalance().toString() : "0",
-                    selected.getActive() ? "Hoạt động" : "Bị khóa"
+                    selected.getActive() ? "Hoạt động" : "Bị khóa",
+                    lastLoginStr
             );
 
             detailAlert.setContentText(details);
@@ -277,16 +306,26 @@ public class AdminUsersController {
 
     private void switchScene(ActionEvent event, String fxmlPath, String title) {
         try {
-            // Giải phóng bộ lắng nghe socket của trang cũ trước khi hủy view
             if (serverMessageListener != null) {
                 ClientSocket.getInstance().removeMessageListener(serverMessageListener);
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.getScene().setRoot(root);
-            stage.setTitle(title);
+
+            if (fxmlPath.contains("login_view.fxml")) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                stage.setTitle("Đăng nhập hệ thống");
+                stage.setMaximized(false);
+                stage.setWidth(850);
+                stage.setHeight(500);
+                stage.centerOnScreen();
+            } else {
+                stage.setTitle(title);
+            }
 
         } catch (IOException e) {
             System.err.println("Lỗi chuyển trang: " + fxmlPath);
@@ -301,6 +340,12 @@ public class AdminUsersController {
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        switchScene(event,"/view/login_view.fxml","Đang đăng xuất...");
+        try {
+            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
+            com.uet.client.network.ClientSocket.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switchScene(event, "/view/login_view.fxml", "Đăng nhập hệ thống");
     }
 }

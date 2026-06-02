@@ -51,7 +51,7 @@
                                 <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenProfile" styleClass="menu-button" text="👤   Thông tin tài khoản" />
                                 <Button fx:id="addProductBtn" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenAddProduct" styleClass="menu-button" text="➕   Thêm Sản Phẩm" />
                                 <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button-active" text="📦   Sản Phẩm Của Tôi" />
-                                <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="menu-button" text="📜   Lịch Sử Giao Dịch" />
+                                <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleOpenNotifications" styleClass="menu-button" text="🔔   Thông Báo Hệ Thống" />
                             </children>
                         </VBox>
                         <Region VBox.vgrow="ALWAYS" />

@@ -44,7 +44,7 @@ public class WalletDAO {
             ps.setString(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getDouble("total_frozen"); // Trả về tổng tiền đang giữ, nếu không có sẽ trả về 0
+                    return rs.getDouble("total_frozen"); 
                 }
             }
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class WalletDAO {
     }
 
     public double getFrozenBalanceExcludeCurrent(String userId, String excludeAuctionId) {
-        // Thêm điều kiện: AND id != ? để không tính tiền bị giam của chính phiên này
+        
         String sql = "SELECT SUM(current_price) AS total_frozen FROM auctions " +
                 "WHERE winner_id = ? AND status = 'RUNNING' AND id != ?";
 
@@ -62,7 +62,7 @@ public class WalletDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, userId);
-            ps.setString(2, excludeAuctionId); // Loại trừ phiên đang đứng ra
+            ps.setString(2, excludeAuctionId); 
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -93,7 +93,7 @@ public class WalletDAO {
         double total = getBalance(userId);
         double frozen = getFrozenBalance(userId);
         double available = total - frozen;
-        return available < 0 ? 0.0 : available; // Đảm bảo không bao giờ bị âm do sai số
+        return available < 0 ? 0.0 : available; 
     }
 
     /**
@@ -101,7 +101,7 @@ public class WalletDAO {
      * Dùng để cộng tiền khi nạp, hoặc trừ hẳn tiền khi phiên đấu giá kết thúc thực sự.
      */
     public boolean updateBalance(String userId, double amount) {
-        // Lệnh này cộng/trừ trực tiếp vào số dư gốc trong DB
+        
         String sql = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -144,7 +144,7 @@ public class WalletDAO {
             return Response.fail("Số dư khả dụng không đủ! Bạn đang có tiền bị đóng băng ở phiên đấu giá khác.");
         }
 
-        // Rút tiền đồng nghĩa với việc cộng một số âm vào tài khoản
+        
         boolean success = updateBalance(userId, -amount);
         if (success) {
             return Response.success("Rút tiền thành công!", getBalance(userId));

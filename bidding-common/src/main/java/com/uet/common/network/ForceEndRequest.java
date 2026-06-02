@@ -7,7 +7,7 @@ public class ForceEndRequest implements Serializable {
 
     private String auctionId;
 
-    // 🌟 Constructor mặc định không tham số (Bắt buộc phải có để gửi nhận Object)
+    
     public ForceEndRequest() {
     }
 
@@ -15,7 +15,7 @@ public class ForceEndRequest implements Serializable {
         this.auctionId = auctionId;
     }
 
-    // Getter và Setter
+    
     public String getAuctionId() {
         return auctionId;
     }

@@ -37,11 +37,21 @@ public class AdminAuctionsController {
 
     @FXML private Label statusMessageLabel;
 
+    @FXML private javafx.scene.control.TextField searchField;
+    @FXML private javafx.scene.control.ComboBox<String> statusFilter;
+
+    private final javafx.collections.ObservableList<AuctionItem> masterData = javafx.collections.FXCollections.observableArrayList();
+    private javafx.collections.transformation.FilteredList<AuctionItem> filteredData;
+
     private final DecimalFormat moneyFormat = new DecimalFormat("#,###đ");
 
     @FXML
     public void initialize() {
-        // Cấu hình các cột thông tin cơ bản
+        if (statusFilter != null) {
+            statusFilter.getItems().addAll("Tất cả", "PENDING", "ACTIVE", "RUNNING", "FINISHED", "REJECTED");
+            statusFilter.getSelectionModel().selectFirst();
+        }
+        
         idColumn.setCellValueFactory(new PropertyValueFactory<>("auctionId"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("productName"));
         sellerColumn.setCellValueFactory(new PropertyValueFactory<>("sellerId"));
@@ -61,22 +71,22 @@ public class AdminAuctionsController {
                     setStyle("");
                 } else {
                     String display = item;
-                    String color = "#111827"; // dark
+                    String color = "#111827"; 
                     if ("PENDING".equalsIgnoreCase(item)) {
                         display = "Chờ duyệt";
-                        color = "#F59E0B"; // orange
+                        color = "#F59E0B"; 
                     } else if ("ACTIVE".equalsIgnoreCase(item)) {
                         display = "Chờ chạy";
-                        color = "#2563EB"; // blue
+                        color = "#2563EB"; 
                     } else if ("RUNNING".equalsIgnoreCase(item)) {
                         display = "Đang chạy";
-                        color = "#16A34A"; // green
+                        color = "#16A34A"; 
                     } else if ("FINISHED".equalsIgnoreCase(item)) {
                         display = "Đã đóng";
-                        color = "#6B7280"; // gray
+                        color = "#6B7280"; 
                     } else if ("REJECTED".equalsIgnoreCase(item)) {
                         display = "Từ chối";
-                        color = "#DC2626"; // red
+                        color = "#DC2626"; 
                     }
                     setText(display);
                     setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
@@ -84,10 +94,47 @@ public class AdminAuctionsController {
             }
         });
 
-        // Sinh cặp nút bấm Duyệt / Từ chối động trên từng dòng
+        
         setupActionColumn();
 
-        // Tải dữ liệu từ server
+        filteredData = new javafx.collections.transformation.FilteredList<>(masterData, p -> true);
+        approvalTable.setItems(filteredData);
+
+        if (searchField != null) {
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+        }
+        if (statusFilter != null) {
+            statusFilter.valueProperty().addListener((observable, oldValue, newValue) -> handleSearch());
+        }
+
+        
+        loadPendingAuctions();
+    }
+
+    @FXML
+    private void handleSearch() {
+        String searchText = (searchField == null || searchField.getText() == null) ? "" : searchField.getText().toLowerCase().trim();
+        String selectedStatus = (statusFilter == null) ? "Tất cả" : statusFilter.getValue();
+
+        if (filteredData != null) {
+            filteredData.setPredicate(item -> {
+                boolean matchesText = searchText.isEmpty()
+                        || String.valueOf(item.getAuctionId()).contains(searchText)
+                        || (item.getProductName() != null && item.getProductName().toLowerCase().contains(searchText))
+                        || (item.getSellerId() != null && item.getSellerId().toLowerCase().contains(searchText));
+
+                boolean matchesStatus = selectedStatus == null || selectedStatus.equals("Tất cả")
+                        || (item.getStatus() != null && item.getStatus().equalsIgnoreCase(selectedStatus));
+
+                return matchesText && matchesStatus;
+            });
+        }
+    }
+
+    @FXML
+    private void handleRefresh(javafx.event.ActionEvent event) {
+        if (searchField != null) searchField.clear();
+        if (statusFilter != null) statusFilter.getSelectionModel().selectFirst();
         loadPendingAuctions();
     }
 
@@ -102,8 +149,9 @@ public class AdminAuctionsController {
                         List<AuctionItem> pendingList = (List<AuctionItem>) res.getData();
 
                         Platform.runLater(() -> {
-                            approvalTable.getItems().clear();
-                            approvalTable.getItems().addAll(pendingList);
+                            masterData.clear();
+                            masterData.addAll(pendingList);
+                            handleSearch();
                         });
                         ClientSocket.getInstance().removeMessageListener(this);
                     }
@@ -138,7 +186,7 @@ public class AdminAuctionsController {
                     private final Label lblFinished = new Label("Đã kết thúc");
 
                     {
-                        // Style các nút
+                        
                         btnApprove.setStyle("-fx-background-color: #16A34A; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
                         btnReject.setStyle("-fx-background-color: #DC2626; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
                         btnForceEnd.setStyle("-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
@@ -157,27 +205,27 @@ public class AdminAuctionsController {
                             HBox pane = new HBox(8);
                             pane.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-                            // 1. Nếu là CHỜ DUYỆT
+                            
                             if ("PENDING".equalsIgnoreCase(status)) {
                                 btnApprove.setOnAction(e -> handleProcessApproval(currentItem.getAuctionId(), true));
                                 btnReject.setOnAction(e -> handleProcessApproval(currentItem.getAuctionId(), false));
                                 pane.getChildren().addAll(btnApprove, btnReject);
 
                             }
-                            // 2. Nếu là ĐÃ DUYỆT (Chờ đến giờ chạy)
+                            
                             else if ("ACTIVE".equalsIgnoreCase(status)) {
-                                btnForceEnd.setText("Hủy phiên"); // Admin có thể hủy nếu muốn
+                                btnForceEnd.setText("Hủy phiên"); 
                                 btnForceEnd.setOnAction(e -> handleForceEnd(currentItem.getAuctionId()));
                                 pane.getChildren().add(btnForceEnd);
                             }
-                            // 3. 🌟 NẾU ĐANG CHẠY ĐẤU GIÁ (RUNNING) -> HIỆN NÚT ÉP KẾT THÚC SỚM
+                            
                             else if ("RUNNING".equalsIgnoreCase(status)) {
                                 btnForceEnd.setText("Kết thúc sớm");
                                 btnForceEnd.setStyle("-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
                                 btnForceEnd.setOnAction(e -> handleForceEnd(currentItem.getAuctionId()));
                                 pane.getChildren().add(btnForceEnd);
                             }
-                            // 4. Nếu là ĐÃ KẾT THÚC THẬT SỰ (FINISHED / COMPLETED)
+                            
                             else {
                                 lblFinished.setText("Đã đóng");
                                 lblFinished.setStyle("-fx-text-fill: #9CA3AF; -fx-font-style: italic;");
@@ -204,7 +252,7 @@ public class AdminAuctionsController {
                         Platform.runLater(() -> {
                             showStatus(res.getMessage(), res.isSuccess());
                             if (res.isSuccess()) {
-                                loadPendingAuctions(); // Refresh lại bảng sau khi duyệt thành công
+                                loadPendingAuctions(); 
                             }
                         });
                         ClientSocket.getInstance().removeMessageListener(this);
@@ -230,13 +278,19 @@ public class AdminAuctionsController {
         }
     }
 
-    // --- Các hàm chuyển màn hình Sidebar có sẵn của Nam ---
+    
     @FXML private void goDashboard() { switchScene("/view/admin/admin_dashboard.fxml"); }
     @FXML private void goUsers() { switchScene("/view/admin/admin_users.fxml"); }
     @FXML private void goProducts() { switchScene("/view/admin/admin_wallet.fxml"); }
 
     @FXML
     private void handleLogout() {
+        try {
+            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
+            com.uet.client.network.ClientSocket.getInstance().close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         switchScene("/view/login_view.fxml");
     }
 
@@ -246,6 +300,15 @@ public class AdminAuctionsController {
             Parent root = loader.load();
             Stage stage = (Stage) approvalTable.getScene().getWindow();
             stage.getScene().setRoot(root);
+
+            if (fxmlPath.contains("login_view.fxml")) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                stage.setTitle("Đăng nhập hệ thống");
+                stage.setMaximized(false);
+                stage.setWidth(850);
+                stage.setHeight(500);
+                stage.centerOnScreen();
+            }
         } catch (Exception e) {
             logger.error("Lỗi chuyển trang: " + fxmlPath, e);
         }
@@ -253,29 +316,29 @@ public class AdminAuctionsController {
 
     private void handleForceEnd(String auctionId) {
         try {
-            // 1. Tạo gói tin yêu cầu kết thúc sớm
+            
             ForceEndRequest request = new ForceEndRequest(auctionId);
 
-            // 2. Tạo Listener để hứng kết quả phản hồi từ Server trả về
+            
             java.util.function.Consumer<Object> listener = new java.util.function.Consumer<>() {
                 @Override
                 public void accept(Object response) {
                     if (response instanceof Response res) {
                         Platform.runLater(() -> {
                             if (res.isSuccess()) {
-                                // Nếu thành công, load lại bảng để cập nhật giao diện lập tức
+                                
                                 loadPendingAuctions();
                             } else {
                                 System.out.println("Lỗi từ Server: " + res.getMessage());
                             }
                         });
-                        // Nhận xong thì gỡ Listener ra cho đỡ rác bộ nhớ
+                        
                         ClientSocket.getInstance().removeMessageListener(this);
                     }
                 }
             };
 
-            // 3. Đăng ký nhận tin và bắn gói Request lên Server
+            
             ClientSocket.getInstance().addMessageListener(listener);
             ClientSocket.getInstance().send(request);
 

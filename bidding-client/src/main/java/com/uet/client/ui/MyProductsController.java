@@ -78,6 +78,13 @@ public class MyProductsController {
         if (balanceLabel != null) {
             balanceLabel.setText(String.format("💰 %,.0f đ", user.getBalance()));
         }
+
+        ClientSocket.onUserUpdated = updatedUser -> {
+            if (this.currentUser != null && this.currentUser.getId().equals(updatedUser.getId())) {
+                javafx.application.Platform.runLater(() -> setUser(updatedUser));
+            }
+        };
+
         if (user.getAvatarBytes() != null && user.getAvatarBytes().length > 0 && userAvatar != null) {
             try (ByteArrayInputStream bais = new ByteArrayInputStream(user.getAvatarBytes())) {
                 userAvatar.setImage(new Image(bais));
@@ -86,7 +93,7 @@ public class MyProductsController {
             }
         }
 
-        // --- Phân quyền hiển thị các nút chức năng theo vai trò ---
+        
         if (user.getRole() == Role.BIDDER) {
             logger.info("Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.");
             if (addProductBtn != null) {
@@ -107,6 +114,14 @@ public class MyProductsController {
             if (btnTabMine != null) {
                 btnTabMine.setVisible(true);
                 btnTabMine.setManaged(true);
+            }
+            
+            // Tự động chuyển sang tab "Sản phẩm tôi đăng bán" nếu là người bán
+            if (btnTabMine != null && btnTabWon != null) {
+                btnTabMine.getStyleClass().clear();
+                btnTabMine.getStyleClass().add("custom-tab-button-active");
+                btnTabWon.getStyleClass().clear();
+                btnTabWon.getStyleClass().add("custom-tab-button-normal");
             }
         }
 
@@ -149,7 +164,14 @@ public class MyProductsController {
 
                     Platform.runLater(() -> {
                         allAuctionsFromServer = items;
-                        switchTabDisplay(true);
+                        
+                        // Xác định xem tab nào đang active
+                        boolean isWonTab = true;
+                        if (btnTabMine != null && btnTabMine.getStyleClass().contains("custom-tab-button-active")) {
+                            isWonTab = false;
+                        }
+                        
+                        switchTabDisplay(isWonTab);
                     });
                 }
             };
@@ -186,12 +208,12 @@ public class MyProductsController {
             } else {
                 if (item.getSellerId() != null && item.getSellerId().equals(currentUser.getId())) {
                     if ("FINISHED".equalsIgnoreCase(item.getStatus())) {
-                        // Nếu đấu giá đã kết thúc, chỉ hiển thị bên người bán khi KHÔNG CÓ người thắng (giao dịch thất bại)
+                        
                         if (item.getWinnerId() == null || item.getWinnerId().trim().isEmpty()) {
                             renderProductCard(item, false);
                         }
                     } else {
-                        // Các trạng thái khác (PENDING, RUNNING) thì luôn hiện bên người bán
+                        
                         renderProductCard(item, false);
                     }
                 }
@@ -242,27 +264,38 @@ public class MyProductsController {
         actionBox.setPrefHeight(35);
 
         if (isWonTab) {
-            // --- TRANG TRÚNG ĐẤU GIÁ: CHỈ CÓ NÚT XÓA ---
+            
             Button deleteBtn = createDeleteButton(item, card);
             actionBox.getChildren().add(deleteBtn);
         } else {
-            // --- TRANG TÔI ĐĂNG BÁN: PHÂN CHIA THEO TRẠNG THÁI ---
+            
             String status = item.getStatus() != null ? item.getStatus().trim().toUpperCase() : "PENDING";
             if ("PENDING".equals(status)) {
-                // ĐANG CHỜ DUYỆT (PENDING): CÓ NÚT SỬA VÀ NÚT XÓA
+                
                 Button editBtn = createEditButton(item);
                 Button deleteBtn = createDeleteButton(item, card);
                 actionBox.getChildren().addAll(editBtn, deleteBtn);
             } else if ("RUNNING".equals(status)) {
-                // ĐANG CHẠY (RUNNING) CHỈ HIỆN NÚT XEM PHIÊN CHI TIẾT
+                
                 Button viewBtn = new Button("👁 Xem phiên");
                 viewBtn.getStyleClass().add("action-button-view");
                 viewBtn.setOnAction(e -> openAuctionDetail(item));
                 actionBox.getChildren().add(viewBtn);
             } else if ("FINISHED".equals(status)) {
-                // ĐÃ KẾT THÚC NHƯNG KHÔNG CÓ NGƯỜI THẮNG (GIAO DỊCH THẤT BẠI): HIỆN NÚT XÓA SẢN PHẨM
+                
                 Button deleteBtn = createDeleteButton(item, card);
                 actionBox.getChildren().add(deleteBtn);
+            } else if ("ACTIVE".equals(status)) {
+                
+                Label activeLabel = new Label("⏳ Chờ chạy");
+                activeLabel.setStyle("-fx-text-fill: #eab308; -fx-font-weight: bold;");
+                actionBox.getChildren().add(activeLabel);
+            } else if ("REJECTED".equals(status)) {
+                
+                Label rejectLabel = new Label("❌ Bị từ chối");
+                rejectLabel.setStyle("-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-padding: 0 10 0 0;");
+                Button deleteBtn = createDeleteButton(item, card);
+                actionBox.getChildren().addAll(rejectLabel, deleteBtn);
             }
         }
 
@@ -299,6 +332,9 @@ public class MyProductsController {
                                             successAlert.setHeaderText(null);
                                             successAlert.setContentText(res.getMessage());
                                             successAlert.showAndWait();
+                                            
+                                            // Tải lại dữ liệu mới từ server để cập nhật giao diện
+                                            loadDataFromServer();
                                         } else {
                                             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                                             errorAlert.setTitle("Thất bại");
@@ -331,7 +367,7 @@ public class MyProductsController {
         editBtn.getStyleClass().add("action-button-edit");
         editBtn.setOnAction(e -> {
             try {
-                // Đổi nút thành trạng thái đang tải
+                
                 editBtn.setDisable(true);
                 editBtn.setText("⏳ Đang tải...");
 
@@ -347,12 +383,12 @@ public class MyProductsController {
                                     if (res.getAuctions() != null && !res.getAuctions().isEmpty()) {
                                         AuctionItem fullItem = res.getAuctions().get(0);
 
-                                        cleanupListener(); // Hủy nghe rác mạng
+                                        cleanupListener(); 
 
                                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/edit_product_view.fxml"));
                                         Parent root = loader.load();
 
-                                        // Bắn cả Session USER và bản ghi ITEM đầy đủ từ Server sang trang sửa
+                                        
                                         EditProductController editController = loader.getController();
                                         editController.setInitData(currentUser, fullItem);
 
@@ -544,6 +580,30 @@ public class MyProductsController {
         } catch (Exception e) {
             logger.error("Không mở được giao diện thêm sản phẩm: ", e);
             showError("Lỗi", "Không mở được giao diện thêm sản phẩm!");
+        }
+    }
+
+    @FXML
+    void handleOpenNotifications(ActionEvent event) {
+        if (event == null)
+            return;
+        try {
+            cleanupListener();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/notifications.fxml"));
+            Parent root = loader.load();
+
+            NotificationController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            Stage stage = (Stage) productContainer.getScene().getWindow();
+            if (com.uet.client.util.TransitionUtils.class != null) {
+                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            }
+            stage.getScene().setRoot(root);
+            stage.setTitle("Hộp Thư Thông Báo - Sàn Đấu Giá UET");
+        } catch (Exception e) {
+            logger.error("Không mở được giao diện thông báo: ", e);
+            showError("Lỗi", "Không mở được giao diện thông báo!");
         }
     }
 

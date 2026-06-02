@@ -9,33 +9,42 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="650" prefWidth="1100" style="-fx-background-color: #2f3336;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.admin.AdminAuctionsController">
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane prefHeight="650" prefWidth="1100" stylesheets="@../../style/admin_global.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uet.client.ui.admin.AdminAuctionsController">
 
     <!-- Sidebar -->
     <left>
-        <VBox prefWidth="230" spacing="12" style="-fx-background-color: #24282b; -fx-padding: 25;">
-            <Label style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;" text="ADMIN PANEL" />
-            <Separator />
+        <VBox fx:id="adminPanel" prefWidth="240" spacing="12" styleClass="admin-sidebar">
+            <Label fx:id="adminLabel" styleClass="admin-sidebar-title" text="ADMIN PANEL" />
+            <Separator styleClass="admin-sidebar-separator" />
 
-            <Button maxWidth="Infinity" onAction="#goDashboard" text="Dashboard" />
-            <Button maxWidth="Infinity" onAction="#goUsers" text="Quản lý người dùng" />
-            <Button maxWidth="Infinity" onAction="#goProducts" text="Quản lý nạp rút " />
-
-            <Button maxWidth="Infinity" style="-fx-background-color: #4f9db2; -fx-text-fill: white; -fx-font-weight: bold;" text="Duyệt phiên đấu giá" />
+            <Button maxWidth="Infinity" onAction="#goDashboard" styleClass="sidebar-btn" text="📦 Dashboard" />
+            <Button maxWidth="Infinity" onAction="#goUsers" styleClass="sidebar-btn" text="👥 Quản lý người dùng" />
+            <Button maxWidth="Infinity" onAction="#goProducts" styleClass="sidebar-btn" text="💳 Quản lý nạp rút " />
+            <Button maxWidth="Infinity" styleClass="sidebar-btn-active" text="⚖️ Duyệt phiên đấu giá" />
 
             <Region VBox.vgrow="ALWAYS" />
-
-            <Button maxWidth="Infinity" onAction="#handleLogout" style="-fx-background-color: #b23b3b; -fx-text-fill: white; -fx-font-weight: bold;" text="Đăng xuất" />
+            <Button fx:id="logOutButton" maxWidth="Infinity" onAction="#handleLogout" styleClass="sidebar-btn-logout" text="🚪 Đăng xuất" />
         </VBox>
     </left>
 
     <!-- Main -->
     <center>
-        <VBox spacing="16" style="-fx-padding: 30; -fx-background-color: #F5F7FA;">
+        <VBox spacing="20" style="-fx-padding: 30;">
+            <Label styleClass="title-header" text="Quản lý phiên đấu giá" />
 
-            <Label style="-fx-text-fill: #111827; -fx-font-size: 24px; -fx-font-weight: bold;" text="Danh sách sản phẩm chờ phê duyệt" />
+            <HBox spacing="12">
+                <TextField fx:id="searchField" prefWidth="300" promptText="🔍 Tìm mã SP, tên SP, người bán..." styleClass="text-field" />
+                <ComboBox fx:id="statusFilter" prefWidth="150" promptText="Trạng thái" styleClass="combo-box" />
+                <Button onAction="#handleRefresh" styleClass="btn-secondary" text="🔄 Làm mới" />
+            </HBox>
 
             <TableView fx:id="approvalTable" VBox.vgrow="ALWAYS">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
                 <columns>
                     <TableColumn fx:id="idColumn" prefWidth="80" text="Mã SP" />
                     <TableColumn fx:id="nameColumn" prefWidth="160" text="Tên sản phẩm" />
