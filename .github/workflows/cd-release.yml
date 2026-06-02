@@ -1,0 +1,51 @@
+name: CD - Auto Release Client
+
+on:
+  push:
+    # Workflow này chỉ chạy khi bạn tạo và push một Tag bắt đầu bằng chữ 'v' (ví dụ: v1.0.0)
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Cấp quyền cho bot GitHub tạo Release
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 25
+      uses: actions/setup-java@v4
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      # Bỏ qua chạy Test ở bước release để build nhanh hơn, vì CI đã test kỹ ở nhánh main rồi
+      run: mvn -B clean package -DskipTests --file pom.xml
+
+    - name: Rename Client File
+      # Đổi tên file jar để người dùng tải về nhìn chuyên nghiệp hơn (ví dụ: Bidding-Client-v1.0.0.jar)
+      run: |
+        mv bidding-client/target/*-jar-with-dependencies.jar Bidding-Client-${{ github.ref_name }}.jar || mv bidding-client/target/*.jar Bidding-Client-${{ github.ref_name }}.jar
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: Phiên bản ${{ github.ref_name }}
+        body: |
+          🎉 **Bản cập nhật mới nhất đã ra mắt!**
+          
+          **Cài đặt:**
+          1. Tải file `Bidding-Client-${{ github.ref_name }}.jar` ở bên dưới.
+          2. Cài đặt Java 25 trên máy.
+          3. Click đúp vào file để chạy hoặc dùng lệnh `java -jar Bidding-Client-${{ github.ref_name }}.jar`.
+          
+          *(Changelog tự động sinh ở đây...)*
+        files: |
+          Bidding-Client-${{ github.ref_name }}.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
