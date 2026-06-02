@@ -51,12 +51,12 @@ public class BidDAO {
 
                 if (!"RUNNING".equalsIgnoreCase(status) && !"ACTIVE".equalsIgnoreCase(status)) {
                     conn.rollback();
-                    return Response.fail("Phiên đấu giá không hoạt động");
+                    throw new com.uet.common.exception.AuctionClosedException("Phiên đấu giá đã đóng hoặc chưa bắt đầu.");
                 }
 
                 if (request.getAmount() <= currentPrice) {
                     conn.rollback();
-                    return Response.fail("Giá đặt phải lớn hơn giá hiện tại");
+                    throw new com.uet.common.exception.InvalidBidException("Giá đặt phải lớn hơn giá hiện tại.");
                 }
 
                 if (endTimeStamp != null) {
