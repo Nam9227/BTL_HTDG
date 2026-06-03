@@ -1,6 +1,5 @@
 package com.uet.client.ui.admin;
 
-import com.uet.client.network.ClientSocket;
 import com.uet.common.model.user.User;
 import com.uet.common.model.user.Role;
 import com.uet.common.network.GetAllUsersRequest;
@@ -23,6 +22,11 @@ import java.util.function.Consumer;
 import com.uet.common.network.Response;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import com.uet.client.network.ClientSocket;
+import com.uet.client.util.ThreadPoolManager;
+import com.uet.client.util.TransitionUtils;
+import com.uet.common.network.DeleteUserRequest;
+import com.uet.common.network.UpdateUserStatusRequest;
 
 public class AdminUsersController {
 
@@ -137,7 +141,7 @@ public class AdminUsersController {
     }
 
     private void fetchUsersFromServer() {
-        com.uet.client.util.ThreadPoolManager.execute(() -> {
+        ThreadPoolManager.execute(() -> {
             try {
                 ClientSocket.getInstance().send(new GetAllUsersRequest());
             } catch (IOException e) {
@@ -182,10 +186,10 @@ public class AdminUsersController {
                 showWarning("Tài khoản này đã bị khóa từ trước!");
                 return;
             }
-            com.uet.client.util.ThreadPoolManager.execute(() -> {
+            ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(
-                            new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false)
+                            new UpdateUserStatusRequest(selected.getId(), false)
                     );
                     System.out.println("[Client] Đã gửi yêu cầu KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
@@ -206,9 +210,9 @@ public class AdminUsersController {
                 showWarning("Tài khoản này đang ở trạng thái hoạt động!");
                 return;
             }
-            com.uet.client.util.ThreadPoolManager.execute(() -> {
+            ThreadPoolManager.execute(() -> {
                 try {
-                    ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), true));
+                    ClientSocket.getInstance().send(new UpdateUserStatusRequest(selected.getId(), true));
                     System.out.println("[Client] Đã gửi yêu cầu MỞ KHÓA user ID: " + selected.getId());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -235,9 +239,9 @@ public class AdminUsersController {
             confirmAlert.setContentText("Bạn có chắc chắn muốn xóa người dùng " + selected.getUsername() + " không?");
 
             if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                com.uet.client.util.ThreadPoolManager.execute(() -> {
+                ThreadPoolManager.execute(() -> {
                     try {
-                        ClientSocket.getInstance().send(new com.uet.common.network.DeleteUserRequest(selected.getId()));
+                        ClientSocket.getInstance().send(new DeleteUserRequest(selected.getId()));
                         System.out.println("[Client] Đã gửi yêu cầu XÓA user ID: " + selected.getId());
                         fetchUsersFromServer();
                     } catch (IOException e) {
@@ -317,7 +321,7 @@ public class AdminUsersController {
             stage.getScene().setRoot(root);
 
             if (fxmlPath.contains("login_view.fxml")) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                TransitionUtils.applyFadeIn(root);
                 stage.setTitle("Đăng nhập hệ thống");
                 stage.setMaximized(false);
                 stage.setWidth(850);
@@ -341,8 +345,8 @@ public class AdminUsersController {
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
-            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
-            com.uet.client.network.ClientSocket.getInstance().close();
+            ClientSocket.getInstance().send("LOGOUT");
+            ClientSocket.getInstance().close();
         } catch (Exception e) {
             e.printStackTrace();
         }

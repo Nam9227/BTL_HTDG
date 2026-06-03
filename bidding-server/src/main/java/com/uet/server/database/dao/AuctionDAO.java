@@ -2,7 +2,6 @@ package com.uet.server.database.dao;
 
 import com.uet.common.model.auction.AuctionItem;
 import com.uet.common.model.auction.BidRecord;
-import com.uet.server.database.DBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +11,13 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import com.uet.common.model.user.User;
+import com.uet.common.network.Response;
+import com.uet.server.database.DBConnection;
+import com.uet.server.database.dao.UserDAO;
+import com.uet.server.database.dao.WalletDAO;
+import com.uet.server.network.ClientManager;
+import com.uet.server.util.IdGenerator;
 
 public class AuctionDAO {
     private static final Logger logger = LoggerFactory.getLogger(AuctionDAO.class);
@@ -230,10 +236,10 @@ public class AuctionDAO {
             conn.setAutoCommit(false); 
 
             
-            String generatedItemId = com.uet.server.util.IdGenerator.generateId();
+            String generatedItemId = IdGenerator.generateId();
 
             
-            String generatedAuctionId = com.uet.server.util.IdGenerator.generateId();
+            String generatedAuctionId = IdGenerator.generateId();
 
             
             try (PreparedStatement psItem = conn.prepareStatement(sqlItem)) {
@@ -301,7 +307,7 @@ public class AuctionDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false); 
 
-            String bidId = com.uet.server.util.IdGenerator.generateId(); 
+            String bidId = IdGenerator.generateId(); 
 
              
             try (PreparedStatement psBid = conn.prepareStatement(sqlBid)) {
@@ -404,7 +410,7 @@ public class AuctionDAO {
                 "INNER JOIN items i ON a.product_id = i.id " +
                 "ORDER BY a.start_time DESC";
 
-        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+        try (java.sql.Connection conn = DBConnection.getConnection();
              java.sql.PreparedStatement ps = conn.prepareStatement(sql);
              java.sql.ResultSet rs = ps.executeQuery()) {
 
@@ -438,7 +444,7 @@ public class AuctionDAO {
 
     public boolean updateAuctionStatus(String auctionId, String status) {
         String sql = "UPDATE auctions SET status = ? WHERE id = ?";
-        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+        try (java.sql.Connection conn = DBConnection.getConnection();
              java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, status);
@@ -460,7 +466,7 @@ public class AuctionDAO {
         String sql = "UPDATE auctions SET status = 'RUNNING' " +
                 "WHERE status = 'ACTIVE' AND start_time <= NOW()";
                 
-        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+        try (java.sql.Connection conn = DBConnection.getConnection();
              java.sql.PreparedStatement psSelect = conn.prepareStatement(selectSql);
              java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
              
@@ -481,7 +487,7 @@ public class AuctionDAO {
                 logger.info("[Scheduler] Đã kích hoạt {} phiên đấu giá sang trạng thái RUNNING!", rows);
                 
                 
-                com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+                UserDAO userDAO = new UserDAO();
                 for (String[] auctionInfo : startingAuctions) {
                     String sellerId = auctionInfo[0];
                     String productName = auctionInfo[1];
@@ -512,11 +518,11 @@ public class AuctionDAO {
         String updateSql = "UPDATE auctions SET status = 'FINISHED' WHERE id = ?";
 
         
-        com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
-        com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+        WalletDAO walletDAO = new WalletDAO();
+        UserDAO userDAO = new UserDAO();
         int finishedCount = 0;
 
-        try (java.sql.Connection conn = com.uet.server.database.DBConnection.getConnection();
+        try (java.sql.Connection conn = DBConnection.getConnection();
              java.sql.PreparedStatement psSelect = conn.prepareStatement(selectSql);
              java.sql.ResultSet rs = psSelect.executeQuery()) {
 
@@ -559,13 +565,13 @@ public class AuctionDAO {
                         userDAO.createNotification(sellerId, "Giao dịch thành công", "Sản phẩm '" + productName + "' đã được bán với giá " + String.format("%,.0f", finalPrice) + "đ.");
                         
                         
-                        com.uet.common.model.user.User updatedWinner = userDAO.findUserByUserId(winnerId);
+                        User updatedWinner = userDAO.findUserByUserId(winnerId);
                         if (updatedWinner != null) {
-                            com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedWinner));
+                            ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedWinner));
                         }
-                        com.uet.common.model.user.User updatedSeller = userDAO.findUserByUserId(sellerId);
+                        User updatedSeller = userDAO.findUserByUserId(sellerId);
                         if (updatedSeller != null) {
-                            com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedSeller));
+                            ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedSeller));
                         }
                     } else {
                         logger.error("[Scheduler] LỖI: Giao dịch dòng tiền thất bại tại phiên {}", auctionId);
@@ -587,8 +593,8 @@ public class AuctionDAO {
                 "WHERE a.id = ?";
         
         String updateSql = "UPDATE auctions SET status = 'FINISHED' WHERE id = ?";
-        com.uet.server.database.dao.WalletDAO walletDAO = new com.uet.server.database.dao.WalletDAO();
-        com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+        WalletDAO walletDAO = new WalletDAO();
+        UserDAO userDAO = new UserDAO();
         
         try (Connection conn = DBConnection.getConnection()) {
             String winnerId = null;
@@ -644,13 +650,13 @@ public class AuctionDAO {
                     userDAO.createNotification(sellerId, "Giao dịch thành công", "Sản phẩm '" + productName + "' đã được bán với giá " + String.format("%,.0f", finalPrice) + "đ.");
                     
                     
-                    com.uet.common.model.user.User updatedWinner = userDAO.findUserByUserId(winnerId);
+                    User updatedWinner = userDAO.findUserByUserId(winnerId);
                     if (updatedWinner != null) {
-                        com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedWinner));
+                        ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedWinner));
                     }
-                    com.uet.common.model.user.User updatedSeller = userDAO.findUserByUserId(sellerId);
+                    User updatedSeller = userDAO.findUserByUserId(sellerId);
                     if (updatedSeller != null) {
-                        com.uet.server.network.ClientManager.broadcast(com.uet.common.network.Response.success("BALANCE_UPDATED", updatedSeller));
+                        ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedSeller));
                     }
                 } else {
                     logger.error("[Admin Force End] LỖI: Giao dịch dòng tiền thất bại tại phiên {}", auctionId);

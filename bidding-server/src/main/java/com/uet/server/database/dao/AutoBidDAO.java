@@ -14,11 +14,12 @@ import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.uet.common.network.AutoBidResponse;
 
 public class AutoBidDAO {
     private static final Logger logger = LoggerFactory.getLogger(AutoBidDAO.class);
 
-    public com.uet.common.network.AutoBidResponse saveAutoBidConfig(AutoBidRequest request) {
+    public AutoBidResponse saveAutoBidConfig(AutoBidRequest request) {
         try (Connection conn = DBConnection.getConnection()) {
             
             String checkSql = "SELECT id FROM auto_bids WHERE auction_id = ? AND user_id = ?";
@@ -56,14 +57,14 @@ public class AutoBidDAO {
             }
 
             if (request.isActive()) {
-                return new com.uet.common.network.AutoBidResponse(true, "Đã bật Đấu giá tự động thành công!");
+                return new AutoBidResponse(true, "Đã bật Đấu giá tự động thành công!");
             } else {
-                return new com.uet.common.network.AutoBidResponse(true, "Đã tắt Đấu giá tự động.");
+                return new AutoBidResponse(true, "Đã tắt Đấu giá tự động.");
             }
 
         } catch (Exception e) {
             logger.error("Lỗi khi lưu cấu hình Auto Bid: ", e);
-            return new com.uet.common.network.AutoBidResponse(false, "Lỗi hệ thống khi thiết lập Auto Bid.");
+            return new AutoBidResponse(false, "Lỗi hệ thống khi thiết lập Auto Bid.");
         }
     }
 

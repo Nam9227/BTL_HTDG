@@ -11,6 +11,9 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import com.uet.client.util.ThreadPoolManager;
+import com.uet.common.model.user.User;
+import com.uet.common.network.Response;
 
 public class ClientSocket {
     private static final Logger logger = LoggerFactory.getLogger(ClientSocket.class);
@@ -72,7 +75,7 @@ public class ClientSocket {
         this.isListenerRunning = true;
         this.listening = true;
 
-        com.uet.client.util.ThreadPoolManager.execute(() -> {
+        ThreadPoolManager.execute(() -> {
             while (listening) {
                 try {
                     if (in == null) break;
@@ -102,11 +105,11 @@ public class ClientSocket {
         });
     }
 
-    public static Consumer<com.uet.common.model.user.User> onUserUpdated;
+    public static Consumer<User> onUserUpdated;
 
     private void notifyListeners(Object message) {
-        if (message instanceof com.uet.common.network.Response res && "BALANCE_UPDATED".equals(res.getMessage())) {
-            if (res.getData() instanceof com.uet.common.model.user.User updatedUser) {
+        if (message instanceof Response res && "BALANCE_UPDATED".equals(res.getMessage())) {
+            if (res.getData() instanceof User updatedUser) {
                 if (onUserUpdated != null) {
                     onUserUpdated.accept(updatedUser);
                 }

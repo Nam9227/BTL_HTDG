@@ -6,6 +6,7 @@ import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.network.ClientHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.uet.server.database.dao.UserDAO;
 
 public class AuctionService {
     private static final Logger logger = LoggerFactory.getLogger(AuctionService.class);
@@ -62,7 +63,7 @@ public class AuctionService {
                 logger.info("[SERVER] Sản phẩm của User {} đang ở trạng thái PENDING.", req.getSellerId());
                 
                 
-                com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+                UserDAO userDAO = new UserDAO();
                 userDAO.createNotification(req.getSellerId(), "Chờ duyệt sản phẩm", "Sản phẩm '" + req.getProductName() + "' đang chờ Admin duyệt.");
             } else {
                 client.send(Response.fail("Lỗi: Không thể ghi dữ liệu sản phẩm vào MySQL Database."));

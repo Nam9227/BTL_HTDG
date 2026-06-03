@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
 
 import javafx.scene.image.ImageView;
 import java.math.BigDecimal;
-import java.util.List;;
+import java.util.List;
+import com.uet.client.util.ThreadPoolManager;
+import com.uet.client.util.TransitionUtils;
 
 public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
@@ -213,7 +215,7 @@ public class HomeController {
             };
 
             socket.addMessageListener(homeListener);
-            com.uet.client.util.ThreadPoolManager.execute(() -> {
+            ThreadPoolManager.execute(() -> {
                 try {
                     socket.send(new GetActiveAuctionsRequest());
                 } catch (Exception e) {
@@ -320,7 +322,7 @@ public class HomeController {
             controller.setData(currentUser, item);
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) productContainer.getScene().getWindow();
             stage.getScene().setRoot(root); 
@@ -389,7 +391,7 @@ public class HomeController {
             Stage stage = (Stage) userNameLabel.getScene().getWindow(); 
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             
             
@@ -415,7 +417,7 @@ public class HomeController {
             controller.setUser(currentUser); 
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) productContainer.getScene().getWindow();
             stage.getScene().setRoot(root); 
@@ -437,7 +439,7 @@ public class HomeController {
             MyProductsController controller = loader.getController();
             controller.setUser(currentUser);
 
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) userNameLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
@@ -466,7 +468,7 @@ public class HomeController {
             Parent root = loader.load();
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) userNameLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
@@ -522,8 +524,8 @@ public class HomeController {
             controller.setUser(currentUser); 
 
             
-            if (com.uet.client.util.TransitionUtils.class != null) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            if (TransitionUtils.class != null) {
+                TransitionUtils.applyFadeIn(root);
             }
 
             

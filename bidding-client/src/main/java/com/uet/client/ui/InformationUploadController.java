@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import com.uet.client.util.TransitionUtils;
 
 public class InformationUploadController {
     private static final Logger logger = LoggerFactory.getLogger(InformationUploadController.class);
@@ -277,7 +278,7 @@ public class InformationUploadController {
             HomeController controller = loader.getController();
             controller.setUser(currentUser); 
 
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) dropImageZone.getScene().getWindow();
             stage.getScene().setRoot(root);

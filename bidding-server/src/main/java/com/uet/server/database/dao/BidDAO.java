@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import com.uet.common.exception.AuctionClosedException;
+import com.uet.common.exception.InvalidBidException;
 
 public class BidDAO {
 
@@ -51,12 +53,12 @@ public class BidDAO {
 
                 if (!"RUNNING".equalsIgnoreCase(status) && !"ACTIVE".equalsIgnoreCase(status)) {
                     conn.rollback();
-                    throw new com.uet.common.exception.AuctionClosedException("Phiên đấu giá đã đóng hoặc chưa bắt đầu.");
+                    throw new AuctionClosedException("Phiên đấu giá đã đóng hoặc chưa bắt đầu.");
                 }
 
                 if (request.getAmount() <= currentPrice) {
                     conn.rollback();
-                    throw new com.uet.common.exception.InvalidBidException("Giá đặt phải lớn hơn giá hiện tại.");
+                    throw new InvalidBidException("Giá đặt phải lớn hơn giá hiện tại.");
                 }
 
                 if (endTimeStamp != null) {

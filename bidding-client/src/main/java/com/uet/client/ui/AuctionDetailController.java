@@ -32,6 +32,8 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import com.uet.client.util.ThreadPoolManager;
+import com.uet.client.util.TransitionUtils;
 
 public class AuctionDetailController {
     private static final Logger logger = LoggerFactory.getLogger(AuctionDetailController.class);
@@ -247,7 +249,7 @@ public class AuctionDetailController {
             };
 
             ClientSocket.getInstance().addMessageListener(historyListener);
-            com.uet.client.util.ThreadPoolManager.execute(() -> {
+            ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(historyReq);
                 } catch (Exception e) {
@@ -441,7 +443,7 @@ public class AuctionDetailController {
             controller.setUser(currentUser);
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) productNameLabel.getScene().getWindow();
 

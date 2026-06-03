@@ -1,6 +1,5 @@
 package com.uet.client.ui.admin;
 
-import com.uet.client.network.ClientSocket;
 import com.uet.common.model.auction.AuctionItem;
 import com.uet.common.network.ForceEndRequest;
 import com.uet.common.network.Response;
@@ -22,6 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import com.uet.client.network.ClientSocket;
+import com.uet.client.util.ThreadPoolManager;
+import com.uet.client.util.TransitionUtils;
 
 public class AdminAuctionsController {
     private static final Logger logger = LoggerFactory.getLogger(AdminAuctionsController.class);
@@ -160,7 +162,7 @@ public class AdminAuctionsController {
 
             ClientSocket.getInstance().addMessageListener(listener);
             
-            com.uet.client.util.ThreadPoolManager.execute(() -> {
+            ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(request);
                 } catch (Exception e) {
@@ -286,8 +288,8 @@ public class AdminAuctionsController {
     @FXML
     private void handleLogout() {
         try {
-            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
-            com.uet.client.network.ClientSocket.getInstance().close();
+            ClientSocket.getInstance().send("LOGOUT");
+            ClientSocket.getInstance().close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -302,7 +304,7 @@ public class AdminAuctionsController {
             stage.getScene().setRoot(root);
 
             if (fxmlPath.contains("login_view.fxml")) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                TransitionUtils.applyFadeIn(root);
                 stage.setTitle("Đăng nhập hệ thống");
                 stage.setMaximized(false);
                 stage.setWidth(850);

@@ -1,7 +1,6 @@
 package com.uet.client.ui;
 
 import com.uet.client.network.ClientSocket;
-import com.uet.common.model.user.User;
 import com.uet.common.network.TransactionRequest;
 import com.uet.common.network.ImageData;
 import com.uet.common.network.Response;
@@ -26,6 +25,8 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.uet.client.util.TransitionUtils;
+import com.uet.common.model.user.User;
 
 public class ProfileController {
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
@@ -126,7 +127,7 @@ public class ProfileController {
                         Platform.runLater(() -> {
                             if (res.isSuccess()) {
 
-                                if (res.getData() instanceof com.uet.common.model.user.User updatedUser) {
+                                if (res.getData() instanceof User updatedUser) {
                                     ProfileController.this.currentUser = updatedUser;
                                     logger.info("Đã cập nhật updatedUser từ Server vào Session Client thành công!");
                                 }
@@ -347,7 +348,7 @@ public class ProfileController {
             controller.setUser(currentUser);
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) fullNameLabel.getScene().getWindow();
 
