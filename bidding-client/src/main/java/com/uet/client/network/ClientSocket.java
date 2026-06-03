@@ -62,11 +62,14 @@ public class ClientSocket {
         out.reset();
     }
 
+    private volatile boolean isListenerRunning = false;
+
     private void startListening() {
-        if (listening) {
+        if (isListenerRunning) {
             return;
         }
 
+        this.isListenerRunning = true;
         this.listening = true;
 
         com.uet.client.util.ThreadPoolManager.execute(() -> {
@@ -95,6 +98,7 @@ public class ClientSocket {
                     break;
                 }
             }
+            isListenerRunning = false;
         });
     }
 

@@ -948,3 +948,77 @@
 2026-06-02 23:13:22 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
 2026-06-02 23:13:22 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
 2026-06-02 23:13:22 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-03 21:44:19 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-03 21:44:19 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã xóa 1 thông báo cũ chứa từ khóa 'Sản phẩm '1' đã bắt đầu phiên đấu giá' của User 1683432468
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 1683432468: Đấu giá kết thúc
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  c.uet.server.database.dao.AuctionDAO - [Scheduler] Giao dịch thành công phiên 8891251762:
+   -> Đã trừ 2500.0đ từ người mua (3846757029)
+   -> Đã cộng 2500.0đ vào người bán (1683432468)
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 3846757029: Trúng đấu giá
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  com.uet.server.database.dao.UserDAO - [Notification] Đã tạo thông báo mới cho User 1683432468: Giao dịch thành công
+2026-06-03 21:44:20 [pool-1-thread-1] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Phát hiện có thay đổi danh sách phiên đấu giá (Kích hoạt: 0, Kết thúc: 1). Tiến hành Broadcast...
+2026-06-03 21:44:31 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-03 21:44:32 [pool-2-thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-06-03 21:44:32 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-06-03 21:44:55 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-06-03 21:44:55 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-03 21:44:55 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-03 21:45:04 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-03 21:45:04 [pool-2-thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-06-03 21:45:04 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-06-03 21:47:35 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-06-03 21:47:35 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-03 21:47:35 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-03 21:48:20 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-03 21:48:20 [pool-2-thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-06-03 21:48:20 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-06-03 21:48:28 [com.uet.server.network.ServerMain.main()] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-03 21:48:28 [com.uet.server.network.ServerMain.main()] ERROR com.uet.server.network.ServerMain - Lỗi xảy ra trong ServerMain: 
+java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at com.uet.server.network.ServerMain.start(ServerMain.java:29)
+	at com.uet.server.network.ServerMain.main(ServerMain.java:26)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.codehaus.mojo.exec.AbstractExecJavaBase.executeMainMethod(AbstractExecJavaBase.java:402)
+	at org.codehaus.mojo.exec.ExecJavaMojo.executeMainMethod(ExecJavaMojo.java:142)
+	at org.codehaus.mojo.exec.AbstractExecJavaBase.doExecClassLoader(AbstractExecJavaBase.java:377)
+	at org.codehaus.mojo.exec.AbstractExecJavaBase.lambda$execute$0(AbstractExecJavaBase.java:287)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+2026-06-03 21:48:29 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-03 21:53:55 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-06-03 21:53:55 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-03 21:53:55 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-03 21:55:33 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-03 21:55:33 [pool-2-thread-2] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-06-03 21:55:33 [pool-2-thread-2] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-06-03 21:55:33 [pool-2-thread-2] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-06-03 22:01:03 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-03 22:01:03 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-06-03 22:01:03 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
+2026-06-03 22:01:26 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-03 22:01:26 [pool-2-thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: admin1
+2026-06-03 22:01:26 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: U001
+2026-06-03 22:01:28 [pool-2-thread-1] INFO  c.u.s.service.AuctionRealtimeService - ==> Admin đang yêu cầu tải toàn bộ danh sách phiên đấu giá!
+2026-06-03 22:01:36 [pool-2-thread-1] WARN  c.uet.server.network.ClientHandler - Server: Không thể gửi phản hồi do Client đã chủ động ngắt kết nối vật lý (Đăng xuất/Tắt app).
+2026-06-03 22:01:36 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-03 22:01:36 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-03 22:01:43 [main] INFO  com.uet.server.network.ServerMain - --- CÓ 1 CLIENT VỪA KẾT NỐI! ---
+2026-06-03 22:01:43 [pool-2-thread-1] INFO  c.u.s.s.ClientRequestDispatcher - Đang đăng nhập: nam
+2026-06-03 22:01:43 [pool-2-thread-1] WARN  com.uet.server.database.dao.UserDAO - UserDAO: file not found: \root\uploads\avatars\3846757029_9e151168-33b1-4fad-97b4-c71411b402f2.png
+2026-06-03 22:01:43 [pool-2-thread-1] INFO  com.uet.server.database.dao.UserDAO - [UserDAO] ⏰ Đã cập nhật mốc đăng nhập mới cho user ID: 3846757029
+2026-06-03 22:01:51 [pool-2-thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_960e7190-3b1d-4637-bfb8-c6615ef6149e.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_960e7190-3b1d-4637-bfb8-c6615ef6149e.png
+2026-06-03 22:01:51 [pool-2-thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/1683432468_e175ce99-e02d-41c3-b782-05e111f9df84.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/1683432468_e175ce99-e02d-41c3-b782-05e111f9df84.png
+2026-06-03 22:01:51 [pool-2-thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_6020268a-792a-4fc2-bb22-b8ea3f40272b.png
+2026-06-03 22:01:51 [pool-2-thread-1] WARN  c.uet.server.database.dao.AuctionDAO - Không thể đọc file ảnh sản phẩm từ path: file://D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png, lỗi: Illegal char <:> at index 3: /D:\root\uploads/products/U004_37539db0-ff21-4960-b0b6-b7155dc45046.png
+2026-06-03 22:01:54 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
+2026-06-03 22:01:54 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
+2026-06-03 22:01:54 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
