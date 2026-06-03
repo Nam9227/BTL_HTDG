@@ -137,14 +137,14 @@ public class AdminUsersController {
     }
 
     private void fetchUsersFromServer() {
-        new Thread(() -> {
+        com.uet.client.util.ThreadPoolManager.execute(() -> {
             try {
                 ClientSocket.getInstance().send(new GetAllUsersRequest());
             } catch (IOException e) {
                 e.printStackTrace();
                 Platform.runLater(() -> showWarning("Không thể gửi yêu cầu lấy dữ liệu đến Server!"));
             }
-        }).start();
+        });
     }
 
     @FXML
@@ -182,7 +182,7 @@ public class AdminUsersController {
                 showWarning("Tài khoản này đã bị khóa từ trước!");
                 return;
             }
-            new Thread(() -> {
+            com.uet.client.util.ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(
                             new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), false)
@@ -192,7 +192,7 @@ public class AdminUsersController {
                     e.printStackTrace();
                     Platform.runLater(() -> showWarning("Không thể kết nối đến server để khóa tài khoản!"));
                 }
-            }).start();
+            });
         } else {
             showWarning("Vui lòng chọn một người dùng để khóa!");
         }
@@ -206,7 +206,7 @@ public class AdminUsersController {
                 showWarning("Tài khoản này đang ở trạng thái hoạt động!");
                 return;
             }
-            new Thread(() -> {
+            com.uet.client.util.ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(new com.uet.common.network.UpdateUserStatusRequest(selected.getId(), true));
                     System.out.println("[Client] Đã gửi yêu cầu MỞ KHÓA user ID: " + selected.getId());
@@ -214,7 +214,7 @@ public class AdminUsersController {
                     e.printStackTrace();
                     Platform.runLater(() -> showWarning("Không thể kết nối đến server để mở khóa tài khoản!"));
                 }
-            }).start();
+            });
         } else {
             showWarning("Vui lòng chọn một người dùng để mở khóa!");
         }
@@ -235,7 +235,7 @@ public class AdminUsersController {
             confirmAlert.setContentText("Bạn có chắc chắn muốn xóa người dùng " + selected.getUsername() + " không?");
 
             if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                new Thread(() -> {
+                com.uet.client.util.ThreadPoolManager.execute(() -> {
                     try {
                         ClientSocket.getInstance().send(new com.uet.common.network.DeleteUserRequest(selected.getId()));
                         System.out.println("[Client] Đã gửi yêu cầu XÓA user ID: " + selected.getId());
@@ -244,7 +244,7 @@ public class AdminUsersController {
                         e.printStackTrace();
                         Platform.runLater(() -> showWarning("Không thể kết nối đến server để xóa tài khoản!"));
                     }
-                }).start();
+                });
             }
         } else {
             showWarning("Vui lòng chọn một người dùng để xóa!");

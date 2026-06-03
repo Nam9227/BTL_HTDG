@@ -7,9 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerMain {
     private static final Logger logger = LoggerFactory.getLogger(ServerMain.class);
+    
+    // Đã chuyển sang dùng ServerThreadPool dùng chung
 
     public static void main(String[] args){
         
@@ -31,7 +35,7 @@ public class ServerMain {
 
                 
                 ClientHandler handler = new ClientHandler(clientSocket);
-                new Thread(handler).start();
+                com.uet.server.util.ServerThreadPool.execute(handler); // Bỏ vào Thread Pool để xử lý
             }
         } catch (Exception e) {
             logger.error("Lỗi xảy ra trong ServerMain: ", e);

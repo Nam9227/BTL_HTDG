@@ -21,7 +21,6 @@ public class ClientSocket {
     private ObjectInputStream in;
 
     private volatile boolean listening = false;
-    private Thread listenerThread;
 
     private final List<Consumer<Object>> listeners = new CopyOnWriteArrayList<>();
 
@@ -63,15 +62,17 @@ public class ClientSocket {
         out.reset();
     }
 
+    private volatile boolean isListenerRunning = false;
+
     private void startListening() {
-        
-        if (listenerThread != null && listenerThread.isAlive()) {
+        if (isListenerRunning) {
             return;
         }
 
+        this.isListenerRunning = true;
         this.listening = true;
 
-        listenerThread = new Thread(() -> {
+        com.uet.client.util.ThreadPoolManager.execute(() -> {
             while (listening) {
                 try {
                     if (in == null) break;
@@ -97,10 +98,8 @@ public class ClientSocket {
                     break;
                 }
             }
+            isListenerRunning = false;
         });
-
-        listenerThread.setDaemon(true);
-        listenerThread.start();
     }
 
     public static Consumer<com.uet.common.model.user.User> onUserUpdated;
@@ -158,7 +157,6 @@ public class ClientSocket {
             this.socket = null;
             this.in = null;
             this.out = null;
-            this.listenerThread = null;
             logger.info("ClientSocket: Đã dọn dẹp sạch sẽ Session kết nối cũ!");
         }
     }

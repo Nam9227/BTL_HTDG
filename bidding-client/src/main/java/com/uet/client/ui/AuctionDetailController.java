@@ -247,13 +247,13 @@ public class AuctionDetailController {
             };
 
             ClientSocket.getInstance().addMessageListener(historyListener);
-            new Thread(() -> {
+            com.uet.client.util.ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(historyReq);
                 } catch (Exception e) {
                     logger.error("Lỗi khi gửi yêu cầu lấy lịch sử đặt giá từ Client: ", e);
                 }
-            }).start();
+            });
 
         } catch (Exception e) {
             logger.error("Lỗi khi gửi yêu cầu lấy lịch sử đặt giá lên Server: ", e);
