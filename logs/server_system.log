@@ -1022,3 +1022,6 @@ java.net.BindException: Address already in use: bind
 2026-06-03 22:01:54 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - Client ngắt kết nối hoặc có lỗi xảy ra: Connection reset
 2026-06-03 22:01:54 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã giải phóng hoàn toàn kết nối Socket vật lý.
 2026-06-03 22:01:54 [pool-2-thread-1] INFO  c.uet.server.network.ClientHandler - [SERVER] Đã Xóa Client khỏi ClientManager thành công.
+2026-06-03 23:46:26 [main] INFO  c.u.server.service.AuctionScheduler - [Scheduler] Bộ quét thời gian đấu giá tự động đã được kích hoạt!
+2026-06-03 23:46:26 [main] INFO  com.uet.server.network.ServerMain - --- SERVER ĐANG CHỜ Ở CỔNG 27915 ---
+2026-06-03 23:46:26 [pool-1-thread-1] INFO  c.uet.server.database.DBConnection - Connected to database successfully!
