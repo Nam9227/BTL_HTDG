@@ -134,35 +134,33 @@ public class AuctionRealtimeService {
                         double bestNextPrice = 0;
 
                         for (com.uet.common.model.auction.AutoBid ab : autoBids) {
-                            if (ab.getUserId().equals(currentWinner))
-                                continue;
-                            if (ab.getUserId().equals(item.getSellerId()))
-                                continue;
+                            if (ab.getUserId().equals(currentWinner)) continue;
+                            if (ab.getUserId().equals(item.getSellerId())) continue;
 
                             double nextPrice = currentPrice + ab.getStepPrice();
-
                             if (nextPrice > ab.getMaxPrice()) {
                                 nextPrice = ab.getMaxPrice();
                             }
 
-                            if (nextPrice > currentPrice) {
-                                double availableBalance = walletDAO.getAvailableBalanceForAuction(ab.getUserId(),
-                                        auctionId);
-                                if (nextPrice > availableBalance) {
-                                    logger.info("Auto-bid của user {} bị tắt do không đủ số dư.", ab.getUserId());
-                                    autoBidDAO.deactivateAutoBid(auctionId, ab.getUserId());
-                                    continue;
-                                }
-
-                                if (bestCandidate == null) {
-                                    bestCandidate = ab;
-                                    bestNextPrice = nextPrice;
-                                }
-                            } else {
+                            if (nextPrice <= currentPrice) {
                                 logger.info("Auto-bid của user {} bị tắt do chạm ngưỡng maxPrice.", ab.getUserId());
                                 autoBidDAO.deactivateAutoBid(auctionId, ab.getUserId());
+                                continue;
+                            }
+
+                            double availableBalance = walletDAO.getAvailableBalanceForAuction(ab.getUserId(), auctionId);
+                            if (nextPrice > availableBalance) {
+                                logger.info("Auto-bid của user {} bị tắt do không đủ số dư.", ab.getUserId());
+                                autoBidDAO.deactivateAutoBid(auctionId, ab.getUserId());
+                                continue;
+                            }
+
+                            if (bestCandidate == null || nextPrice > bestNextPrice) {
+                                bestCandidate = ab;
+                                bestNextPrice = nextPrice;
                             }
                         }
+
 
                         if (bestCandidate != null) {
                             try {
