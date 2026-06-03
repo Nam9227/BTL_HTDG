@@ -6,12 +6,20 @@ import com.uet.common.network.*;
 import com.uet.server.database.dao.AuctionDAO;
 import com.uet.server.database.dao.BidDAO;
 import com.uet.server.network.ClientHandler;
-import com.uet.server.network.ClientManager;
 import com.uet.server.database.dao.WalletDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import com.uet.common.exception.AuctionClosedException;
+import com.uet.common.exception.InvalidBidException;
+import com.uet.common.model.auction.AutoBid;
+import com.uet.common.network.AuctionUpdateResponse;
+import com.uet.server.database.dao.AdminDAO;
+import com.uet.server.database.dao.AutoBidDAO;
+import com.uet.server.database.dao.UserDAO;
+import com.uet.server.network.ClientManager;
+import com.uet.server.util.ServerThreadPool;
 
 public class AuctionRealtimeService {
     private static final Logger logger = LoggerFactory.getLogger(AuctionRealtimeService.class);
@@ -96,7 +104,7 @@ public class AuctionRealtimeService {
             } else {
                 client.send(response);
             }
-        } catch (com.uet.common.exception.InvalidBidException | com.uet.common.exception.AuctionClosedException e) {
+        } catch (InvalidBidException | AuctionClosedException e) {
             logger.warn("Bid bị từ chối: {}", e.getMessage());
             client.send(Response.fail(e.getMessage()));
         } catch (Exception e) {
@@ -112,9 +120,9 @@ public class AuctionRealtimeService {
                 k -> new java.util.concurrent.atomic.AtomicBoolean(false));
 
         if (isRunning.compareAndSet(false, true)) {
-            com.uet.server.util.ServerThreadPool.execute(() -> {
+            ServerThreadPool.execute(() -> {
                 try {
-                    com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
+                    AutoBidDAO autoBidDAO = new AutoBidDAO();
                     boolean bidPlacedInThisRound = true;
 
                     while (bidPlacedInThisRound) {
@@ -128,12 +136,12 @@ public class AuctionRealtimeService {
                         double currentPrice = item.getCurrentPrice();
                         String currentWinner = item.getWinnerId();
 
-                        List<com.uet.common.model.auction.AutoBid> autoBids = autoBidDAO.getActiveAutoBids(auctionId);
+                        List<AutoBid> autoBids = autoBidDAO.getActiveAutoBids(auctionId);
 
-                        com.uet.common.model.auction.AutoBid bestCandidate = null;
+                        AutoBid bestCandidate = null;
                         double bestNextPrice = 0;
 
-                        for (com.uet.common.model.auction.AutoBid ab : autoBids) {
+                        for (AutoBid ab : autoBids) {
                             if (ab.getUserId().equals(currentWinner))
                                 continue;
                             if (ab.getUserId().equals(item.getSellerId()))
@@ -194,7 +202,7 @@ public class AuctionRealtimeService {
                                     } catch (InterruptedException e) {
                                     }
                                 }
-                            } catch (com.uet.common.exception.InvalidBidException | com.uet.common.exception.AuctionClosedException e) {
+                            } catch (InvalidBidException | AuctionClosedException e) {
                                 logger.info("AutoBid thất bại: {}", e.getMessage());
                             } catch (Exception e) {
                                 logger.error("AutoBid gặp lỗi hệ thống: ", e);
@@ -227,11 +235,11 @@ public class AuctionRealtimeService {
             boolean success = auctionDAO.forceEndAuctionAndProcessTransaction(auctionId);
             if (success) {
                 client.send(Response.success("Đã ép kết thúc phiên đấu giá thành công!", null));
-                com.uet.server.database.dao.AdminDAO.logAdminAction("Ép kết thúc đấu giá", auctionId, "Thành công");
+                AdminDAO.logAdminAction("Ép kết thúc đấu giá", auctionId, "Thành công");
 
-                com.uet.server.network.ClientManager.broadcastAuction(
+                ClientManager.broadcastAuction(
                         auctionId,
-                        new com.uet.common.network.AuctionUpdateResponse(auctionDAO.getAuctionById(auctionId, false),
+                        new AuctionUpdateResponse(auctionDAO.getAuctionById(auctionId, false),
                                 "Phiên đấu giá đã bị Admin kết thúc."));
 
                 try {
@@ -259,11 +267,11 @@ public class AuctionRealtimeService {
 
             if (success) {
                 client.send(Response.success(statusText + " phiên đấu giá thành công!", null));
-                com.uet.server.database.dao.AdminDAO.logAdminAction(statusText + " đấu giá", request.getAuctionId(),
+                AdminDAO.logAdminAction(statusText + " đấu giá", request.getAuctionId(),
                         "Thành công");
 
                 if (item != null) {
-                    com.uet.server.database.dao.UserDAO userDAO = new com.uet.server.database.dao.UserDAO();
+                    UserDAO userDAO = new UserDAO();
 
                     userDAO.deleteNotificationByKeyword(item.getSellerId(),
                             "Sản phẩm '" + item.getProductName() + "' đang chờ Admin duyệt");

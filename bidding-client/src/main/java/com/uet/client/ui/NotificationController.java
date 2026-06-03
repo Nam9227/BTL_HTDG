@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.function.Consumer;
+import com.uet.client.util.TransitionUtils;
+import com.uet.common.model.user.Role;
 
 public class NotificationController {
 
@@ -72,7 +74,7 @@ public class NotificationController {
 
         
         if (addProductBtn != null) {
-            if (user.getRole() == com.uet.common.model.user.Role.SELLER) {
+            if (user.getRole() == Role.SELLER) {
                 addProductBtn.setVisible(true);
                 addProductBtn.setManaged(true);
             } else {
@@ -195,8 +197,8 @@ public class NotificationController {
             controller.setUser(currentUser); 
 
             Stage stage = (Stage) userNameLabel.getScene().getWindow(); 
-            if (com.uet.client.util.TransitionUtils.class != null) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            if (TransitionUtils.class != null) {
+                TransitionUtils.applyFadeIn(root);
             }
             stage.getScene().setRoot(root);
             stage.setTitle("Thông tin tài khoản");
@@ -215,8 +217,8 @@ public class NotificationController {
             controller.setUser(currentUser);
 
             Stage stage = (Stage) notificationContainer.getScene().getWindow();
-            if (com.uet.client.util.TransitionUtils.class != null) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            if (TransitionUtils.class != null) {
+                TransitionUtils.applyFadeIn(root);
             }
             stage.getScene().setRoot(root);
             stage.setTitle("Đăng bán sản phẩm mới");
@@ -235,8 +237,8 @@ public class NotificationController {
             controller.setUser(currentUser);
 
             Stage stage = (Stage) userNameLabel.getScene().getWindow();
-            if (com.uet.client.util.TransitionUtils.class != null) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            if (TransitionUtils.class != null) {
+                TransitionUtils.applyFadeIn(root);
             }
             stage.getScene().setRoot(root);
             stage.setTitle("Sản phẩm của tôi");
@@ -290,8 +292,8 @@ public class NotificationController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
             Parent root = loader.load();
 
-            if (com.uet.client.util.TransitionUtils.class != null) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            if (TransitionUtils.class != null) {
+                TransitionUtils.applyFadeIn(root);
             }
 
             Stage stage = (Stage) userNameLabel.getScene().getWindow();

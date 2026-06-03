@@ -37,6 +37,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import com.uet.client.util.ThreadPoolManager;
+import com.uet.client.util.TransitionUtils;
 
 public class MyProductsController {
     private static final Logger logger = LoggerFactory.getLogger(MyProductsController.class);
@@ -178,7 +180,7 @@ public class MyProductsController {
 
             socket.addMessageListener(myProductsListener);
 
-            com.uet.client.util.ThreadPoolManager.execute(() -> {
+            ThreadPoolManager.execute(() -> {
                 try {
                     socket.send(new GetActiveAuctionsRequest(currentUser.getId(), "USER"));
                 } catch (Exception e) {
@@ -432,7 +434,7 @@ public class MyProductsController {
             AuctionDetailController controller = loader.getController();
             controller.setData(currentUser, item);
 
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Stage stage = (Stage) productContainer.getScene().getWindow();
             stage.getScene().setRoot(root);
@@ -552,7 +554,7 @@ public class MyProductsController {
             controller.setUser(currentUser);
 
             Stage stage = (Stage) productContainer.getScene().getWindow();
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
             stage.getScene().setRoot(root);
             stage.setTitle("Thông tin tài khoản");
         } catch (Exception e) {
@@ -574,7 +576,7 @@ public class MyProductsController {
             controller.setUser(currentUser);
 
             Stage stage = (Stage) productContainer.getScene().getWindow();
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
             stage.getScene().setRoot(root);
             stage.setTitle("Đăng bán sản phẩm mới");
         } catch (Exception e) {
@@ -596,8 +598,8 @@ public class MyProductsController {
             controller.setUser(currentUser);
 
             Stage stage = (Stage) productContainer.getScene().getWindow();
-            if (com.uet.client.util.TransitionUtils.class != null) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            if (TransitionUtils.class != null) {
+                TransitionUtils.applyFadeIn(root);
             }
             stage.getScene().setRoot(root);
             stage.setTitle("Hộp Thư Thông Báo - Sàn Đấu Giá UET");
@@ -620,7 +622,7 @@ public class MyProductsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login_view.fxml"));
             Parent root = loader.load();
 
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
             Stage stage = (Stage) productContainer.getScene().getWindow();
             stage.getScene().setRoot(root);
             stage.setTitle("Đăng nhập hệ thống");

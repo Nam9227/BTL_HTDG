@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
+import com.uet.common.model.notification.Notification;
 
 public class UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
@@ -720,7 +721,7 @@ public class UserDAO {
         return null;
     }
 
-    public List<com.uet.common.model.notification.Notification> getNotificationsByUserId(String userId) {
+    public List<Notification> getNotificationsByUserId(String userId) {
         String deleteOldSql = "DELETE FROM notifications WHERE user_id = ? AND created_at < DATE_SUB(NOW(), INTERVAL 3 DAY)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(deleteOldSql)) {
@@ -730,7 +731,7 @@ public class UserDAO {
             logger.error("Lỗi khi xóa thông báo cũ hơn 3 ngày của user: " + userId, e);
         }
 
-        List<com.uet.common.model.notification.Notification> list = new ArrayList<>();
+        List<Notification> list = new ArrayList<>();
         String sql = "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
 
         try (Connection conn = DBConnection.getConnection();
@@ -739,7 +740,7 @@ public class UserDAO {
             ps.setString(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    list.add(new com.uet.common.model.notification.Notification(
+                    list.add(new Notification(
                             rs.getInt("id"),
                             rs.getString("user_id"),
                             rs.getString("title"),

@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import com.uet.client.util.TransitionUtils;
 
 public class ClientApp extends Application {
 
@@ -19,7 +20,7 @@ public class ClientApp extends Application {
             Parent root = loader.load();
             
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
             
             Scene scene = new Scene(root);
             stage.getIcons().add(icon);

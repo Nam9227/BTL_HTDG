@@ -612,3 +612,10 @@ java.lang.ClassCastException: class com.uet.common.model.user.User cannot be cas
 2026-06-03 22:01:49 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
 2026-06-03 22:01:51 [JavaFX Application Thread] INFO  c.uet.client.ui.MyProductsController - Người dùng đăng nhập vai trò Người mua (BUYER). Ẩn các tính năng của Người bán.
 2026-06-03 22:01:51 [Thread-3] INFO  c.uet.client.ui.MyProductsController - Data received: 4 items
+2026-06-03 23:44:45 [JavaFX Application Thread] INFO  com.uet.client.network.ClientSocket - ClientSocket: Kết nối Server thành công!
+2026-06-03 23:44:46 [JavaFX Application Thread] INFO  com.uet.client.ui.LoginController - Đăng nhập OK! User: nam
+2026-06-03 23:44:46 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-06-03 23:44:46 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-03 23:44:54 [JavaFX Application Thread] INFO  com.uet.client.ui.HomeController - Chọn giao diện vai trò: Người đấu giá
+2026-06-03 23:44:54 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0
+2026-06-03 23:44:54 [Thread-3] INFO  com.uet.client.ui.HomeController - Home nhận danh sách đấu giá: 0

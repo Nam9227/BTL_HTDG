@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import com.uet.client.util.TransitionUtils;
 
 public class AdminDashboardController {
 
@@ -97,7 +98,7 @@ public class AdminDashboardController {
             stage.getScene().setRoot(root);
 
             if (fxmlPath.contains("login_view.fxml")) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                TransitionUtils.applyFadeIn(root);
                 stage.setTitle("Đăng nhập hệ thống");
                 stage.setMaximized(false);
                 stage.setWidth(850);

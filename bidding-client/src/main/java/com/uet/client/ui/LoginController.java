@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.Node;
 import java.util.concurrent.CompletableFuture;
+import com.uet.client.util.TransitionUtils;
 
 
 
@@ -140,7 +141,7 @@ public class LoginController {
             Parent root = loader.load();
 
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
 
             Object controller = loader.getController();
             if (controller instanceof HomeController homeController) {
@@ -168,7 +169,7 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
             
             Scene scene = new Scene(root);
             stage.setTitle(title);

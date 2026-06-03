@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import com.uet.client.util.TransitionUtils;
 
 public class RegisterController {
     private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
@@ -200,7 +201,7 @@ public class RegisterController {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             
             
-            com.uet.client.util.TransitionUtils.applyFadeIn(root);
+            TransitionUtils.applyFadeIn(root);
             
             Scene scene = new Scene(root);
             stage.setTitle(title);

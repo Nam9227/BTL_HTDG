@@ -15,6 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.ArrayList;
+import com.uet.common.model.auction.AutoBid;
+import com.uet.common.model.notification.Notification;
+import com.uet.common.network.AutoBidResponse;
+import com.uet.common.network.GetAutoBidRequest;
+import com.uet.common.network.GetAutoBidResponse;
+import com.uet.common.network.ImageData;
+import com.uet.server.database.dao.AutoBidDAO;
+import com.uet.server.network.ClientManager;
 
 public class ClientRequestDispatcher {
     private static final Logger logger = LoggerFactory.getLogger(ClientRequestDispatcher.class);
@@ -109,8 +117,8 @@ public class ClientRequestDispatcher {
         }
 
         if (obj instanceof AutoBidRequest request) {
-            com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
-            com.uet.common.network.AutoBidResponse response = autoBidDAO.saveAutoBidConfig(request);
+            AutoBidDAO autoBidDAO = new AutoBidDAO();
+            AutoBidResponse response = autoBidDAO.saveAutoBidConfig(request);
             client.send(response);
             
             if (request.isActive() && response.isSuccess()) {
@@ -119,10 +127,10 @@ public class ClientRequestDispatcher {
             return true;
         }
 
-        if (obj instanceof com.uet.common.network.GetAutoBidRequest request) {
-            com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
-            com.uet.common.model.auction.AutoBid autoBid = autoBidDAO.getAutoBidConfig(request.getAuctionId(), request.getUserId());
-            client.send(new com.uet.common.network.GetAutoBidResponse(true, autoBid));
+        if (obj instanceof GetAutoBidRequest request) {
+            AutoBidDAO autoBidDAO = new AutoBidDAO();
+            AutoBid autoBid = autoBidDAO.getAutoBidConfig(request.getAuctionId(), request.getUserId());
+            client.send(new GetAutoBidResponse(true, autoBid));
             return true;
         }
 
@@ -211,7 +219,7 @@ public class ClientRequestDispatcher {
                 client.send(Response.success("Duyệt giao dịch thành công", null));
                 AdminDAO.logAdminAction("Duyệt giao dịch", String.valueOf(request.getTransactionId()), "Thành công");
                 if (updatedUser != null) {
-                    com.uet.server.network.ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedUser));
+                    ClientManager.broadcast(Response.success("BALANCE_UPDATED", updatedUser));
                 }
             } catch (Exception e) {
                 logger.error("Lỗi khi phê duyệt giao dịch ID: " + request.getTransactionId(), e);
@@ -312,7 +320,7 @@ public class ClientRequestDispatcher {
             
             if (item.getProductImageBytes() != null && item.getProductImageBytes().length > 0) {
                 FileStorageService fileStorageService = new FileStorageService();
-                com.uet.common.network.ImageData imgData = new com.uet.common.network.ImageData("product.png", "image/png", item.getProductImageBytes());
+                ImageData imgData = new ImageData("product.png", "image/png", item.getProductImageBytes());
                 String newImageUrl = fileStorageService.save(imgData, "products", item.getSellerId());
                 if (newImageUrl != null) {
                     item.setImageUrl(newImageUrl);
@@ -329,7 +337,7 @@ public class ClientRequestDispatcher {
                 
                 try {
                     List<AuctionItem> activeAuctions = auctionDAO.getActiveAuctions();
-                    com.uet.server.network.ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
+                    ClientManager.broadcast(new GetActiveAuctionsResponse(activeAuctions));
                 } catch (Exception e) {
                     logger.error("Lỗi khi phát sóng danh sách đấu giá mới sau khi cập nhật sản phẩm: ", e);
                 }
@@ -349,7 +357,7 @@ public class ClientRequestDispatcher {
 
         try {
             
-            List<com.uet.common.model.notification.Notification> list = userDAO.getNotificationsByUserId(userId);
+            List<Notification> list = userDAO.getNotificationsByUserId(userId);
             logger.info("[Server] Đã tìm thấy {} thông báo trong DB của User: {}", list.size(), userId);
 
             

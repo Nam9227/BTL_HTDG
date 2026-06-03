@@ -1,6 +1,5 @@
 package com.uet.client.ui.admin;
 
-import com.uet.client.network.ClientSocket;
 import com.uet.common.model.transaction.Transaction;
 import com.uet.common.network.ApproveTransactionRequest;
 import com.uet.common.network.GetPendingTransactionRequest;
@@ -22,6 +21,8 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import com.uet.client.network.ClientSocket;
+import com.uet.client.util.TransitionUtils;
 
 public class AdminWalletController {
 
@@ -216,7 +217,7 @@ public class AdminWalletController {
             stage.getScene().setRoot(root);
 
             if (fxmlPath.contains("login_view.fxml")) {
-                com.uet.client.util.TransitionUtils.applyFadeIn(root);
+                TransitionUtils.applyFadeIn(root);
                 stage.setTitle("Đăng nhập hệ thống");
                 stage.setMaximized(false);
                 stage.setWidth(850);
@@ -250,8 +251,8 @@ public class AdminWalletController {
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
-            com.uet.client.network.ClientSocket.getInstance().send("LOGOUT");
-            com.uet.client.network.ClientSocket.getInstance().close();
+            ClientSocket.getInstance().send("LOGOUT");
+            ClientSocket.getInstance().close();
         } catch (Exception e) {
             e.printStackTrace();
         }
