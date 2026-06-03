@@ -18,43 +18,31 @@ Hệ thống được chia thành 3 module Maven riêng biệt để đảm bả
 *   `bidding-server/`: Chứa logic nghiệp vụ máy chủ, quản lý đa luồng (Multi-threading) xử lý kết nối từ nhiều Client, tương tác với cơ sở dữ liệu MySQL (qua DAO pattern), và phân phối dữ liệu (Broadcast) tới các Client theo thời gian thực.
 *   `bidding-client/`: Ứng dụng Desktop dành cho người dùng cuối sử dụng JavaFX, thực hiện gửi/nhận gói tin mạng từ Server và render giao diện cập nhật trạng thái đấu giá.
 
-## 4. Hướng dẫn cài đặt và chạy chương trình (Đa nền tảng)
+## 4. Hướng dẫn khởi chạy hệ thống (Đa nền tảng)
 
-### Bước 4.1. Chuẩn bị Cơ sở dữ liệu
-1. Cài đặt MySQL Server.
-2. Tạo database (ví dụ: `auction_system`) và nạp file SQL khởi tạo (nếu có).
-3. Cập nhật thông tin kết nối trong file: `bidding-server/config/db.properties`.
-   *(Bao gồm: `db.url`, `db.username`, `db.password`).*
+> **Lưu ý quan trọng:** Hệ thống bao gồm Server và Cơ sở dữ liệu đã được triển khai sẵn trên máy chủ ảo (VPS). Do đó, bạn **không cần** phải thiết lập hay khởi chạy Server. Chỉ cần biên dịch và chạy ứng dụng Client theo hướng dẫn dưới đây để kết nối vào hệ thống.
 
-### Bước 4.2. Build toàn bộ dự án
-Mở Terminal/Command Prompt tại thư mục gốc của project (nơi chứa file `pom.xml` tổng) và chạy lệnh:
+### Bước 4.1. Biên dịch dự án
+Mở Terminal/Command Prompt tại thư mục gốc của project (nơi chứa file `pom.xml` tổng) và chạy lệnh sau để tải các thư viện và biên dịch mã nguồn:
 ```bash
 # Trên Windows
-mvn clean install
+mvnw.cmd clean compile
 
 # Trên Linux/macOS
-mvn clean install
-```
-*(Nếu máy chưa cài Maven system-wide, bạn có thể sử dụng `./mvnw clean install` trên Linux/Mac hoặc `mvnw.cmd clean install` trên Windows nếu project có tích hợp Maven Wrapper).*
-
-### Bước 4.3. Chạy Server
-Server **bắt buộc** phải được khởi chạy trước để lắng nghe kết nối:
-```bash
-# Dùng Maven exec (Khuyến nghị trên mọi HĐH)
-mvn exec:java -pl bidding-server -Dexec.mainClass="com.uet.server.network.ServerMain"
-```
-*(Hoặc nếu chạy qua file `.jar` đã build):*
-```bash
-java -jar bidding-server/target/bidding-server-1.0-jar-with-dependencies.jar
+chmod +x mvnw
+./mvnw clean compile
 ```
 
-### Bước 4.4. Chạy Client
-Sau khi Server báo đã chạy thành công, mở một Terminal khác và chạy Client:
+### Bước 4.2. Chạy Client
+Sau khi lệnh biên dịch chạy xong và báo SUCCESS, chạy tiếp lệnh sau để mở giao diện người dùng:
 ```bash
-# Dùng Maven exec (Khuyến nghị trên mọi HĐH)
-mvn exec:java -pl bidding-client -Dexec.mainClass="com.uet.client.Launcher"
+# Trên Windows
+mvnw.cmd exec:java -pl bidding-client "-Dexec.mainClass=com.uet.client.Launcher"
+
+# Trên Linux/macOS
+./mvnw exec:java -pl bidding-client -Dexec.mainClass="com.uet.client.Launcher"
 ```
-*(Bạn có thể chạy lệnh này nhiều lần trên các cửa sổ Terminal khác nhau để mở nhiều Client cùng lúc nhằm test đấu giá).*
+*(Bạn có thể mở thêm nhiều Terminal và chạy lại lệnh này để mở nhiều Client cùng lúc, phục vụ việc kiểm thử đấu giá với nhiều tài khoản).*
 
 ## 5. Danh sách chức năng đã hoàn thành
 - [x] Đăng nhập, đăng ký, cấp quyền người dùng (Admin, Seller, Bidder).
