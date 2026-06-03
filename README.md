@@ -197,5 +197,5 @@ Hệ thống seed sẵn một số tài khoản demo để bạn test nhanh:
 - [x] Bảng xếp hạng & lịch sử đặt giá minh bạch.
 
 ## 11. Báo cáo và video demo
-*   📄 **[Link Báo Cáo Chi Tiết (PDF)](#)** *(Cập nhật link báo cáo tại đây)*
-*   🎥 **[Link Video Demo Hệ Thống](#)** *(Cập nhật link video YouTube/Drive tại đây)*
+*   📄 **[Link Báo Cáo Chi Tiết (PDF)](https://drive.google.com/drive/folders/1d3h_n8NWTvRnhAKQ3lKmtJv0aqE4Mi4m?usp=drive_link)** *(Cập nhật link báo cáo tại đây)*
+*   🎥 **[Link Video Demo Hệ Thống](https://drive.google.com/file/d/1y8Nl0PZNTOriYC_wMgLt6hR8YbbvExUj/view?usp=sharing)** *(Cập nhật link video YouTube/Drive tại đây)*
