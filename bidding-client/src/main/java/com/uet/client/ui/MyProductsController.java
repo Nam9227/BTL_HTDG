@@ -178,13 +178,13 @@ public class MyProductsController {
 
             socket.addMessageListener(myProductsListener);
 
-            new Thread(() -> {
+            com.uet.client.util.ThreadPoolManager.execute(() -> {
                 try {
                     socket.send(new GetActiveAuctionsRequest(currentUser.getId(), "USER"));
                 } catch (Exception e) {
                     logger.error("Error sending request: ", e);
                 }
-            }).start();
+            });
 
         } catch (Exception e) {
             logger.error("Connection error: ", e);

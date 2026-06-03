@@ -112,7 +112,7 @@ public class AuctionRealtimeService {
                 k -> new java.util.concurrent.atomic.AtomicBoolean(false));
 
         if (isRunning.compareAndSet(false, true)) {
-            new Thread(() -> {
+            com.uet.server.util.ServerThreadPool.execute(() -> {
                 try {
                     com.uet.server.database.dao.AutoBidDAO autoBidDAO = new com.uet.server.database.dao.AutoBidDAO();
                     boolean bidPlacedInThisRound = true;
@@ -204,7 +204,7 @@ public class AuctionRealtimeService {
                 } finally {
                     isRunning.set(false);
                 }
-            }).start();
+            });
         }
     }
 

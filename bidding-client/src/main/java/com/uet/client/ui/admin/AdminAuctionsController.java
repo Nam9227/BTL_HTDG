@@ -160,14 +160,14 @@ public class AdminAuctionsController {
 
             ClientSocket.getInstance().addMessageListener(listener);
             
-            new Thread(() -> {
+            com.uet.client.util.ThreadPoolManager.execute(() -> {
                 try {
                     ClientSocket.getInstance().send(request);
                 } catch (Exception e) {
                     logger.error("Lỗi khi gửi yêu cầu danh sách đấu giá lên Server: ", e);
                     Platform.runLater(() -> showStatus("Không thể gửi yêu cầu lấy danh sách sản phẩm.", false));
                 }
-            }).start();
+            });
 
         } catch (Exception e) {
             logger.error("Lỗi chuẩn bị tải danh sách đấu giá: ", e);

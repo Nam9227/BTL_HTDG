@@ -213,13 +213,13 @@ public class HomeController {
             };
 
             socket.addMessageListener(homeListener);
-            new Thread(() -> {
+            com.uet.client.util.ThreadPoolManager.execute(() -> {
                 try {
                     socket.send(new GetActiveAuctionsRequest());
                 } catch (Exception e) {
                     logger.error("Lỗi khi gửi yêu cầu danh sách đấu giá từ Home: ", e);
                 }
-            }).start();
+            });
 
         } catch (Exception e) {
             logger.error("Không lấy được danh sách sản phẩm đấu giá: ", e);
